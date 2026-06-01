@@ -1902,35 +1902,15 @@ async function syncWithSheets(){
     // أو POST — هنجرب POST أولاً
     const jsonStr = JSON.stringify(payload);
 
-    // إرسال البيانات — POST أولاً، لو فشل جرب GET مع البيانات في الـ params
+    // إرسال البيانات للـ URL الأساسي مباشرة (مش ping)
     const syncUrl = url + (url.includes('?') ? '&' : '?') + 'action=sync';
 
-    let postOk = false;
-    try {
-      await fetch(syncUrl, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {'Content-Type': 'text/plain'},
-        body: jsonStr
-      });
-      postOk = true;
-    } catch(e){ postOk = false; }
-
-    // fallback: GET مع البيانات في الـ URL (للحالات اللي POST فيها مش شغال)
-    if(!postOk){
-      const encoded = encodeURIComponent(jsonStr);
-      // لو البيانات صغيرة (<7500 حرف) نبعتها GET
-      if(encoded.length < 7500){
-        try {
-          await fetch(url + (url.includes('?') ? '&' : '?') + 'data=' + encoded, {
-            method: 'GET',
-            mode: 'no-cors'
-          });
-        } catch(e){}
-      }
-    }
-
-    const resp = { ok: true }; // no-cors دايماً بيرجع opaque response = مش بنقرأه
+    const resp = await fetch(syncUrl, {
+      method: 'POST',
+      mode: 'no-cors', // Apps Script requires no-cors
+      headers: {'Content-Type': 'text/plain'},
+      body: jsonStr
+    });
 
     // no-cors means we can't read the response, but no error = connected
     btn.classList.remove('syncing');
@@ -2012,13 +1992,12 @@ async function loadFromSheets(silent=false){
     }
   } catch(e){ /* timeout أو script error - جرب fetch */ }
 
-  // ─── المحاولة 2: fetch مباشر مع cors ───
+  // ─── المحاولة 2: fetch مباشر (يشتغل لو CORS مسموح) ───
   try {
     const getdataUrl = url + (url.includes('?') ? '&' : '?') + 'action=getdata';
     const resp = await fetch(getdataUrl, {
       method: 'GET',
       redirect: 'follow',
-      mode: 'cors',
       headers: { 'Accept': 'application/json' }
     });
     if(resp.ok){
@@ -2035,36 +2014,6 @@ async function loadFromSheets(silent=false){
         if(!silent) toast('⚠️ مفيش بيانات في الشيت — ابعت مزامنة أولاً', 'error');
         return false;
       }
-    }
-  } catch(e){}
-
-  // ─── المحاولة 3: JSONP بـ cache-bust (لو المحاولة الأولى اتـ cache) ───
-  try {
-    const cbName2 = '__floosi_cb2__';
-    const data2 = await new Promise((resolve, reject) => {
-      const script2 = document.createElement('script');
-      script2.setAttribute('crossorigin', 'anonymous');
-      let done2 = false;
-      const timer2 = setTimeout(() => {
-        if(!done2){ done2=true; script2.remove(); delete window[cbName2]; reject(new Error('timeout2')); }
-      }, 15000);
-      window[cbName2] = (d) => {
-        if(!done2){ done2=true; clearTimeout(timer2); script2.remove(); delete window[cbName2]; resolve(d); }
-      };
-      const url2 = url + (url.includes('?') ? '&' : '?') + 'action=getdata&callback=' + cbName2 + '&_t=' + Date.now();
-      script2.src = url2;
-      script2.onerror = () => { if(!done2){ done2=true; clearTimeout(timer2); script2.remove(); delete window[cbName2]; reject(new Error('script error 2')); } };
-      document.head.appendChild(script2);
-    });
-    if(data2 && data2.status === 'ok' && data2.data){
-      applyOnce(data2.data);
-      if(!silent) toast('✅ تم تحميل البيانات من Google Sheets!');
-      return true;
-    }
-    if(data2 && data2.status === 'empty'){
-      resetBtns();
-      if(!silent) toast('⚠️ مفيش بيانات في الشيت — ابعت مزامنة أولاً', 'error');
-      return false;
     }
   } catch(e){}
 
@@ -2261,7 +2210,6 @@ function _fetchViaScript(url, timeoutMs=8000){
   return new Promise((resolve, reject) => {
     const cbName = '__floosi_cb__';
     const script = document.createElement('script');
-    script.setAttribute('crossorigin', 'anonymous');
     let done = false;
     const timer = setTimeout(() => {
       if(!done){ done=true; script.remove(); delete window[cbName]; reject(new Error('timeout')); }
@@ -3036,27 +2984,10 @@ function openEditBudget(idx){
   openModal('modalBudget');
 }
 function saveBudget(){
-  const cat=document.getElementById('budgetCat').value.trim();
-  const total=parseFloat(document.getElementById('budgetLimit').value)||0;
-  const spent=parseFloat(document.getElementById('budgetSpent').value)||0;
+  const cat=document.getElementById('budgetCat').value.trim();const total=parseFloat(document.getElementById('budgetLimit').value)||0;const spent=parseFloat(document.getElementById('budgetSpent').value)||0;
   if(!cat||total<=0){toast('اكتب الفئة والحد','error');return;}
-
-  // ── تحقق: مجموع ميزانيات الفئات لا يتعدى ميزانية الشهر ──
-  const cairoNow=getCairoNow();
-  const mo=`${cairoNow.getFullYear()}-${String(cairoNow.getMonth()+1).padStart(2,'0')}`;
-  const monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===mo||w.end.slice(0,7)===mo);
-  const monthlyTotal=monthWeeks.reduce((s,w)=>s+w.limit,0);
-  const editIdx=document.getElementById('budgetEditIdx').value;
-  // مجموع الفئات الأخرى (مش الفئة اللي بنعدلها)
-  const otherCatsTotal=state.budget.reduce((s,b,i)=>
-    (editIdx!==''&&i===+editIdx)?s:s+(b.total||b.limit||0),0);
-  if(monthlyTotal>0 && (otherCatsTotal+total)>monthlyTotal){
-    const available=monthlyTotal-otherCatsTotal;
-    toast(`⚠️ ميزانية الفئات هتتعدى ميزانية الشهر (${fmt(monthlyTotal)} EGP)! المتاح: ${fmt(Math.max(available,0))} EGP فقط`,'error');
-    return;
-  }
-
   const data={cat,total,spent,icon:document.getElementById('budgetIcon').value||'ti-circle',color:document.getElementById('budgetColor').value};
+  const editIdx=document.getElementById('budgetEditIdx').value;
   if(editIdx!==''){state.budget[+editIdx]=data;toast('✏️ تم التعديل');}else{state.budget.push(data);toast('✅ تم إضافة الفئة');}
   saveState();_syncAfterSave();closeModal('modalBudget');renderBudget();
 }
@@ -3226,31 +3157,20 @@ function renderBudget(){
     el.innerHTML='<div class="empty-state" style="padding:32px"><i class="ti ti-chart-pie"></i><p>مفيش فئات ميزانية — أضف فئات من الإعدادات وهتظهر هنا تلقائياً</p></div>';
   }
 
-  // ─── الميزانية الشهرية الكلية ───
-  // المجموع = مجموع ميزانيات كل أسابيع الشهر المحفوظة
-  // المنصرف = كل مصاريف الشهر (مش مقيّد بالأسابيع فقط)
-  const cairoNow = getCairoNow();
-  const mo = `${cairoNow.getFullYear()}-${String(cairoNow.getMonth()+1).padStart(2,'0')}`;
-
-  // أسابيع الشهر المحفوظة (الأسبوع يعتبر "في الشهر" لو بدايته أو نهايته فيه)
-  const monthWeeks = (state.weeklyBudgets||[]).filter(w =>
-    w.start.slice(0,7) === mo || w.end.slice(0,7) === mo
-  );
-  const total = monthWeeks.reduce((s,w) => s + w.limit, 0);
-
-  // المنصرف الفعلي = كل مصاريف الشهر كاملاً (مش مقيّد بالأسابيع المحفوظة)
-  const spent = calcMonthExpenses(mo);
-  const rem = total - spent;
-
-  document.getElementById('budgetTotal').textContent = total > 0 ? fmt(total) : '—';
-  document.getElementById('budgetSpentTotal').textContent = fmt(spent);
-  document.getElementById('budgetRemaining').textContent = total > 0 ? fmt(Math.max(rem,0)) : '—';
-  const pctTotal = total > 0 ? Math.round(spent / total * 100) : 0;
-  document.getElementById('budgetSpentPct').innerHTML = total > 0
-    ? `<span class="${pctTotal>90?'down':pctTotal>70?'neutral':'up'}">${pctTotal}% من الميزانية</span>`
-    : '<span class="neutral">لم تُحدد بعد</span>';
-  const noteEl = document.getElementById('budgetTotalNote');
-  if(noteEl) noteEl.textContent = monthWeeks.length > 0 ? `${monthWeeks.length} أسابيع هذا الشهر` : 'من مجموع الأسابيع';
+  // الميزانية الشهرية = مجموع ميزانيات أسابيع الشهر الحالي
+  const now=new Date();
+  const mo=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===mo||w.end.slice(0,7)===mo);
+  const total=monthWeeks.reduce((s,w)=>s+w.limit,0);
+  const spent=monthWeeks.reduce((s,w)=>s+getSpentBetween(w.start,w.end),0);
+  const rem=total-spent;
+  document.getElementById('budgetTotal').textContent=total>0?fmt(total):'—';
+  document.getElementById('budgetSpentTotal').textContent=fmt(spent);
+  document.getElementById('budgetRemaining').textContent=total>0?fmt(rem):'—';
+  const pctTotal=total>0?Math.round(spent/total*100):0;
+  document.getElementById('budgetSpentPct').innerHTML=total>0?`<span class="${pctTotal>90?'down':pctTotal>70?'neutral':'up'}">${pctTotal}% من الميزانية</span>`:'<span class="neutral">لم تُحدد بعد</span>';
+  const noteEl=document.getElementById('budgetTotalNote');
+  if(noteEl) noteEl.textContent=monthWeeks.length>0?`${monthWeeks.length} أسابيع هذا الشهر`:'من مجموع الأسابيع';
 
   // اليوم من الأسبوع
   const todayStr = new Date().toISOString().slice(0,10);
@@ -3808,8 +3728,8 @@ function deleteWeekSlotByDates(ws, we){
 }
 
 function getCurrentWeekBudget(){
-  // find the custom week slot that contains today (Cairo time)
-  const today = isoDate(getCairoNow());
+  // find the custom week slot that contains today
+  const today=isoDate(new Date());
   return (state.weeklyBudgets||[]).find(w=>today>=w.start&&today<=w.end)||null;
 }
 
@@ -3838,9 +3758,9 @@ function renderWeeklyBudgetUI(){
   const detEl=document.getElementById('weekBudgetDetails');
   if(detEl&&limit>0){
     const barColor=pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--green)';
-    const cairoNow2=getCairoNow();
-    const mo=`${cairoNow2.getFullYear()}-${String(cairoNow2.getMonth()+1).padStart(2,'0')}`;
-    const todayIso=isoDate(cairoNow2);
+    // show all weeks for current month
+    const now=new Date();
+    const mo=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
     const monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===mo||w.end.slice(0,7)===mo);
     let allWeeksHtml='';
     if(monthWeeks.length>1){
@@ -3851,7 +3771,7 @@ function renderWeeklyBudgetUI(){
           const lft=w.limit-sp;
           const p=Math.min(Math.round(sp/w.limit*100),100);
           const bc=p>=90?'var(--red)':p>=70?'var(--amber)':'var(--green)';
-          const isActive=todayIso>=w.start&&todayIso<=w.end;
+          const isActive=isoDate(new Date())>=w.start&&isoDate(new Date())<=w.end;
           return`<div style="margin-bottom:8px;${isActive?'background:var(--bg-2);border-radius:var(--r-md);padding:6px 8px;border:1px solid var(--border-med)':'padding:4px 0'}">
             <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2);margin-bottom:4px">
               <span style="flex:1;font-weight:${isActive?700:500};color:${isActive?'var(--amber)':'var(--text-2)'}">
@@ -4052,11 +3972,9 @@ function initWeekChart(){
   const days={};
   txs.forEach(t=>{const d=t.date.slice(8,10);days[d]=(days[d]||0)+toEGP(t.amount,t.currency);});
   const labels=Object.keys(days).sort();const vals=labels.map(d=>Math.round(days[d]));
-  // الشهر الصح بتوقيت القاهرة
-  const cairoM=String(getCairoNow().getMonth()+1).padStart(2,'0');
   mkChart('weekChart',{
     type:'bar',
-    data:{labels:labels.map(d=>d+'/'+cairoM),datasets:[{data:vals,backgroundColor:vals.map(v=>v>5000?'rgba(255,85,128,.8)':v>2000?'rgba(255,179,64,.8)':'rgba(106,180,255,.8)'),borderRadius:6}]},
+    data:{labels:labels.map(d=>d+' / '+new Date().getMonth()+1),datasets:[{data:vals,backgroundColor:vals.map(v=>v>5000?'rgba(255,77,109,.8)':v>2000?'rgba(245,166,35,.8)':'rgba(79,156,249,.8)'),borderRadius:6}]},
     options:{...chartDefaults,scales:{...chartDefaults.scales,x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,font:{size:9}}}}}
   });
 }
@@ -4595,7 +4513,7 @@ async function _autoLoadFromSheets(){
   if(banner){
     banner.remove();
     const app=document.querySelector('.app');
-    if(app)app.style.marginTop='';ِ
+    if(app)app.style.marginTop='';
   }
 }
 </script>
