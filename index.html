@@ -1878,6 +1878,19 @@ async function syncWithSheets(){
   dot.className = 'sync-dot';
   if(label) label.textContent = 'جاري...';
 
+  // ✅ FIX: احسب spent الحقيقي من المعاملات قبل الإرسال (مش بس لما تفتح تاب الميزانية)
+  const _mk = getCurrentMonthKey();
+  const _spentByCat = {};
+  getMonthTxs(_mk).filter(t=>t.type==='expense').forEach(t=>{
+    _spentByCat[t.cat] = (_spentByCat[t.cat]||0) + toEGP(t.amount, t.currency);
+  });
+  (state.budget||[]).forEach(r=>{
+    const ck = r.catKey||r.cat;
+    const c2 = state.categories.find(c=>c.key===ck||c.name===r.cat);
+    r.spent = Math.round(_spentByCat[ck]||_spentByCat[c2?.key]||0);
+  });
+  saveState();
+
   // بناء الـ payload — debts تتحول لـ flat array
   const flatDebts=[
     ...(state.debts.owe||[]).map(d=>({...d,dir:'owe'})),
@@ -1908,8 +1921,8 @@ async function syncWithSheets(){
     const resp = await fetch(syncUrl, {
       method: 'POST',
       mode: 'no-cors', // Apps Script requires no-cors
-      headers: {'Content-Type': 'text/plain'},
-      body: jsonStr
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'data=' + encodeURIComponent(jsonStr)
     });
 
     // no-cors means we can't read the response, but no error = connected
