@@ -2389,6 +2389,12 @@ function fmtDate(d){
   if(parts.length===3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
   return d;
 }
+function fmtDateShort(d){
+  if(!d)return d;
+  const parts=d.split('-'); // yyyy-mm-dd
+  if(parts.length===3)return `${parts[2]}/${parts[1]}`;
+  return d;
+}
 function getCurrentMonthKey(){const n=getCairoNow();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;}
 function getPrevMonthKey(){const n=getCairoNow();const m=n.getMonth();const y=n.getFullYear();const pm=m===0?11:m-1;const py=m===0?y-1:y;return`${py}-${String(pm+1).padStart(2,'0')}`;}
 function getMonthTxs(mk){return state.transactions.filter(t=>t.date&&t.date.startsWith(mk));}
@@ -2980,16 +2986,50 @@ function openAddBudget(){
 function openEditBudget(idx){
   const b=state.budget[idx];if(!b)return;
   document.getElementById('budgetEditIdx').value=idx;document.getElementById('modalBudgetTitle').textContent='تعديل الفئة';document.getElementById('modalBudgetBtn').textContent='حفظ التعديل';
-  document.getElementById('budgetCat').value=b.cat;document.getElementById('budgetLimit').value=b.total;document.getElementById('budgetSpent').value=b.spent;document.getElementById('budgetIcon').value=b.icon||'ti-circle';document.getElementById('budgetColor').value=b.color||'#4f9cf9';
+  document.getElementById('budgetCat').value=b.cat;document.getElementById('budgetLimit').value=b.total||b.limit||0;document.getElementById('budgetSpent').value=b.spent||0;document.getElementById('budgetIcon').value=b.icon||'ti-circle';document.getElementById('budgetColor').value=b.color||'#4f9cf9';
   openModal('modalBudget');
 }
 function saveBudget(){
   const cat=document.getElementById('budgetCat').value.trim();const total=parseFloat(document.getElementById('budgetLimit').value)||0;const spent=parseFloat(document.getElementById('budgetSpent').value)||0;
-  if(!cat||total<=0){toast('اكتب الفئة والحد','error');return;}
-  const data={cat,total,spent,icon:document.getElementById('budgetIcon').value||'ti-circle',color:document.getElementById('budgetColor').value};
+  if(!cat){toast('اكتب اسم الفئة','error');return;}
+  if(total<0){toast('الميزانية لا تكون أقل من صفر','error');return;}
+
+  // ✅ تحقق إن ميزانية الفئة مش أكبر من ميزانية الشهر الكلية
+  const _now=new Date();
+  const _mo=`${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}`;
+  const _monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===_mo||w.end.slice(0,7)===_mo);
+  const _monthTotal=_monthWeeks.reduce((s,w)=>s+(w.limit||0),0);
   const editIdx=document.getElementById('budgetEditIdx').value;
-  if(editIdx!==''){state.budget[+editIdx]=data;toast('✏️ تم التعديل');}else{state.budget.push(data);toast('✅ تم إضافة الفئة');}
+  if(_monthTotal>0 && total>0){
+    const _otherTotal=state.budget.reduce((s,b,i)=>+i===(editIdx!==''?+editIdx:-1)?s:s+(b.total||b.limit||0),0);
+    if(_otherTotal+total>_monthTotal){
+      toast(`⚠️ مجموع ميزانيات الفئات (${fmt(_otherTotal+total)} EGP) أكبر من ميزانية الشهر (${fmt(_monthTotal)} EGP)!`,'error');
+      return;
+    }
+  }
+
+  const data={cat,total,limit:total,spent,icon:document.getElementById('budgetIcon').value||'ti-circle',color:document.getElementById('budgetColor').value};
+  if(editIdx!==''){const old=state.budget[+editIdx];if(old&&old.catKey)data.catKey=old.catKey;state.budget[+editIdx]=data;toast('✏️ تم التعديل');}else{state.budget.push(data);toast('✅ تم إضافة الفئة');}
   saveState();_syncAfterSave();closeModal('modalBudget');renderBudget();
+}
+function toggleSkipBudget(idx){
+  const b=state.budget[idx];if(!b)return;
+  b.skipMonth=!b.skipMonth;
+  saveState();_syncAfterSave();renderBudget();
+  toast(b.skipMonth?'⏸ تم تأجيل الفئة هذا الشهر':'▶️ تم استئناف متابعة الفئة','info');
+}
+function openSetBudgetLimit(idx){
+  const b=state.budget[idx];if(!b)return;
+  document.getElementById('budgetEditIdx').value=idx;
+  document.getElementById('modalBudgetTitle').textContent='تحديد ميزانية الفئة';
+  document.getElementById('modalBudgetBtn').textContent='حفظ';
+  document.getElementById('budgetCat').value=b.cat;
+  document.getElementById('budgetLimit').value='';
+  document.getElementById('budgetSpent').value=b.spent||0;
+  document.getElementById('budgetIcon').value=b.icon||'ti-circle';
+  document.getElementById('budgetColor').value=b.color||'#4f9cf9';
+  openModal('modalBudget');
+  setTimeout(()=>document.getElementById('budgetLimit').focus(),200);
 }
 function deleteBudget(idx){confirmDelete('هتحذف الفئة دي؟',()=>{state.budget.splice(idx,1);saveState();_syncAfterSave();renderBudget();toast('🗑️ تم الحذف','info');});}
 
@@ -3126,29 +3166,47 @@ function renderBudget(){
     const col=pct>90?'var(--red)':pct>70?'var(--amber)':'var(--green)';
     const remaining=budget-realSpent;
     const noLimit=budget===0;
+    const skipMonth=r.skipMonth===true; // "مش مهمة الشهر ده"
 
-    return`<div class="budget-row" id="brow_${i}">
+    return`<div class="budget-row" id="brow_${i}" style="${skipMonth?'opacity:.55':''}}">
       <div class="budget-row-head">
         <div class="budget-cat">
           <i class="ti ${r.icon||'ti-circle'}" style="color:${r.color||'var(--blue)'};font-size:17px"></i>
           ${r.cat}
-          ${noLimit?`<span class="badge badge-amber" style="margin-right:6px;font-size:9px">بدون حد</span>`:''}
+          ${skipMonth?'<span class="badge badge-amber" style="margin-right:6px;font-size:9px">⏸ مؤجلة</span>':noLimit?'<span class="badge badge-amber" style="margin-right:6px;font-size:9px">بدون حد</span>':''} 
         </div>
         <div style="display:flex;align-items:center;gap:10px">
-          ${noLimit
-            ?`<button class="btn btn-sm btn-warning" onclick="openSetBudgetLimit(${i})" style="font-size:11px;padding:4px 10px"><i class="ti ti-pencil" style="font-size:12px"></i> حدد الميزانية</button>`
-            :`<div class="budget-nums">${fmt(realSpent)} / ${fmt(budget)} <span style="color:${col};font-weight:700">${pct}%</span></div>`
+          ${skipMonth
+            ?`<span style="font-size:11px;color:var(--text-3)">صرفت <strong style="color:var(--text-1)">${fmt(realSpent)} EGP</strong></span>`
+            :noLimit
+              ?`<button class="btn btn-sm btn-warning" onclick="openSetBudgetLimit(${i})" style="font-size:11px;padding:4px 10px"><i class="ti ti-pencil" style="font-size:12px"></i> حدد الميزانية</button>`
+              :`<div style="display:flex;align-items:center;gap:8px">
+                  <div style="text-align:left;font-size:12px">
+                    <div style="color:var(--text-3);font-size:10px">الميزانية</div>
+                    <div style="font-family:'Space Grotesk',monospace;font-weight:700;color:var(--text-1)">${fmt(budget)}</div>
+                  </div>
+                  <div style="text-align:left;font-size:12px">
+                    <div style="color:var(--text-3);font-size:10px">صرفت</div>
+                    <div style="font-family:'Space Grotesk',monospace;font-weight:700;color:var(--red)">${fmt(realSpent)}</div>
+                  </div>
+                  <div style="text-align:left;font-size:12px">
+                    <div style="color:var(--text-3);font-size:10px">متبقي</div>
+                    <div style="font-family:'Space Grotesk',monospace;font-weight:800;color:${remaining<0?'var(--red)':remaining<budget*0.2?'var(--amber)':'var(--green)'}">${fmt(Math.max(remaining,0))}</div>
+                  </div>
+                  <span style="color:${col};font-weight:700;font-size:13px">${pct}%</span>
+                </div>`
           }
           <div class="item-actions" style="opacity:1;display:flex;gap:4px">
+            <button class="btn btn-ghost btn-icon btn-sm" title="${skipMonth?'استئناف الميزانية':'تأجيل هذا الشهر'}" onclick="toggleSkipBudget(${i})" style="color:${skipMonth?'var(--green)':'var(--amber)'}"><i class="ti ${skipMonth?'ti-player-play':'ti-player-pause'}" style="font-size:13px"></i></button>
             <button class="btn btn-ghost btn-icon btn-sm" onclick="openEditBudget(${i})" title="تعديل"><i class="ti ti-pencil" style="font-size:13px"></i></button>
             <button class="btn btn-ghost btn-icon btn-sm" onclick="deleteBudget(${i})" title="حذف" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px"></i></button>
           </div>
         </div>
       </div>
-      ${noLimit
-        ?`<div style="font-size:11px;color:var(--text-3);margin-top:4px">صرفت <strong style="color:var(--text-1)">${fmt(realSpent)} EGP</strong> هذا الشهر — اضغط "حدد الميزانية" لتفعيل التتبع</div>`
-        :`<div class="progress-track"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:linear-gradient(90deg,${r.color||'var(--blue)'},${r.color||'var(--blue)'}cc)"></div></div>
-        <div style="font-size:11px;color:var(--text-3);margin-top:5px">${pct>100?`<span style="color:var(--red);font-weight:600">تجاوزت الحد بـ ${fmt(realSpent-budget)} EGP</span>`:`متبقي: <strong style="color:var(--text-1)">${fmt(Math.max(remaining,0))} EGP</strong>`}</div>`
+      ${!skipMonth && !noLimit
+        ?`<div class="progress-track"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:linear-gradient(90deg,${r.color||'var(--blue)'},${r.color||'var(--blue)'}cc)"></div></div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:5px">${pct>100?`<span style="color:var(--red);font-weight:600">⚠️ تجاوزت الحد بـ ${fmt(realSpent-budget)} EGP</span>`:''}</div>`
+        :skipMonth?'':`<div style="font-size:11px;color:var(--text-3);margin-top:4px">اضغط "حدد الميزانية" لتفعيل التتبع أو <button onclick="toggleSkipBudget(${i})" style="background:none;border:none;color:var(--amber);cursor:pointer;font-family:Tajawal,sans-serif;font-size:11px;padding:0;text-decoration:underline">أجّل الشهر ده</button></div>`
       }
     </div>`;
   }).join('');
@@ -3609,7 +3667,7 @@ function generateWeekSlots(){
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <div style="font-size:12.5px;font-weight:700;color:var(--text-1)">
           <span style="color:var(--amber)">الأسبوع ${weekNum}</span>
-          <span style="color:var(--text-3);font-weight:400;font-size:11px;margin-right:6px">${ws} ← ${we}</span>
+          <span style="color:var(--text-3);font-weight:400;font-size:11px;margin-right:6px">${fmtDateShort(ws)} ← ${fmtDateShort(we)}</span>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           ${limit>0?`<span style="font-size:11px;color:${left<0?'var(--red)':left<limit*0.2?'var(--amber)':'var(--green)'};font-weight:700">${pct}% منصرف</span>`:''}
@@ -3775,7 +3833,7 @@ function renderWeeklyBudgetUI(){
           return`<div style="margin-bottom:8px;${isActive?'background:var(--bg-2);border-radius:var(--r-md);padding:6px 8px;border:1px solid var(--border-med)':'padding:4px 0'}">
             <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2);margin-bottom:4px">
               <span style="flex:1;font-weight:${isActive?700:500};color:${isActive?'var(--amber)':'var(--text-2)'}">
-                ${isActive?'● ':''}الأسبوع ${i+1} (${w.start.slice(5)} ← ${w.end.slice(5)})
+                ${isActive?'● ':''}الأسبوع ${i+1} (${fmtDateShort(w.start)} ← ${fmtDateShort(w.end)})
               </span>
               <span style="font-family:'Space Grotesk',monospace;color:${lft<0?'var(--red)':'var(--text-1)'};font-weight:700">${fmt(Math.max(lft,0))} متبقي</span>
               <button onclick="openEditWeekSlot('${w.start}','${w.end}')" title="تعديل" style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700;white-space:nowrap">✏️ تعديل</button>
@@ -3791,7 +3849,7 @@ function renderWeeklyBudgetUI(){
     detEl.innerHTML=`
       <div style="padding:0 0 10px">
         <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px">
-          <span>الأسبوع الحالي: ${ws} ← ${we}</span>
+          <span>الأسبوع الحالي: ${fmtDateShort(ws)} ← ${fmtDateShort(we)}</span>
           <span style="font-weight:700;color:${left<0?'var(--red)':'var(--teal)'}">${pct}% منصرف</span>
         </div>
         <div class="progress-track" style="height:7px">
@@ -3974,7 +4032,7 @@ function initWeekChart(){
   const labels=Object.keys(days).sort();const vals=labels.map(d=>Math.round(days[d]));
   mkChart('weekChart',{
     type:'bar',
-    data:{labels:labels.map(d=>d+' / '+new Date().getMonth()+1),datasets:[{data:vals,backgroundColor:vals.map(v=>v>5000?'rgba(255,77,109,.8)':v>2000?'rgba(245,166,35,.8)':'rgba(79,156,249,.8)'),borderRadius:6}]},
+    data:{labels:labels.map(d=>d+'/'+(new Date().getMonth()+1)),datasets:[{data:vals,backgroundColor:vals.map(v=>v>5000?'rgba(255,77,109,.8)':v>2000?'rgba(245,166,35,.8)':'rgba(79,156,249,.8)'),borderRadius:6}]},
     options:{...chartDefaults,scales:{...chartDefaults.scales,x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,font:{size:9}}}}}
   });
 }
