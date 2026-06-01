@@ -2318,6 +2318,20 @@ function _applyLoadedData(data){
   const _walCount = (_check.wallets||[]).length;
   console.log('[فلوسي] _applyLoadedData saved:', _txCount, 'tx,', _walCount, 'wallets');
 
+  // ✅ FIX: تحديث وقت "آخر مزامنة" من exportedAt الحقيقي اللي جه من السيرفر
+  if(data.exportedAt){
+    try{
+      const d = new Date(data.exportedAt);
+      const formatted = d.toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}) +
+                        ' ' + d.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+      localStorage.setItem('floosi_lastSync', formatted);
+      const wrap = document.getElementById('lastSyncWrap');
+      const timeEl = document.getElementById('lastSyncTime');
+      if(wrap) wrap.style.display = 'flex';
+      if(timeEl) timeEl.textContent = formatted;
+    }catch(e){}
+  }
+
   refreshAll();
   renderSettings();
 
@@ -3154,6 +3168,14 @@ function renderBudget(){
   getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{
     spentByCat[t.cat]=(spentByCat[t.cat]||0)+toEGP(t.amount,t.currency);
   });
+
+  // ✅ FIX: حدّث spent في state.budget من المعاملات الحقيقية عشان يتحفظ ويتبعت للشيت صح
+  state.budget.forEach(r=>{
+    const ck=r.catKey||r.cat;
+    const c2=state.categories.find(c=>c.key===ck||c.name===r.cat);
+    r.spent=Math.round(spentByCat[ck]||spentByCat[c2?.key]||0);
+  });
+  saveState();
 
   el.innerHTML=state.budget.map((r,i)=>{
     // الـ catKey ممكن يكون مخزون أو نفس الـ cat
