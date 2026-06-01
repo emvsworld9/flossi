@@ -20,47 +20,49 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 ::-webkit-scrollbar-thumb{background:var(--border-med);border-radius:99px}
 
 :root{
-  /* Deep teal-to-indigo dark theme */
-  --bg-0:#080e1a;
-  --bg-1:#0d1628;
-  --bg-2:#111e35;
-  --bg-3:#162440;
-  --bg-4:#1c2d4f;
-  --border:#1e2f50;
-  --border-med:#253a62;
-  --border-hi:#2f4a7a;
+  /* 🎨 Vibrant dark theme — warm purple-to-teal */
+  --bg-0:#0f0b1e;
+  --bg-1:#16102b;
+  --bg-2:#1d1638;
+  --bg-3:#251e46;
+  --bg-4:#2e2656;
+  --border:#2e2455;
+  --border-med:#3d3070;
+  --border-hi:#5040a0;
 
-  --text-1:#e8f0ff;
-  --text-2:#7a96c4;
-  --text-3:#3a5080;
+  --text-1:#f0eaff;
+  --text-2:#9b8ec4;
+  --text-3:#4e3d80;
 
-  /* Vibrant accent palette */
-  --blue:#4f9cf9;
-  --blue-dim:#4f9cf912;
-  --blue-glow:#4f9cf930;
-  --teal:#00d4b4;
-  --teal-dim:#00d4b412;
-  --teal-glow:#00d4b430;
-  --green:#22c55e;
-  --green-dim:#22c55e12;
-  --red:#ff4d6d;
-  --red-dim:#ff4d6d12;
-  --amber:#f5a623;
-  --amber-dim:#f5a62312;
-  --purple:#a78bfa;
-  --purple-dim:#a78bfa12;
-  --gold:#fbbf24;
-  --gold-dim:#fbbf2412;
-  --pink:#f472b6;
-  --pink-dim:#f472b612;
-  --cyan:#22d3ee;
-  --cyan-dim:#22d3ee12;
+  /* 🌈 Punchy accent palette */
+  --blue:#6ab4ff;
+  --blue-dim:#6ab4ff15;
+  --blue-glow:#6ab4ff35;
+  --teal:#00f5c4;
+  --teal-dim:#00f5c415;
+  --teal-glow:#00f5c435;
+  --green:#22e87a;
+  --green-dim:#22e87a15;
+  --red:#ff5580;
+  --red-dim:#ff558015;
+  --amber:#ffb340;
+  --amber-dim:#ffb34015;
+  --purple:#c084fc;
+  --purple-dim:#c084fc15;
+  --gold:#ffd700;
+  --gold-dim:#ffd70015;
+  --pink:#ff72c8;
+  --pink-dim:#ff72c815;
+  --cyan:#22eeff;
+  --cyan-dim:#22eeff15;
+  --orange:#ff8c42;
+  --orange-dim:#ff8c4215;
 
   --r-sm:6px;--r-md:10px;--r-lg:14px;--r-xl:18px;--r-2xl:24px;
   --shadow-sm:0 1px 4px rgba(0,0,0,.5);
   --shadow-md:0 4px 20px rgba(0,0,0,.6);
   --shadow-lg:0 8px 40px rgba(0,0,0,.7);
-  --shadow-glow:0 0 30px rgba(79,156,249,.15);
+  --shadow-glow:0 0 30px rgba(192,132,252,.2);
   --trans:.2s cubic-bezier(.4,0,.2,1);
 }
 
@@ -70,7 +72,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 /* ── SIDEBAR ── */
 .sidebar{
   width:250px;flex-shrink:0;
-  background:var(--bg-1);
+  background:linear-gradient(180deg,#1a0f35 0%,#16102b 40%,#0f1a28 100%);
   border-left:1px solid var(--border);
   display:flex;flex-direction:column;
   overflow-y:auto;overflow-x:hidden;
@@ -79,7 +81,9 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 }
 .sidebar::before{
   content:'';position:absolute;top:0;left:0;right:0;bottom:0;
-  background:radial-gradient(ellipse at 30% 0%,rgba(79,156,249,.06) 0%,transparent 60%);
+  background:
+    radial-gradient(ellipse at 20% 0%,rgba(192,132,252,.12) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 100%,rgba(0,245,196,.08) 0%,transparent 50%);
   pointer-events:none;
 }
 .sidebar-logo{
@@ -90,19 +94,19 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .logo-icon{
   width:40px;height:40px;
   border-radius:var(--r-lg);
-  background:linear-gradient(135deg,var(--blue),var(--teal));
+  background:linear-gradient(135deg,var(--purple),var(--teal));
   display:flex;align-items:center;justify-content:center;
   font-size:20px;flex-shrink:0;
-  box-shadow:0 0 20px var(--blue-glow);
+  box-shadow:0 0 24px rgba(192,132,252,.5);
   position:relative;
 }
 .logo-icon::after{
   content:'';position:absolute;inset:-1px;
   border-radius:var(--r-lg);
-  background:linear-gradient(135deg,var(--blue),var(--teal));
-  z-index:-1;opacity:.3;filter:blur(6px);
+  background:linear-gradient(135deg,var(--purple),var(--teal));
+  z-index:-1;opacity:.4;filter:blur(8px);
 }
-.logo-text{font-size:18px;font-weight:800;letter-spacing:-.3px;background:linear-gradient(135deg,var(--text-1),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo-text{font-size:18px;font-weight:800;letter-spacing:-.3px;background:linear-gradient(135deg,var(--purple),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .logo-sub{font-size:10.5px;color:var(--text-3);margin-top:1px;letter-spacing:.03em}
 
 .nav{padding:10px 0;flex:1}
@@ -124,13 +128,13 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   -webkit-tap-highlight-color:transparent;
   user-select:none;
 }
-.nav-item:hover{color:var(--text-1);background:var(--bg-2)}
+.nav-item:hover{color:var(--text-1);background:rgba(192,132,252,.08)}
 .nav-item.active{
-  color:var(--blue);
-  background:linear-gradient(90deg,var(--blue-dim),transparent);
-  border-right-color:var(--blue);
+  color:var(--purple);
+  background:linear-gradient(90deg,rgba(192,132,252,.15),transparent);
+  border-right-color:var(--purple);
 }
-.nav-item.active i{color:var(--blue)}
+.nav-item.active i{color:var(--purple)}
 .nav-item i{font-size:18px;flex-shrink:0;transition:color var(--trans)}
 .nav-badge{
   margin-right:auto;
@@ -165,7 +169,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg-0)}
 
 .topbar{
-  background:var(--bg-1);
+  background:linear-gradient(135deg,#16102b 0%,#1a1535 100%);
   border-bottom:1px solid var(--border);
   padding:0 26px;height:60px;
   display:flex;align-items:center;justify-content:space-between;
@@ -173,8 +177,9 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   position:relative;
 }
 .topbar::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--blue-glow),transparent);
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--blue),var(--teal),var(--green));
+  opacity:.7;
 }
 .page-title{font-size:17px;font-weight:800;color:var(--text-1)}
 .page-subtitle{font-size:11.5px;color:var(--text-3);margin-top:2px}
@@ -195,13 +200,13 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .btn:hover{background:var(--bg-3);border-color:var(--border-hi)}
 .btn i{font-size:15px}
 .btn-primary{
-  background:linear-gradient(135deg,#3b82f6,#1d4ed8);
-  border-color:#3b82f6;color:#fff;
-  box-shadow:0 2px 12px rgba(59,130,246,.3);
+  background:linear-gradient(135deg,#9333ea,#6366f1);
+  border-color:#9333ea;color:#fff;
+  box-shadow:0 2px 16px rgba(147,51,234,.4);
 }
 .btn-primary:hover{
-  background:linear-gradient(135deg,#4f9cf9,#2563eb);
-  box-shadow:0 4px 20px rgba(59,130,246,.4);
+  background:linear-gradient(135deg,#a855f7,#818cf8);
+  box-shadow:0 4px 24px rgba(147,51,234,.5);
   transform:translateY(-1px);
 }
 .btn-ghost{background:transparent;border-color:transparent;color:var(--text-2)}
@@ -248,13 +253,13 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   cursor:default;position:relative;overflow:hidden;
 }
 .metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0}
-.metric-card.blue::before{background:linear-gradient(90deg,var(--blue),var(--teal))}
+.metric-card.blue::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
 .metric-card.green::before{background:linear-gradient(90deg,var(--green),var(--teal))}
 .metric-card.red::before{background:linear-gradient(90deg,var(--red),var(--pink))}
-.metric-card.amber::before{background:linear-gradient(90deg,var(--amber),var(--gold))}
+.metric-card.amber::before{background:linear-gradient(90deg,var(--amber),var(--orange))}
 .metric-card.purple::before{background:linear-gradient(90deg,var(--purple),var(--pink))}
-.metric-card.cyan::before{background:linear-gradient(90deg,var(--cyan),var(--blue))}
-.metric-card.teal::before{background:linear-gradient(90deg,var(--teal),var(--cyan))}
+.metric-card.cyan::before{background:linear-gradient(90deg,var(--cyan),var(--teal))}
+.metric-card.teal::before{background:linear-gradient(90deg,var(--teal),var(--green))}
 .metric-card::after{
   content:'';position:absolute;top:0;left:0;right:0;bottom:0;
   background:radial-gradient(ellipse at 80% 50%,rgba(255,255,255,.015) 0%,transparent 60%);
@@ -539,8 +544,8 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 
 /* ── AI INSIGHT ── */
 .ai-insight{
-  background:linear-gradient(135deg,rgba(79,156,249,.07),rgba(0,212,180,.05));
-  border:1px solid rgba(79,156,249,.2);
+  background:linear-gradient(135deg,rgba(192,132,252,.1),rgba(0,245,196,.06),rgba(106,180,255,.05));
+  border:1px solid rgba(192,132,252,.25);
   border-radius:var(--r-xl);
   padding:16px 20px;
   display:flex;align-items:flex-start;gap:13px;
@@ -549,16 +554,16 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 }
 .ai-insight::before{
   content:'';position:absolute;top:0;right:0;
-  width:150px;height:150px;
-  background:radial-gradient(circle,rgba(79,156,249,.06),transparent 70%);
+  width:180px;height:180px;
+  background:radial-gradient(circle,rgba(192,132,252,.1),transparent 70%);
   pointer-events:none;
 }
 .ai-icon{
   width:38px;height:38px;border-radius:50%;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
+  background:linear-gradient(135deg,var(--purple),var(--pink));
   display:flex;align-items:center;justify-content:center;
   font-size:17px;flex-shrink:0;
-  box-shadow:0 0 15px rgba(79,156,249,.3);
+  box-shadow:0 0 18px rgba(192,132,252,.4);
 }
 .ai-text{font-size:13.5px;color:var(--text-2);line-height:1.65}
 .ai-text strong{color:var(--text-1)}
@@ -812,6 +817,104 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .qs-val{font-size:22px;font-weight:800;font-family:'Space Grotesk',monospace;line-height:1}
 .qs-label{font-size:10px;color:var(--text-3);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.08em}
 .qs-divider{width:1px;background:var(--border);flex-shrink:0;align-self:stretch}
+
+/* ── TODAY CARD ── */
+.today-card{
+  background:linear-gradient(135deg,rgba(192,132,252,.12),rgba(0,245,196,.07),rgba(106,180,255,.08));
+  border:1px solid rgba(192,132,252,.3);
+  border-radius:var(--r-xl);
+  padding:16px 20px;
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:16px;
+  position:relative;overflow:hidden;
+}
+.today-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--blue),var(--teal),var(--green),var(--purple));
+  animation:shimmer 3s linear infinite;
+  background-size:200% 100%;
+}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.today-icon{
+  width:48px;height:48px;border-radius:var(--r-lg);
+  background:linear-gradient(135deg,var(--purple),var(--teal));
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+  box-shadow:0 4px 20px rgba(192,132,252,.4);
+}
+.today-info{flex:1}
+.today-label{font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.today-amount{font-size:26px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--text-1);line-height:1}
+.today-sub{font-size:11.5px;color:var(--text-2);margin-top:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.today-progress{flex:1;min-width:100px}
+.today-progress-track{height:6px;background:var(--bg-3);border-radius:99px;overflow:hidden;margin-bottom:4px}
+.today-progress-fill{height:100%;border-radius:99px;transition:width .5s cubic-bezier(.4,0,.2,1)}
+
+/* ── DAILY RATE CHART in budget ── */
+.daily-rate-card{background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px 22px;margin-bottom:20px}
+
+/* ── MONTHLY SPEND RATE PILL ── */
+.spend-rate-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:99px;
+  font-size:11.5px;font-weight:700;
+  border:1px solid;
+}
+
+/* ── QUICK ADD PANEL ── */
+.quick-add-strip{
+  display:flex;gap:8px;flex-wrap:wrap;
+  background:var(--bg-1);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:12px 18px;
+  margin-bottom:20px;align-items:center;
+}
+.quick-cat-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:var(--r-md);
+  font-size:12px;font-weight:600;cursor:pointer;
+  border:1px solid var(--border-med);
+  background:var(--bg-2);color:var(--text-2);
+  transition:all var(--trans);
+  -webkit-tap-highlight-color:transparent;
+}
+.quick-cat-btn:hover{background:var(--bg-3);color:var(--text-1);border-color:var(--border-hi)}
+.quick-cat-btn:active{transform:scale(.96)}
+
+/* ── DAILY SPEND CHART CARD ── */
+.daily-chart-mini{margin-top:16px}
+
+/* ── MONTHLY AVG CARD ── */
+.monthly-avg-row{
+  display:flex;gap:12px;flex-wrap:wrap;
+  margin-bottom:20px;
+}
+.avg-pill{
+  flex:1;min-width:120px;
+  background:var(--bg-1);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:14px 16px;
+  text-align:center;transition:all var(--trans);
+}
+.avg-pill:hover{border-color:var(--border-med);transform:translateY(-1px)}
+.avg-pill-val{font-size:19px;font-weight:800;font-family:'Space Grotesk',monospace;line-height:1}
+.avg-pill-label{font-size:10px;color:var(--text-3);margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+
+/* ── TABS ENHANCED ── */
+.tabs{display:flex;background:var(--bg-2);border-radius:var(--r-md);padding:3px;border:1px solid var(--border)}
+.tab-btn{padding:5px 14px;border-radius:calc(var(--r-md) - 2px);font-size:12px;font-weight:600;cursor:pointer;background:transparent;border:none;color:var(--text-2);transition:all var(--trans)}
+.tab-btn.active{background:var(--bg-3);color:var(--text-1);box-shadow:var(--shadow-sm)}
+
+/* ── PROGRESS TRACK ── */
+.progress-track{background:var(--bg-3);border-radius:99px;overflow:hidden;height:6px}
+.progress-fill{height:100%;border-radius:99px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+/* ── BADGE ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:99px;font-size:10.5px;font-weight:700}
+.badge-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,77,109,.2)}
+.badge-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+.badge-amber{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(245,166,35,.2)}
+.badge-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(79,156,249,.2)}
+.badge-purple{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,.2)}
+.mb20{margin-bottom:20px}
 </style>
 </head>
 <body>
@@ -826,8 +929,8 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <div class="modal-title"><i class="ti ti-receipt" style="color:var(--blue)"></i> <span id="modalAddTitle">إضافة معاملة جديدة</span></div>
   <input type="hidden" id="txEditId">
   <div class="form-group">
-    <label class="form-label">الوصف</label>
-    <input type="text" id="txDesc" placeholder="مثال: كارفور، بنزين، راتب...">
+    <label class="form-label">الوصف <span style="color:var(--text-3);font-weight:400;font-size:10px">(اختياري — هيتملى من الفئة لو فاضي)</span></label>
+    <input type="text" id="txDesc" placeholder="مثال: كارفور، بنزين، راتب... (أو اتركه فاضي)">
   </div>
   <div class="form-grid">
     <div class="form-group">
@@ -1184,6 +1287,10 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <i class="ti ti-bell" style="font-size:18px"></i>
           <span class="notif-dot" id="notifDot" style="display:none"></span>
         </button>
+        <div id="lastSyncWrap" style="display:none;flex-direction:column;align-items:flex-end;line-height:1.3">
+          <span style="font-size:9px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.05em">آخر مزامنة</span>
+          <span id="lastSyncTime" style="font-size:11px;font-weight:700;color:var(--teal);font-family:'Space Grotesk',monospace;white-space:nowrap">—</span>
+        </div>
         <button class="btn btn-sync" id="syncBtn" onclick="syncWithSheets()" title="مزامنة مع Google Sheets">
           <i class="ti ti-refresh"></i> <span id="syncBtnLabel">مزامنة</span>
           <span class="sync-dot" id="syncDot"></span>
@@ -1208,6 +1315,38 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div class="rate-item"><span class="lbl">ذهب/جم</span><span class="val">4,250 EGP</span><span class="chg up">▲ 1.2%</span></div>
           <div class="rate-item"><span class="lbl">Bitcoin</span><span class="val">$98,240</span><span class="chg up">▲ 2.8%</span></div>
           <div class="rate-item" style="margin-right:auto"><span class="lbl">تحديث</span><span class="val" id="lastUpdate">الآن</span></div>
+        </div>
+
+        <!-- ══ TODAY WIDGET ══ -->
+        <div class="today-card" id="todayCard">
+          <div class="today-icon">📅</div>
+          <div class="today-info">
+            <div class="today-label">اليوم — <span id="todayDateLabel">—</span></div>
+            <div class="today-amount"><span class="curr" style="font-size:14px;color:var(--text-3)">EGP</span> <span id="todaySpent">—</span></div>
+            <div class="today-sub">
+              <span id="todayTxCount" style="color:var(--text-3)">—</span>
+              <span id="todayVsAvg"></span>
+            </div>
+          </div>
+          <div class="today-progress" style="min-width:130px">
+            <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-3);margin-bottom:4px">
+              <span>من الميزانية اليومية</span>
+              <span id="todayPct" style="font-weight:700">—</span>
+            </div>
+            <div class="today-progress-track">
+              <div class="today-progress-fill" id="todayBar" style="width:0%;background:linear-gradient(90deg,var(--blue),var(--teal))"></div>
+            </div>
+            <div style="font-size:10px;color:var(--text-3);margin-top:4px" id="todayBudgetHint">الميزانية اليومية = ميزانية الأسبوع ÷ 7</div>
+          </div>
+          <button class="btn btn-sm btn-primary" onclick="openAddTx()" style="flex-shrink:0">
+            <i class="ti ti-plus"></i>
+          </button>
+        </div>
+
+        <!-- ══ QUICK ADD STRIP ══ -->
+        <div class="quick-add-strip" id="quickAddStrip">
+          <span style="font-size:11.5px;color:var(--text-3);font-weight:600;flex-shrink:0">سجّل سريع:</span>
+          <div id="quickCatBtns" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
         </div>
 
         <div class="ai-insight" id="aiInsight">
@@ -1372,7 +1511,18 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div id="weekBudgetDetails" style="padding:4px 0 8px">
             <div style="font-size:12px;color:var(--text-3);text-align:center;padding:12px">اضغط "تحديد" لتحديد ميزانيتك الأسبوعية</div>
           </div>
-          <div class="chart-wrap" style="height:190px"><canvas id="weekChart"></canvas></div>
+          <!-- اليوم من الأسبوع -->
+          <div id="todayFromWeekCard" style="display:none;margin-top:12px;padding:12px 14px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg)">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div style="font-size:12px;font-weight:700;color:var(--text-1)">📅 صرفت اليوم</div>
+              <div style="font-family:'Space Grotesk',monospace;font-size:16px;font-weight:800;color:var(--red)" id="budgetTodayAmt">—</div>
+            </div>
+            <div style="font-size:11px;color:var(--text-3);margin-bottom:6px">من ميزانية يومية = <strong id="budgetDailyLimit">—</strong> EGP</div>
+            <div class="progress-track" style="height:5px">
+              <div class="progress-fill" id="budgetTodayBar" style="width:0%"></div>
+            </div>
+          </div>
+          <div class="chart-wrap" style="height:190px;margin-top:12px"><canvas id="weekChart"></canvas></div>
         </div>
         <div class="card">
           <div class="card-header">
@@ -1512,6 +1662,27 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 
       <!-- ═══ ANALYTICS ═══ -->
       <div class="page" id="page-analytics">
+
+        <!-- معدل الصرف الشهري المتوسط -->
+        <div class="monthly-avg-row" id="monthlyAvgRow"></div>
+
+        <!-- رسم معدل الصرف اليومي كل شهر -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div>
+              <div class="card-title">📊 معدل الصرف اليومي — شهر بشهر</div>
+              <div class="card-subtitle" id="dailyAvgSubtitle">متوسط الصرف في اليوم لكل شهر</div>
+            </div>
+            <select class="btn btn-sm" id="dailyRateMonthCount" onchange="renderDailyRateChart()">
+              <option value="6">6 شهور</option>
+              <option value="12">12 شهر</option>
+              <option value="3">3 شهور</option>
+            </select>
+          </div>
+          <div class="chart-wrap" style="height:220px"><canvas id="dailyRateChart"></canvas></div>
+          <div id="dailyRateLegend" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:11.5px"></div>
+        </div>
+
         <div class="g2 mb20">
           <div class="card">
             <div class="card-header"><div class="card-title">الدخل مقابل الإنفاق — 6 شهور</div></div>
@@ -1546,6 +1717,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
                   <th style="padding:11px 13px;text-align:right;color:var(--text-2);font-weight:600">الشهر</th>
                   <th style="padding:11px 13px;text-align:left;color:var(--text-2);font-weight:600">الدخل</th>
                   <th style="padding:11px 13px;text-align:left;color:var(--text-2);font-weight:600">المصاريف</th>
+                  <th style="padding:11px 13px;text-align:left;color:var(--text-2);font-weight:600">معدل يومي</th>
                   <th style="padding:11px 13px;text-align:left;color:var(--text-2);font-weight:600">الادخار</th>
                   <th style="padding:11px 13px;text-align:left;color:var(--text-2);font-weight:600">نسبة الادخار</th>
                 </tr>
@@ -1629,7 +1801,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
         <div class="settings-section">
           <div class="settings-title"><i class="ti ti-info-circle"></i> عن التطبيق</div>
           <div style="font-size:13px;color:var(--text-2);line-height:1.7">
-            <strong style="color:var(--text-1)">فلوسي v2.0</strong> — تطبيق إدارة مالية شخصية متكامل.<br>
+            <strong style="color:var(--text-1)">فلوسي v3.0</strong> — تطبيق إدارة مالية شخصية متكامل.<br>
             كل بياناتك محفوظة محلياً على جهازك بأمان تام.<br>
             <span style="color:var(--teal)">✦ لا يوجد سيرفر — لا يوجد تتبع — بياناتك ملكك</span>
           </div>
@@ -1746,6 +1918,9 @@ async function syncWithSheets(){
     dot.className = 'sync-dot ok';
     label.textContent = 'متزامن ✓';
     toast('✅ تم الإرسال لـ Google Sheets بنجاح!');
+
+    // ── تسجيل وقت آخر مزامنة ──
+    _updateLastSyncTime();
 
     // reset label after 4s
     setTimeout(()=>{
@@ -1923,7 +2098,7 @@ function _showLoadFailedToast(url){
     <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
       <button onclick="_loadViaNewTab('${url.replace(/'/g,"\\'")}').then(ok=>{ if(ok) document.getElementById('loadFailedBanner')?.remove(); })" style="
         flex:2;padding:11px;border-radius:var(--r-md);border:1px solid var(--blue);
-        background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;font-size:13px;font-weight:700;
+        background:linear-gradient(135deg,#9333ea,#6366f1);color:#fff;font-size:13px;font-weight:700;
         cursor:pointer;font-family:'Tajawal',sans-serif;
         box-shadow:0 2px 12px rgba(59,130,246,.4);
       "><i class="ti ti-cloud-download"></i> تحميل تلقائي (تبويب جديد)</button>
@@ -2205,13 +2380,17 @@ function toEGP(amount,currency){
   return amount;
 }
 function fmtDate(d){
-  const today=new Date().toISOString().slice(0,10);
-  const yest=new Date(Date.now()-86400000).toISOString().slice(0,10);
-  if(d===today)return'اليوم';if(d===yest)return'أمس';
-  return new Date(d+'T00:00:00').toLocaleDateString('ar-EG',{month:'short',day:'numeric'});
+  const cairoToday = getCairoNow().toISOString().slice(0,10);
+  const yest = new Date(getCairoNow() - 86400000).toISOString().slice(0,10);
+  if(d===cairoToday) return 'اليوم';
+  if(d===yest) return 'أمس';
+  // عرض التاريخ بصيغة dd/mm/yyyy
+  const parts = d.split('-'); // yyyy-mm-dd
+  if(parts.length===3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  return d;
 }
-function getCurrentMonthKey(){const n=new Date();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;}
-function getPrevMonthKey(){const n=new Date();const m=n.getMonth();const y=n.getFullYear();const pm=m===0?11:m-1;const py=m===0?y-1:y;return`${py}-${String(pm+1).padStart(2,'0')}`;}
+function getCurrentMonthKey(){const n=getCairoNow();return`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;}
+function getPrevMonthKey(){const n=getCairoNow();const m=n.getMonth();const y=n.getFullYear();const pm=m===0?11:m-1;const py=m===0?y-1:y;return`${py}-${String(pm+1).padStart(2,'0')}`;}
 function getMonthTxs(mk){return state.transactions.filter(t=>t.date&&t.date.startsWith(mk));}
 function calcMonthIncome(mk){return getMonthTxs(mk).filter(t=>t.type==='income').reduce((s,t)=>s+toEGP(t.amount,t.currency),0);}
 function calcMonthExpenses(mk){return getMonthTxs(mk).filter(t=>t.type==='expense').reduce((s,t)=>s+toEGP(t.amount,t.currency),0);}
@@ -2281,13 +2460,14 @@ function showPage(id,el){
   document.getElementById('pageTitle').textContent=pageTitles[id]||id;
   const now=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long'});
   document.getElementById('pageSubtitle').textContent=now+' — '+pageSubs[id];
-  if(id==='analytics')renderAnalytics();
+  if(id==='analytics'){renderAnalytics();}
   if(id==='wallets'){renderWallets();renderWalletTxBreakdown();}
   if(id==='invest'){renderInvestments();calcSim();}
   if(id==='goals')renderGoals();
   if(id==='budget'){renderBudget();initWeekChart();}
   if(id==='debts')renderDebts();
   if(id==='settings')renderSettings();
+  if(id==='dashboard'){updateTodayWidget();}
 }
 
 // ── MODALS ──
@@ -2479,15 +2659,21 @@ function openEditTx(id){
   openModal('modalAdd');
 }
 function saveTransaction(){
-  const desc=document.getElementById('txDesc').value.trim();
   const amount=parseFloat(document.getElementById('txAmount').value);
-  if(!desc||!amount||amount<=0){toast('اكتب الوصف والمبلغ الصح','error');return;}
+  if(!amount||amount<=0){toast('اكتب المبلغ الصح','error');return;}
   const type=document.getElementById('txType').value;
+  const catKey=document.getElementById('txCat').value;
+  // الوصف اختياري — لو فاضي نستخدم اسم الفئة
+  let desc=document.getElementById('txDesc').value.trim();
+  if(!desc){
+    const cat=state.categories.find(c=>c.key===catKey);
+    desc=cat?cat.name:(type==='income'?'دخل':type==='transfer'?'تحويل':'مصروف');
+  }
   const walletKey=document.getElementById('txWallet').value;
   const toWalletKey=type==='transfer'?document.getElementById('txToWallet').value:'';
   if(type==='transfer'&&toWalletKey===walletKey){toast('المحفظة المصدر والوجهة لازم يكونوا مختلفين','error');return;}
   const editId=document.getElementById('txEditId').value;
-  const data={desc,amount,currency:document.getElementById('txCurrency').value,type,cat:document.getElementById('txCat').value,wallet:walletKey,toWallet:toWalletKey,date:document.getElementById('txDate').value||new Date().toISOString().slice(0,10),note:document.getElementById('txNote').value};
+  const data={desc,amount,currency:document.getElementById('txCurrency').value,type,cat:catKey,wallet:walletKey,toWallet:toWalletKey,date:document.getElementById('txDate').value||new Date().toISOString().slice(0,10),note:document.getElementById('txNote').value};
 
   if(editId){
     const idx=state.transactions.findIndex(t=>t.id===+editId);
@@ -2798,10 +2984,27 @@ function openEditBudget(idx){
   openModal('modalBudget');
 }
 function saveBudget(){
-  const cat=document.getElementById('budgetCat').value.trim();const total=parseFloat(document.getElementById('budgetLimit').value)||0;const spent=parseFloat(document.getElementById('budgetSpent').value)||0;
+  const cat=document.getElementById('budgetCat').value.trim();
+  const total=parseFloat(document.getElementById('budgetLimit').value)||0;
+  const spent=parseFloat(document.getElementById('budgetSpent').value)||0;
   if(!cat||total<=0){toast('اكتب الفئة والحد','error');return;}
-  const data={cat,total,spent,icon:document.getElementById('budgetIcon').value||'ti-circle',color:document.getElementById('budgetColor').value};
+
+  // ── تحقق: مجموع ميزانيات الفئات لا يتعدى ميزانية الشهر ──
+  const cairoNow=getCairoNow();
+  const mo=`${cairoNow.getFullYear()}-${String(cairoNow.getMonth()+1).padStart(2,'0')}`;
+  const monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===mo||w.end.slice(0,7)===mo);
+  const monthlyTotal=monthWeeks.reduce((s,w)=>s+w.limit,0);
   const editIdx=document.getElementById('budgetEditIdx').value;
+  // مجموع الفئات الأخرى (مش الفئة اللي بنعدلها)
+  const otherCatsTotal=state.budget.reduce((s,b,i)=>
+    (editIdx!==''&&i===+editIdx)?s:s+(b.total||b.limit||0),0);
+  if(monthlyTotal>0 && (otherCatsTotal+total)>monthlyTotal){
+    const available=monthlyTotal-otherCatsTotal;
+    toast(`⚠️ ميزانية الفئات هتتعدى ميزانية الشهر (${fmt(monthlyTotal)} EGP)! المتاح: ${fmt(Math.max(available,0))} EGP فقط`,'error');
+    return;
+  }
+
+  const data={cat,total,spent,icon:document.getElementById('budgetIcon').value||'ti-circle',color:document.getElementById('budgetColor').value};
   if(editIdx!==''){state.budget[+editIdx]=data;toast('✏️ تم التعديل');}else{state.budget.push(data);toast('✅ تم إضافة الفئة');}
   saveState();_syncAfterSave();closeModal('modalBudget');renderBudget();
 }
@@ -2921,40 +3124,105 @@ function renderExpenses(){
 
 function renderBudget(){
   const el=document.getElementById('budgetRows');
+  const mk=getCurrentMonthKey();
+
+  // احسب الـ spent الفعلي من المعاملات لكل فئة
+  const spentByCat={};
+  getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{
+    spentByCat[t.cat]=(spentByCat[t.cat]||0)+toEGP(t.amount,t.currency);
+  });
+
   el.innerHTML=state.budget.map((r,i)=>{
-    const pct=r.total>0?Math.round(r.spent/r.total*100):0;
+    // الـ catKey ممكن يكون مخزون أو نفس الـ cat
+    const catKey=r.catKey||r.cat;
+    const cat=state.categories.find(c=>c.key===catKey||c.name===r.cat);
+    // spent الحقيقي من المعاملات
+    const realSpent=Math.round((spentByCat[catKey]||spentByCat[cat?.key]||0));
+    const budget=r.total||r.limit||0;
+    const pct=budget>0?Math.round(realSpent/budget*100):0;
     const col=pct>90?'var(--red)':pct>70?'var(--amber)':'var(--green)';
-    const remaining=r.total-r.spent;
-    return`<div class="budget-row">
+    const remaining=budget-realSpent;
+    const noLimit=budget===0;
+
+    return`<div class="budget-row" id="brow_${i}">
       <div class="budget-row-head">
-        <div class="budget-cat"><i class="ti ${r.icon}" style="color:${r.color};font-size:17px"></i>${r.cat}</div>
+        <div class="budget-cat">
+          <i class="ti ${r.icon||'ti-circle'}" style="color:${r.color||'var(--blue)'};font-size:17px"></i>
+          ${r.cat}
+          ${noLimit?`<span class="badge badge-amber" style="margin-right:6px;font-size:9px">بدون حد</span>`:''}
+        </div>
         <div style="display:flex;align-items:center;gap:10px">
-          <div class="budget-nums">${fmt(r.spent)} / ${fmt(r.total)} <span style="color:${col};font-weight:700">${pct}%</span></div>
-          <div class="item-actions" style="opacity:1">
+          ${noLimit
+            ?`<button class="btn btn-sm btn-warning" onclick="openSetBudgetLimit(${i})" style="font-size:11px;padding:4px 10px"><i class="ti ti-pencil" style="font-size:12px"></i> حدد الميزانية</button>`
+            :`<div class="budget-nums">${fmt(realSpent)} / ${fmt(budget)} <span style="color:${col};font-weight:700">${pct}%</span></div>`
+          }
+          <div class="item-actions" style="opacity:1;display:flex;gap:4px">
             <button class="btn btn-ghost btn-icon btn-sm" onclick="openEditBudget(${i})" title="تعديل"><i class="ti ti-pencil" style="font-size:13px"></i></button>
             <button class="btn btn-ghost btn-icon btn-sm" onclick="deleteBudget(${i})" title="حذف" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px"></i></button>
           </div>
         </div>
       </div>
-      <div class="progress-track"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:linear-gradient(90deg,${r.color},${r.color}cc)"></div></div>
-      <div style="font-size:11px;color:var(--text-3);margin-top:5px">${pct>100?`<span style="color:var(--red);font-weight:600">تجاوزت الحد بـ ${fmt(r.spent-r.total)} EGP</span>`:`متبقي: <strong style="color:var(--text-1)">${fmt(remaining)} EGP</strong>`}</div>
+      ${noLimit
+        ?`<div style="font-size:11px;color:var(--text-3);margin-top:4px">صرفت <strong style="color:var(--text-1)">${fmt(realSpent)} EGP</strong> هذا الشهر — اضغط "حدد الميزانية" لتفعيل التتبع</div>`
+        :`<div class="progress-track"><div class="progress-fill" style="width:${Math.min(pct,100)}%;background:linear-gradient(90deg,${r.color||'var(--blue)'},${r.color||'var(--blue)'}cc)"></div></div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:5px">${pct>100?`<span style="color:var(--red);font-weight:600">تجاوزت الحد بـ ${fmt(realSpent-budget)} EGP</span>`:`متبقي: <strong style="color:var(--text-1)">${fmt(Math.max(remaining,0))} EGP</strong>`}</div>`
+      }
     </div>`;
   }).join('');
 
-  // الميزانية الشهرية = مجموع ميزانيات أسابيع الشهر الحالي
-  const now=new Date();
-  const mo=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  const monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===mo||w.end.slice(0,7)===mo);
-  const total=monthWeeks.reduce((s,w)=>s+w.limit,0);
-  const spent=monthWeeks.reduce((s,w)=>s+getSpentBetween(w.start,w.end),0);
-  const rem=total-spent;
-  document.getElementById('budgetTotal').textContent=total>0?fmt(total):'—';
-  document.getElementById('budgetSpentTotal').textContent=fmt(spent);
-  document.getElementById('budgetRemaining').textContent=total>0?fmt(rem):'—';
-  const pctTotal=total>0?Math.round(spent/total*100):0;
-  document.getElementById('budgetSpentPct').innerHTML=total>0?`<span class="${pctTotal>90?'down':pctTotal>70?'neutral':'up'}">${pctTotal}% من الميزانية</span>`:'<span class="neutral">لم تُحدد بعد</span>';
-  const noteEl=document.getElementById('budgetTotalNote');
-  if(noteEl) noteEl.textContent=monthWeeks.length>0?`${monthWeeks.length} أسابيع هذا الشهر`:'من مجموع الأسابيع';
+  if(!state.budget.length){
+    el.innerHTML='<div class="empty-state" style="padding:32px"><i class="ti ti-chart-pie"></i><p>مفيش فئات ميزانية — أضف فئات من الإعدادات وهتظهر هنا تلقائياً</p></div>';
+  }
+
+  // ─── الميزانية الشهرية الكلية ───
+  // المجموع = مجموع ميزانيات كل أسابيع الشهر المحفوظة
+  // المنصرف = كل مصاريف الشهر (مش مقيّد بالأسابيع فقط)
+  const cairoNow = getCairoNow();
+  const mo = `${cairoNow.getFullYear()}-${String(cairoNow.getMonth()+1).padStart(2,'0')}`;
+
+  // أسابيع الشهر المحفوظة (الأسبوع يعتبر "في الشهر" لو بدايته أو نهايته فيه)
+  const monthWeeks = (state.weeklyBudgets||[]).filter(w =>
+    w.start.slice(0,7) === mo || w.end.slice(0,7) === mo
+  );
+  const total = monthWeeks.reduce((s,w) => s + w.limit, 0);
+
+  // المنصرف الفعلي = كل مصاريف الشهر كاملاً (مش مقيّد بالأسابيع المحفوظة)
+  const spent = calcMonthExpenses(mo);
+  const rem = total - spent;
+
+  document.getElementById('budgetTotal').textContent = total > 0 ? fmt(total) : '—';
+  document.getElementById('budgetSpentTotal').textContent = fmt(spent);
+  document.getElementById('budgetRemaining').textContent = total > 0 ? fmt(Math.max(rem,0)) : '—';
+  const pctTotal = total > 0 ? Math.round(spent / total * 100) : 0;
+  document.getElementById('budgetSpentPct').innerHTML = total > 0
+    ? `<span class="${pctTotal>90?'down':pctTotal>70?'neutral':'up'}">${pctTotal}% من الميزانية</span>`
+    : '<span class="neutral">لم تُحدد بعد</span>';
+  const noteEl = document.getElementById('budgetTotalNote');
+  if(noteEl) noteEl.textContent = monthWeeks.length > 0 ? `${monthWeeks.length} أسابيع هذا الشهر` : 'من مجموع الأسابيع';
+
+  // اليوم من الأسبوع
+  const todayStr = new Date().toISOString().slice(0,10);
+  const todaySpentAmt = state.transactions.filter(t=>t.type==='expense'&&t.date===todayStr).reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+  const todayFromWeekEl = document.getElementById('todayFromWeekCard');
+  const curWeekForBudget = getCurrentWeekBudget();
+  if(todayFromWeekEl){
+    if(curWeekForBudget && curWeekForBudget.limit>0){
+      todayFromWeekEl.style.display='block';
+      const dailyLim = Math.round(curWeekForBudget.limit/7);
+      const todayPct = Math.min(Math.round(todaySpentAmt/dailyLim*100), 150);
+      const btaEl = document.getElementById('budgetTodayAmt');
+      const bdlEl = document.getElementById('budgetDailyLimit');
+      const btbEl = document.getElementById('budgetTodayBar');
+      if(btaEl){ btaEl.textContent=fmt(todaySpentAmt)+' EGP'; btaEl.style.color=todayPct>=100?'var(--red)':todayPct>=80?'var(--amber)':'var(--text-1)'; }
+      if(bdlEl) bdlEl.textContent=fmt(dailyLim);
+      if(btbEl){
+        btbEl.style.width=Math.min(todayPct,100)+'%';
+        btbEl.style.background=todayPct>=100?'linear-gradient(90deg,var(--red),var(--pink))':todayPct>=80?'linear-gradient(90deg,var(--amber),var(--gold))':'linear-gradient(90deg,var(--blue),var(--teal))';
+      }
+    } else {
+      todayFromWeekEl.style.display='none';
+    }
+  }
 }
 
 function renderDebts(){
@@ -3249,17 +3517,28 @@ function saveCat(){
   const key=name.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9_؀-ۿ]/g,'')+'_'+Date.now();
   const editIdx=document.getElementById('catEditIdx').value;
   if(editIdx!==''){
-    state.categories[+editIdx]={...state.categories[+editIdx],name,color,icon};
+    const oldCat=state.categories[+editIdx];
+    state.categories[+editIdx]={...oldCat,name,color,icon};
+    // حدّث اسم الفئة في الميزانية لو موجودة
+    const bIdx=state.budget.findIndex(b=>b.catKey===oldCat.key);
+    if(bIdx>=0){ state.budget[bIdx].cat=name; state.budget[bIdx].color=color; state.budget[bIdx].icon=icon; }
     toast('✏️ تم تعديل الفئة');
   }else{
-    state.categories.push({key,name,color,icon});
-    toast('✅ تم إضافة الفئة');
+    const newCat={key,name,color,icon};
+    state.categories.push(newCat);
+    // ✅ أضف الفئة تلقائياً للميزانية بحد 0 (المستخدم يحدده)
+    const alreadyInBudget=state.budget.some(b=>b.catKey===key||b.cat===name);
+    if(!alreadyInBudget){
+      state.budget.push({cat:name,catKey:key,total:0,spent:0,icon,color,limit:0});
+    }
+    toast('✅ تم إضافة الفئة — حدد ميزانيتها في صفحة الميزانية');
   }
   saveState();
   closeModal('modalCat');
   renderCatList();
   populateTxCatSelect();
   populateFilterCat();
+  renderBudget();
 }
 function deleteCat(idx){
   confirmDelete('هتحذف الفئة دي؟',()=>{
@@ -3477,8 +3756,8 @@ function deleteWeekSlotByDates(ws, we){
 }
 
 function getCurrentWeekBudget(){
-  // find the custom week slot that contains today
-  const today=isoDate(new Date());
+  // find the custom week slot that contains today (Cairo time)
+  const today = isoDate(getCairoNow());
   return (state.weeklyBudgets||[]).find(w=>today>=w.start&&today<=w.end)||null;
 }
 
@@ -3507,9 +3786,9 @@ function renderWeeklyBudgetUI(){
   const detEl=document.getElementById('weekBudgetDetails');
   if(detEl&&limit>0){
     const barColor=pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--green)';
-    // show all weeks for current month
-    const now=new Date();
-    const mo=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    const cairoNow2=getCairoNow();
+    const mo=`${cairoNow2.getFullYear()}-${String(cairoNow2.getMonth()+1).padStart(2,'0')}`;
+    const todayIso=isoDate(cairoNow2);
     const monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===mo||w.end.slice(0,7)===mo);
     let allWeeksHtml='';
     if(monthWeeks.length>1){
@@ -3520,7 +3799,7 @@ function renderWeeklyBudgetUI(){
           const lft=w.limit-sp;
           const p=Math.min(Math.round(sp/w.limit*100),100);
           const bc=p>=90?'var(--red)':p>=70?'var(--amber)':'var(--green)';
-          const isActive=isoDate(new Date())>=w.start&&isoDate(new Date())<=w.end;
+          const isActive=todayIso>=w.start&&todayIso<=w.end;
           return`<div style="margin-bottom:8px;${isActive?'background:var(--bg-2);border-radius:var(--r-md);padding:6px 8px;border:1px solid var(--border-med)':'padding:4px 0'}">
             <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2);margin-bottom:4px">
               <span style="flex:1;font-weight:${isActive?700:500};color:${isActive?'var(--amber)':'var(--text-2)'}">
@@ -3619,6 +3898,7 @@ function updateDashboard(){
   updateAIInsight(savingRate,exp,prevExp,inc,oweEGP);
   updateNotif();
   updateNetWorthUI();
+  updateTodayWidget();
 
   // ── إجمالي المتعلق للأهداف النشطة فقط ──
   const totalPinned=state.goals.filter(g=>!g.achieved).reduce((s,g)=>s+_calcEffectiveSaved(g),0);
@@ -3649,11 +3929,22 @@ function updateAIInsight(savingRate,exp,prevExp,inc,oweEGP){
   getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{cats[t.cat]=(cats[t.cat]||0)+toEGP(t.amount,t.currency);});
   const topCat=Object.entries(cats).sort((a,b)=>b[1]-a[1])[0];
   const ci=topCat?catInfo[topCat[0]]:null;
+
+  // تقدير نهاية الشهر
+  const now = new Date();
+  const daysInM = getDaysInMonth(now.getFullYear(), now.getMonth()+1);
+  const dayOfM = now.getDate();
+  const projectedExp = dayOfM>0 ? Math.round(exp/dayOfM*daysInM) : 0;
+  const monthPct = Math.round(dayOfM/daysInM*100);
+
   let insight='';
   if(prevExp>0&&exp>prevExp){const diff=Math.round((exp-prevExp)/prevExp*100);insight=`مصاريفك زادت <strong style="color:var(--red)">${diff}%</strong> عن الشهر اللي فات.`;}
   else if(prevExp>0&&exp<prevExp){const diff=Math.round((prevExp-exp)/prevExp*100);insight=`ممتاز! مصاريفك قلت <strong style="color:var(--green)">${diff}%</strong> عن الشهر اللي فات 🎉`;}
   else{insight='مصاريفك متوازنة مع الشهر اللي فات.';}
   if(ci){insight+=` أكبر فئة: <strong>${ci.label}</strong> (${fmt(topCat[1])} EGP).`;}
+  if(dayOfM>5&&projectedExp>0){
+    insight+=` <span style="color:var(--amber)">📈 المتوقع لنهاية الشهر: <strong>${fmt(projectedExp)} EGP</strong> (${monthPct}% من الشهر فات).</span>`;
+  }
   if(savingRate<20){insight+=` <span style="color:var(--amber)">حاول تدخر أكتر — هدفك 30%.</span>`;}
   if(oweEGP>0){insight+=` <span style="color:var(--red)">عندك ديون ${fmt(oweEGP)} EGP — خليهم على بالك.</span>`;}
   el.innerHTML=`<strong>تحليل ذكي:</strong> ${insight}`;
@@ -3709,9 +4000,11 @@ function initWeekChart(){
   const days={};
   txs.forEach(t=>{const d=t.date.slice(8,10);days[d]=(days[d]||0)+toEGP(t.amount,t.currency);});
   const labels=Object.keys(days).sort();const vals=labels.map(d=>Math.round(days[d]));
+  // الشهر الصح بتوقيت القاهرة
+  const cairoM=String(getCairoNow().getMonth()+1).padStart(2,'0');
   mkChart('weekChart',{
     type:'bar',
-    data:{labels:labels.map(d=>d+' / '+new Date().getMonth()+1),datasets:[{data:vals,backgroundColor:vals.map(v=>v>5000?'rgba(255,77,109,.8)':v>2000?'rgba(245,166,35,.8)':'rgba(79,156,249,.8)'),borderRadius:6}]},
+    data:{labels:labels.map(d=>d+'/'+cairoM),datasets:[{data:vals,backgroundColor:vals.map(v=>v>5000?'rgba(255,85,128,.8)':v>2000?'rgba(255,179,64,.8)':'rgba(106,180,255,.8)'),borderRadius:6}]},
     options:{...chartDefaults,scales:{...chartDefaults.scales,x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,font:{size:9}}}}}
   });
 }
@@ -3745,17 +4038,29 @@ function renderAnalytics(){
   const sortedCats=Object.entries(dailyCats).sort((a,b)=>b[1]-a[1]);
   mkChart('analyticsCatChart',{type:'bar',data:{labels:sortedCats.map(([k])=>catInfo[k]?.label||k),datasets:[{data:sortedCats.map(([,v])=>Math.round(v)),backgroundColor:sortedCats.map(([k])=>catInfo[k]?.color||'#888'),borderRadius:5}]},options:{...chartDefaults,indexAxis:'y'}});
 
+  const now = new Date();
   const tbl=document.getElementById('analyticsTable');
-  tbl.innerHTML=data.map(d=>{
+  tbl.innerHTML=data.map((d,i)=>{
     const sav=d.inc-d.exp;const pct=d.inc>0?Math.round(sav/d.inc*100):0;
-    return`<tr style="border-bottom:1px solid var(--border);transition:background .2s" onmouseover="this.style.background='var(--bg-2)'" onmouseout="this.style.background=''">
-      <td style="padding:11px 13px;font-weight:700">${d.label}</td>
+    // احسب معدل اليوم للشهر ده
+    const monthIndex = n - 1 - i;
+    const dd = new Date(now.getFullYear(), now.getMonth()-monthIndex, 1);
+    const dInM = getDaysInMonth(dd.getFullYear(), dd.getMonth()+1);
+    const daysToCount = monthIndex===0 ? Math.min(now.getDate(), dInM) : dInM;
+    const dailyAvg = daysToCount>0 ? Math.round(d.exp/daysToCount) : 0;
+    const isCurrentMonth = monthIndex===0;
+    return`<tr style="border-bottom:1px solid var(--border);transition:background .2s;${isCurrentMonth?'background:var(--bg-2);':''}" onmouseover="this.style.background='var(--bg-2)'" onmouseout="this.style.background='${isCurrentMonth?'var(--bg-2)':''}'">
+      <td style="padding:11px 13px;font-weight:700">${d.label}${isCurrentMonth?` <span class="badge badge-blue" style="font-size:9px">الحالي</span>`:''}</td>
       <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--green);text-align:left;font-weight:700">${fmt(d.inc)}</td>
       <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--red);text-align:left;font-weight:700">${fmt(d.exp)}</td>
+      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--amber);text-align:left;font-weight:600;font-size:12px">${dailyAvg>0?fmt(dailyAvg)+' EGP/يوم':'—'}</td>
       <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:${sav>=0?'var(--green)':'var(--red)'};text-align:left;font-weight:700">${fmt(sav)}</td>
       <td style="padding:11px 13px;text-align:left"><span class="badge ${pct>=30?'badge-green':pct>=15?'badge-amber':'badge-red'}">${pct}%</span></td>
     </tr>`;
   }).join('');
+
+  // رسم معدل الصرف اليومي
+  renderDailyRateChart();
 }
 
 // ── SIMULATOR ──
@@ -3799,8 +4104,26 @@ function globalSearchFn(){
   },100);
 }
 
+// ── CAIRO TIME HELPERS ──
+function getCairoNow(){
+  // تاريخ ووقت القاهرة (Africa/Cairo = UTC+2 أو UTC+3 في التوقيت الصيفي)
+  return new Date(new Date().toLocaleString('en-US', {timeZone:'Africa/Cairo'}));
+}
+function fmtCairoDateTime(date){
+  const d = String(date.getDate()).padStart(2,'0');
+  const m = String(date.getMonth()+1).padStart(2,'0');
+  const y = date.getFullYear();
+  const hh = String(date.getHours()).padStart(2,'0');
+  const mm = String(date.getMinutes()).padStart(2,'0');
+  return `${d}/${m}/${y} ${hh}:${mm}`;
+}
+
 // ── CLOCK ──
-function updateClock(){const now=new Date();const el=document.getElementById('lastUpdate');if(el)el.textContent=now.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});}
+function updateClock(){
+  const cairo = getCairoNow();
+  const el = document.getElementById('lastUpdate');
+  if(el) el.textContent = fmtCairoDateTime(cairo);
+}
 setInterval(updateClock,60000);
 
 // ── SYNC ON SAVE — مزامنة تلقائية بعد كل حفظ ──
@@ -3826,6 +4149,28 @@ async function _syncAfterSave(){
   _syncPending = false;
 }
 
+// ── تحديث عرض آخر مزامنة ──
+function _updateLastSyncTime(){
+  const cairo = getCairoNow();
+  const formatted = fmtCairoDateTime(cairo);
+  // حفظ في localStorage
+  localStorage.setItem('floosi_lastSync', formatted);
+  // تحديث الـ UI
+  const wrap = document.getElementById('lastSyncWrap');
+  const timeEl = document.getElementById('lastSyncTime');
+  if(wrap) wrap.style.display = 'flex';
+  if(timeEl) timeEl.textContent = formatted;
+}
+
+function _loadLastSyncTime(){
+  const saved = localStorage.getItem('floosi_lastSync');
+  if(!saved) return;
+  const wrap = document.getElementById('lastSyncWrap');
+  const timeEl = document.getElementById('lastSyncTime');
+  if(wrap) wrap.style.display = 'flex';
+  if(timeEl) timeEl.textContent = saved;
+}
+
 // stub فاضي بدل _recheckAutoSync عشان مش يكسر أي كود تاني
 function _recheckAutoSync(){}
 
@@ -3835,12 +4180,258 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape')document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('show'));
 });
 
+// ══════════════════════════════════════════════════════════
+// TODAY WIDGET — صرفت كام النهارده
+// ══════════════════════════════════════════════════════════
+function updateTodayWidget(){
+  const cairoNow = getCairoNow();
+  const today = cairoNow.getFullYear()+'-'+String(cairoNow.getMonth()+1).padStart(2,'0')+'-'+String(cairoNow.getDate()).padStart(2,'0');
+  const todayTxs = state.transactions.filter(t=>t.type==='expense'&&t.date===today);
+  const todaySpent = todayTxs.reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+  const count = todayTxs.length;
+
+  // عرض التاريخ بالعربي
+  const dateLabel = new Date().toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
+  const el = id => document.getElementById(id);
+  if(el('todayDateLabel')) el('todayDateLabel').textContent = dateLabel;
+  if(el('todaySpent')) el('todaySpent').textContent = fmt(todaySpent);
+  if(el('todayTxCount')) el('todayTxCount').textContent = count===0?'لا توجد مصاريف اليوم':`${count} معاملة اليوم`;
+
+  // مقارنة بالمتوسط
+  const mk = getCurrentMonthKey();
+  const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth()+1, 0).getDate();
+  const dayOfMonth = new Date().getDate();
+  const monthExp = calcMonthExpenses(mk);
+  const avgPerDay = dayOfMonth>1 ? monthExp / dayOfMonth : 0;
+  const vsAvgEl = el('todayVsAvg');
+  if(vsAvgEl && avgPerDay>0){
+    const diff = todaySpent - avgPerDay;
+    const diffPct = Math.abs(Math.round(diff/avgPerDay*100));
+    if(diff>50){
+      vsAvgEl.innerHTML=`<span style="color:var(--red);font-size:11px;font-weight:600"><i class="ti ti-arrow-up" style="font-size:10px"></i>${diffPct}% أكتر من معدلك اليومي (${fmt(avgPerDay)} EGP)</span>`;
+    } else if(diff<-50){
+      vsAvgEl.innerHTML=`<span style="color:var(--green);font-size:11px;font-weight:600"><i class="ti ti-arrow-down" style="font-size:10px"></i>${diffPct}% أقل من معدلك اليومي (${fmt(avgPerDay)} EGP)</span>`;
+    } else {
+      vsAvgEl.innerHTML=`<span style="color:var(--text-3);font-size:11px">معدلك اليومي: ${fmt(avgPerDay)} EGP</span>`;
+    }
+  }
+
+  // progress bar من ميزانية الأسبوع ÷ 7
+  const curWeek = getCurrentWeekBudget();
+  const dailyBudget = curWeek ? Math.round(curWeek.limit / 7) : 0;
+  const pct = dailyBudget>0 ? Math.min(Math.round(todaySpent/dailyBudget*100), 150) : 0;
+  if(el('todayBar')){
+    const barWidth = Math.min(pct, 100);
+    const barColor = pct>=100?'linear-gradient(90deg,var(--red),var(--pink))':pct>=80?'linear-gradient(90deg,var(--amber),var(--gold))':'linear-gradient(90deg,var(--blue),var(--teal))';
+    el('todayBar').style.width = barWidth+'%';
+    el('todayBar').style.background = barColor;
+  }
+  if(el('todayPct')){
+    if(dailyBudget>0){
+      const pctColor = pct>=100?'var(--red)':pct>=80?'var(--amber)':'var(--teal)';
+      el('todayPct').textContent = pct+'%';
+      el('todayPct').style.color = pctColor;
+    } else {
+      el('todayPct').textContent = '—';
+    }
+  }
+  if(el('todayBudgetHint')){
+    if(dailyBudget>0){
+      const remaining = Math.max(dailyBudget - todaySpent, 0);
+      el('todayBudgetHint').innerHTML = `متبقي اليوم: <strong style="color:var(--green)">${fmt(remaining)} EGP</strong> من ${fmt(dailyBudget)} EGP`;
+    } else {
+      el('todayBudgetHint').textContent = 'حدد ميزانية أسبوعية لتفعيل التتبع اليومي';
+    }
+  }
+
+  // Quick Add Strip — أسرع فئات الشهر
+  renderQuickAddStrip(todayTxs);
+}
+
+function renderQuickAddStrip(todayTxs){
+  const el = document.getElementById('quickCatBtns');
+  if(!el) return;
+  // أكثر الفئات استخداماً هذا الشهر
+  const mk = getCurrentMonthKey();
+  const catCount = {};
+  state.transactions.filter(t=>t.type==='expense'&&t.date&&t.date.startsWith(mk))
+    .forEach(t=>{ catCount[t.cat] = (catCount[t.cat]||0)+1; });
+  const topCats = Object.entries(catCount).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k])=>k);
+
+  // لو مفيش تاريخ شهري، نعرض الفئات الافتراضية
+  const displayCats = topCats.length ? topCats : (state.categories.slice(0,5).map(c=>c.key));
+  el.innerHTML = displayCats.map(key=>{
+    const cat = state.categories.find(c=>c.key===key);
+    if(!cat) return '';
+    return `<button class="quick-cat-btn" onclick="openQuickAddTx('${cat.key}','${cat.name}')">
+      <i class="ti ${cat.icon||'ti-circle'}" style="color:${cat.color||'var(--blue)'};font-size:14px"></i>
+      ${cat.name}
+    </button>`;
+  }).join('');
+}
+
+function openQuickAddTx(catKey, catName){
+  populateWalletSelect();
+  populateTxCatSelect();
+  document.getElementById('txEditId').value='';
+  document.getElementById('modalAddTitle').textContent='إضافة مصروف سريع — '+catName;
+  document.getElementById('modalAddBtn').textContent='حفظ المعاملة';
+  ['txDesc','txNote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('txAmount').value='';
+  document.getElementById('txCurrency').value='EGP';
+  document.getElementById('txType').value='expense';
+  document.getElementById('txCat').value=catKey;
+  if(state.wallets.length) document.getElementById('txWallet').value=state.wallets[0].key;
+  document.getElementById('txDate').value=new Date().toISOString().slice(0,10);
+  updateTxTypeUI();
+  openModal('modalAdd');
+  // focus على المبلغ
+  setTimeout(()=>document.getElementById('txAmount')?.focus(), 200);
+}
+
+// ══════════════════════════════════════════════════════════
+// DAILY RATE CHART — معدل الصرف اليومي شهرياً
+// ══════════════════════════════════════════════════════════
+function getDaysInMonth(year, month){ return new Date(year, month, 0).getDate(); }
+
+function renderDailyRateChart(){
+  const n = parseInt(document.getElementById('dailyRateMonthCount')?.value||6);
+  const now = new Date();
+  const data = [];
+  let maxDailyAvg = 0;
+
+  for(let i=n-1;i>=0;i--){
+    const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const mk = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const daysInM = getDaysInMonth(d.getFullYear(), d.getMonth()+1);
+    // لو الشهر الحالي، نحسب بس الأيام اللي فاتت
+    const daysToCount = i===0 ? Math.min(now.getDate(), daysInM) : daysInM;
+    const totalExp = calcMonthExpenses(mk);
+    const dailyAvg = daysToCount>0 ? Math.round(totalExp/daysToCount) : 0;
+    const label = d.toLocaleDateString('ar-EG',{month:'short',year:'2-digit'});
+    data.push({label, dailyAvg, totalExp, mk, daysInM, daysToCount});
+    if(dailyAvg>maxDailyAvg) maxDailyAvg = dailyAvg;
+  }
+
+  // إجمالي متوسط اليوم على كل الشهور
+  const overallAvg = data.length>0 ? Math.round(data.reduce((s,d)=>s+d.dailyAvg,0)/data.filter(d=>d.dailyAvg>0).length)||0 : 0;
+
+  mkChart('dailyRateChart',{
+    type:'bar',
+    data:{
+      labels:data.map(d=>d.label),
+      datasets:[
+        {
+          label:'معدل يومي',
+          data:data.map(d=>d.dailyAvg),
+          backgroundColor:data.map(d=>{
+            if(d.dailyAvg===0) return 'rgba(58,80,128,.3)';
+            if(d.dailyAvg > overallAvg*1.3) return 'rgba(255,77,109,.8)';
+            if(d.dailyAvg > overallAvg*1.1) return 'rgba(245,166,35,.8)';
+            return 'rgba(34,197,94,.75)';
+          }),
+          borderRadius:6,borderWidth:0,
+        },
+        {
+          type:'line',
+          label:'المتوسط العام',
+          data:data.map(()=>overallAvg),
+          borderColor:'rgba(79,156,249,.7)',
+          backgroundColor:'transparent',
+          borderWidth:2,
+          borderDash:[6,4],
+          pointRadius:0,
+          tension:0,
+        }
+      ]
+    },
+    options:{
+      ...chartDefaults,
+      interaction:{intersect:false,mode:'index'},
+      plugins:{
+        ...chartDefaults.plugins,
+        tooltip:{
+          ...chartDefaults.plugins.tooltip,
+          callbacks:{
+            label:ctx=>{
+              if(ctx.datasetIndex===1) return ` المتوسط: ${fmt(ctx.parsed.y)} EGP/يوم`;
+              const d=data[ctx.dataIndex];
+              return [` معدل اليوم: ${fmt(d.dailyAvg)} EGP`,` إجمالي الشهر: ${fmt(d.totalExp)} EGP`,` أيام محسوبة: ${d.daysToCount}`];
+            }
+          }
+        },
+        legend:{display:false}
+      }
+    }
+  });
+
+  // legend
+  const legEl = document.getElementById('dailyRateLegend');
+  if(legEl){
+    const bestMonth = data.reduce((b,d)=>d.dailyAvg>0&&d.dailyAvg<b.dailyAvg?d:b, data[0]||{dailyAvg:Infinity});
+    const worstMonth = data.reduce((b,d)=>d.dailyAvg>b.dailyAvg?d:b, {dailyAvg:0});
+    legEl.innerHTML = `
+      <span style="display:flex;align-items:center;gap:5px;color:var(--text-2)"><span style="width:12px;height:12px;border-radius:3px;background:rgba(34,197,94,.75);display:inline-block"></span>أقل من المعدل</span>
+      <span style="display:flex;align-items:center;gap:5px;color:var(--text-2)"><span style="width:12px;height:12px;border-radius:3px;background:rgba(245,166,35,.8);display:inline-block"></span>فوق المعدل بـ 10%</span>
+      <span style="display:flex;align-items:center;gap:5px;color:var(--text-2)"><span style="width:12px;height=12px;border-radius:3px;background:rgba(255,77,109,.8);display:inline-block"></span>فوق المعدل بـ 30%+</span>
+      <span style="display:flex;align-items:center;gap:5px;color:var(--text-3)"><span style="width:20px;height:2px;border-bottom:2px dashed rgba(79,156,249,.7);display:inline-block;margin-top:5px"></span>المتوسط العام: ${fmt(overallAvg)} EGP/يوم</span>
+      ${bestMonth&&bestMonth.dailyAvg>0&&bestMonth.dailyAvg<Infinity?`<span style="color:var(--green);font-size:11px;font-weight:600">✅ أفضل شهر: ${bestMonth.label} (${fmt(bestMonth.dailyAvg)} EGP/يوم)</span>`:''}
+      ${worstMonth&&worstMonth.dailyAvg>0?`<span style="color:var(--amber);font-size:11px;font-weight:600">⚠️ أعلى شهر: ${worstMonth.label} (${fmt(worstMonth.dailyAvg)} EGP/يوم)</span>`:''}
+    `;
+  }
+
+  // Monthly Avg Pills
+  renderMonthlyAvgPills(data, overallAvg);
+
+  // subtitle
+  const subEl = document.getElementById('dailyAvgSubtitle');
+  if(subEl && overallAvg>0){
+    subEl.textContent = `متوسطك اليومي = ${fmt(overallAvg)} EGP — أي ${fmt(overallAvg*30)} EGP في الشهر`;
+  }
+}
+
+function renderMonthlyAvgPills(data, overallAvg){
+  const el = document.getElementById('monthlyAvgRow');
+  if(!el || !data.length) return;
+  const latest = data[data.length-1];
+  const prev = data[data.length-2];
+  const best = [...data].filter(d=>d.dailyAvg>0).sort((a,b)=>a.dailyAvg-b.dailyAvg)[0];
+  const totalThisMonth = latest?.totalExp||0;
+  const dayOfMonth = new Date().getDate();
+  const projectedMonth = latest&&latest.daysToCount>0 ? Math.round(latest.dailyAvg * getDaysInMonth(new Date().getFullYear(), new Date().getMonth()+1)) : 0;
+
+  el.innerHTML = `
+    <div class="avg-pill">
+      <div class="avg-pill-val" style="color:var(--red)">${fmt(latest?.dailyAvg||0)}</div>
+      <div class="avg-pill-label">EGP / يوم (الشهر الحالي)</div>
+    </div>
+    <div class="avg-pill">
+      <div class="avg-pill-val" style="color:var(--blue)">${fmt(overallAvg)}</div>
+      <div class="avg-pill-label">متوسط عام اليومي</div>
+    </div>
+    <div class="avg-pill">
+      <div class="avg-pill-val" style="color:var(--amber)">${fmt(projectedMonth)}</div>
+      <div class="avg-pill-label">تقدير نهاية الشهر</div>
+    </div>
+    <div class="avg-pill">
+      <div class="avg-pill-val" style="color:var(--green)">${fmt(best?.dailyAvg||0)}</div>
+      <div class="avg-pill-label">أفضل يوم (${best?.label||'—'})</div>
+    </div>
+    <div class="avg-pill">
+      <div class="avg-pill-val" style="color:${prev&&latest&&latest.dailyAvg>prev.dailyAvg?'var(--red)':'var(--green)'}">${prev&&prev.dailyAvg>0?Math.abs(Math.round((latest.dailyAvg-prev.dailyAvg)/prev.dailyAvg*100))+'%':'—'}</div>
+      <div class="avg-pill-label" style="color:${prev&&latest&&latest.dailyAvg>prev.dailyAvg?'var(--red)':'var(--green)'}">${prev&&latest&&latest.dailyAvg>prev.dailyAvg?'زيادة عن الشهر اللي فات':'انخفاض عن الشهر اللي فات'}</div>
+    </div>
+  `;
+}
+
+
 // ── REFRESH ALL ──
 function refreshAll(){
   renderRecentTx();renderExpenses();renderCatChart();
   initMainChart();updateDashboard();populateMonthFilter();
   updateNetWorthUI();renderWeeklyBudgetUI();
   populateFilterCat();populateTxCatSelect();
+  updateTodayWidget();
 }
 
 function populateMonthFilter(){
@@ -3858,6 +4449,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderBudget();renderDebts();renderGoals();
   initMainChart();initWeekChart();updateDashboard();updateClock();calcSim();renderSettings();
   populateTxCatSelect();populateFilterCat();updateNetWorthUI();renderWeeklyBudgetUI();
+  updateTodayWidget(); // ويدجت اليوم
 
   // Save chart ref for tab switching
   const mainChartInst=Chart.getChart('mainChart');if(mainChartInst)state.charts.main=mainChartInst;
@@ -3873,6 +4465,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // ── تشغيل المزامنة التلقائية كل دقيقة لو في URL ──
   _recheckAutoSync();
+
+  // ── تحميل آخر وقت مزامنة محفوظ ──
+  _loadLastSyncTime();
+
+  // تحديث ويدجت اليوم كل دقيقة
+  setInterval(updateTodayWidget, 60000);
 });
 
 // ── كشف الجهاز الجديد ──
@@ -3908,7 +4506,7 @@ function _showNewDeviceBanner(url){
       padding:9px 18px;border-radius:var(--r-md);
       font-size:13px;font-weight:700;cursor:pointer;
       border:1px solid var(--blue);
-      background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;
+      background:linear-gradient(135deg,#9333ea,#6366f1);color:#fff;
       box-shadow:0 2px 12px rgba(59,130,246,.4);
       font-family:'Tajawal',sans-serif;
     ">
@@ -3945,7 +4543,7 @@ async function _autoLoadFromSheets(){
   if(banner){
     banner.remove();
     const app=document.querySelector('.app');
-    if(app)app.style.marginTop='';
+    if(app)app.style.marginTop='';ِ
   }
 }
 </script>
