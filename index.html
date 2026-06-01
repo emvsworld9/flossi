@@ -1902,15 +1902,35 @@ async function syncWithSheets(){
     // أو POST — هنجرب POST أولاً
     const jsonStr = JSON.stringify(payload);
 
-    // إرسال البيانات للـ URL الأساسي مباشرة (مش ping)
+    // إرسال البيانات — POST أولاً، لو فشل جرب GET مع البيانات في الـ params
     const syncUrl = url + (url.includes('?') ? '&' : '?') + 'action=sync';
 
-    const resp = await fetch(syncUrl, {
-      method: 'POST',
-      mode: 'no-cors', // Apps Script requires no-cors
-      headers: {'Content-Type': 'text/plain'},
-      body: jsonStr
-    });
+    let postOk = false;
+    try {
+      await fetch(syncUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain'},
+        body: jsonStr
+      });
+      postOk = true;
+    } catch(e){ postOk = false; }
+
+    // fallback: GET مع البيانات في الـ URL (للحالات اللي POST فيها مش شغال)
+    if(!postOk){
+      const encoded = encodeURIComponent(jsonStr);
+      // لو البيانات صغيرة (<7500 حرف) نبعتها GET
+      if(encoded.length < 7500){
+        try {
+          await fetch(url + (url.includes('?') ? '&' : '?') + 'data=' + encoded, {
+            method: 'GET',
+            mode: 'no-cors'
+          });
+        } catch(e){}
+      }
+    }
+
+    const resp = { ok: true }; // no-cors دايماً بيرجع opaque response = مش بنقرأه
 
     // no-cors means we can't read the response, but no error = connected
     btn.classList.remove('syncing');
@@ -1992,12 +2012,13 @@ async function loadFromSheets(silent=false){
     }
   } catch(e){ /* timeout أو script error - جرب fetch */ }
 
-  // ─── المحاولة 2: fetch مباشر (يشتغل لو CORS مسموح) ───
+  // ─── المحاولة 2: fetch مباشر مع cors ───
   try {
     const getdataUrl = url + (url.includes('?') ? '&' : '?') + 'action=getdata';
     const resp = await fetch(getdataUrl, {
       method: 'GET',
       redirect: 'follow',
+      mode: 'cors',
       headers: { 'Accept': 'application/json' }
     });
     if(resp.ok){
@@ -2014,6 +2035,36 @@ async function loadFromSheets(silent=false){
         if(!silent) toast('⚠️ مفيش بيانات في الشيت — ابعت مزامنة أولاً', 'error');
         return false;
       }
+    }
+  } catch(e){}
+
+  // ─── المحاولة 3: JSONP بـ cache-bust (لو المحاولة الأولى اتـ cache) ───
+  try {
+    const cbName2 = '__floosi_cb2__';
+    const data2 = await new Promise((resolve, reject) => {
+      const script2 = document.createElement('script');
+      script2.setAttribute('crossorigin', 'anonymous');
+      let done2 = false;
+      const timer2 = setTimeout(() => {
+        if(!done2){ done2=true; script2.remove(); delete window[cbName2]; reject(new Error('timeout2')); }
+      }, 15000);
+      window[cbName2] = (d) => {
+        if(!done2){ done2=true; clearTimeout(timer2); script2.remove(); delete window[cbName2]; resolve(d); }
+      };
+      const url2 = url + (url.includes('?') ? '&' : '?') + 'action=getdata&callback=' + cbName2 + '&_t=' + Date.now();
+      script2.src = url2;
+      script2.onerror = () => { if(!done2){ done2=true; clearTimeout(timer2); script2.remove(); delete window[cbName2]; reject(new Error('script error 2')); } };
+      document.head.appendChild(script2);
+    });
+    if(data2 && data2.status === 'ok' && data2.data){
+      applyOnce(data2.data);
+      if(!silent) toast('✅ تم تحميل البيانات من Google Sheets!');
+      return true;
+    }
+    if(data2 && data2.status === 'empty'){
+      resetBtns();
+      if(!silent) toast('⚠️ مفيش بيانات في الشيت — ابعت مزامنة أولاً', 'error');
+      return false;
     }
   } catch(e){}
 
@@ -2210,6 +2261,7 @@ function _fetchViaScript(url, timeoutMs=8000){
   return new Promise((resolve, reject) => {
     const cbName = '__floosi_cb__';
     const script = document.createElement('script');
+    script.setAttribute('crossorigin', 'anonymous');
     let done = false;
     const timer = setTimeout(() => {
       if(!done){ done=true; script.remove(); delete window[cbName]; reject(new Error('timeout')); }
