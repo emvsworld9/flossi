@@ -1009,6 +1009,34 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <div class="modal-footer">
     <button class="btn" onclick="closeModal('modalDebt')">إلغاء</button>
     <button class="btn btn-primary" onclick="saveDebt()"><i class="ti ti-check"></i> <span id="modalDebtBtn">حفظ</span></button>
+
+  </div>
+</div>
+</div>
+
+<!-- PARTIAL PAYMENT MODAL -->
+<div class="modal-overlay" id="modalPartialPay">
+<div class="modal">
+  <div class="modal-title"><i class="ti ti-coin" style="color:var(--teal)"></i> سداد جزئي</div>
+  <input type="hidden" id="partialDir">
+  <input type="hidden" id="partialIdx">
+  <div id="partialDebtInfo" style="background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);padding:12px 14px;margin-bottom:16px">
+    <div style="font-size:12px;color:var(--text-3);margin-bottom:4px">الدين الحالي</div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div id="partialName" style="font-size:14px;font-weight:700;color:var(--text-1)"></div>
+      <div id="partialOrigAmount" style="font-size:16px;font-weight:800;color:var(--amber)"></div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">المبلغ اللي اتسدد</label>
+    <input type="number" id="partialAmount" placeholder="0" oninput="updatePartialPreview()">
+  </div>
+  <div id="partialPreview" style="display:none;background:var(--teal-dim);border:1px solid var(--teal);border-radius:var(--r-md);padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--teal)">
+    <i class="ti ti-arrow-right"></i> المتبقي: <span id="partialRemaining" style="font-weight:800"></span>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" onclick="closeModal('modalPartialPay')">إلغاء</button>
+    <button class="btn btn-teal" onclick="savePartialPayment()"><i class="ti ti-coin"></i> تسجيل السداد</button>
   </div>
 </div>
 </div>
@@ -2855,6 +2883,56 @@ function saveDebt(){
 function deleteDebt(dir,idx){confirmDelete('هتحذف الدين ده؟',()=>{state.debts[dir].splice(idx,1);saveState();_syncAfterSave();renderDebts();updateNotif();toast('🗑️ تم الحذف','info');});}
 function markDebtPaid(dir,idx){confirmDelete('هتعلّم الدين ده كمسدّد؟',()=>{state.debts[dir].splice(idx,1);saveState();_syncAfterSave();renderDebts();updateNotif();toast('✅ تم تسجيل السداد');});}
 
+function openPartialPay(dir,idx){
+  const d=state.debts[dir][idx];if(!d)return;
+  document.getElementById('partialDir').value=dir;
+  document.getElementById('partialIdx').value=idx;
+  document.getElementById('partialName').textContent=d.name;
+  document.getElementById('partialOrigAmount').textContent=fmt(d.amount)+' '+d.currency;
+  document.getElementById('partialAmount').value='';
+  document.getElementById('partialPreview').style.display='none';
+  openModal('modalPartialPay');
+}
+
+function updatePartialPreview(){
+  const dir=document.getElementById('partialDir').value;
+  const idx=+document.getElementById('partialIdx').value;
+  const d=state.debts[dir][idx];if(!d)return;
+  const paid=parseFloat(document.getElementById('partialAmount').value)||0;
+  const remaining=d.amount-paid;
+  const preview=document.getElementById('partialPreview');
+  const remEl=document.getElementById('partialRemaining');
+  if(paid>0){
+    preview.style.display='block';
+    if(remaining<=0){
+      remEl.textContent='صفر — هيتسجل كمسدّد بالكامل ✅';
+      preview.style.background='var(--green-dim)';preview.style.borderColor='var(--green)';preview.style.color='var(--green)';
+    } else {
+      remEl.textContent=fmt(remaining)+' '+d.currency;
+      preview.style.background='var(--teal-dim)';preview.style.borderColor='var(--teal)';preview.style.color='var(--teal)';
+    }
+  } else { preview.style.display='none'; }
+}
+
+function savePartialPayment(){
+  const dir=document.getElementById('partialDir').value;
+  const idx=+document.getElementById('partialIdx').value;
+  const d=state.debts[dir][idx];if(!d)return;
+  const paid=parseFloat(document.getElementById('partialAmount').value);
+  if(!paid||paid<=0){toast('⚠️ أدخل مبلغ صحيح','info');return;}
+  if(paid>d.amount){toast('⚠️ المبلغ أكبر من الدين!','info');return;}
+  const remaining=d.amount-paid;
+  if(remaining<=0){
+    state.debts[dir].splice(idx,1);
+    toast('✅ تم السداد الكامل وحذف الدين');
+  } else {
+    if(!d.originalAmount) d.originalAmount=d.amount;
+    d.amount=Math.round(remaining*100)/100;
+    toast('✅ تم تسجيل السداد الجزئي');
+  }
+  saveState();_syncAfterSave();closeModal('modalPartialPay');renderDebts();updateNotif();
+}
+
 // ── GOALS CRUD ──
 function _populateGoalWallet(selectedKey){
   const sel=document.getElementById('goalWallet');if(!sel)return;
@@ -3390,13 +3468,24 @@ function renderDebts(){
       const amtCol=dir==='owe'?'var(--red)':'var(--green)';
       return`<div class="debt-item">
         <div class="debt-avatar" style="background:${avatarColors[i%avatarColors.length]}18;color:${avatarColors[i%avatarColors.length]}">${initials}</div>
-        <div class="debt-info"><div class="debt-name">${d.name}</div><div class="debt-note">${d.reason}</div></div>
+        <div class="debt-info">
+          <div class="debt-name">${d.name}</div>
+          <div class="debt-note">${d.reason}</div>
+          ${d.originalAmount && d.originalAmount > d.amount ? `
+          <div style="margin-top:5px">
+            <div class="progress-track" style="height:4px">
+              <div class="progress-fill" style="width:${Math.round((1 - d.amount/d.originalAmount)*100)}%;background:linear-gradient(90deg,var(--teal),var(--green))"></div>
+            </div>
+            <div style="font-size:10px;color:var(--text-3);margin-top:2px">سُدِّد ${fmt(d.originalAmount - d.amount)} من ${fmt(d.originalAmount)} ${d.currency}</div>
+          </div>` : ''}
+        </div>
         <div class="debt-right">
           <div class="debt-amount" style="color:${amtCol}">${fmt(d.amount)} <span style="font-size:11px;opacity:.7">${d.currency}</span></div>
           <div style="margin-top:3px"><span class="badge ${statusBadge[d.status]}">${statusLabel[d.status]}</span></div>
         </div>
         <div class="item-actions">
-          <button class="btn btn-ghost btn-icon btn-sm" onclick="markDebtPaid('${dir}',${i})" title="مسدّد" style="color:var(--green)"><i class="ti ti-check" style="font-size:13px"></i></button>
+          <button class="btn btn-ghost btn-icon btn-sm" onclick="openPartialPay('${dir}',${i})" title="سداد جزئي" style="color:var(--teal)"><i class="ti ti-coin" style="font-size:13px"></i></button>
+          <button class="btn btn-ghost btn-icon btn-sm" onclick="markDebtPaid('${dir}',${i})" title="مسدّد بالكامل" style="color:var(--green)"><i class="ti ti-check" style="font-size:13px"></i></button>
           <button class="btn btn-ghost btn-icon btn-sm" onclick="openEditDebt('${dir}',${i})" title="تعديل"><i class="ti ti-pencil" style="font-size:13px"></i></button>
           <button class="btn btn-ghost btn-icon btn-sm" onclick="deleteDebt('${dir}',${i})" title="حذف" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px"></i></button>
         </div>
