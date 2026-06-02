@@ -1663,10 +1663,19 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
       <!-- ═══ ANALYTICS ═══ -->
       <div class="page" id="page-analytics">
 
-        <!-- معدل الصرف الشهري المتوسط -->
+        <!-- ═══ KPI PILLS ═══ -->
         <div class="monthly-avg-row" id="monthlyAvgRow"></div>
 
-        <!-- رسم معدل الصرف اليومي كل شهر -->
+        <!-- ═══ SMART INSIGHTS BANNER ═══ -->
+        <div id="analyticsInsightsBanner" class="card mb20" style="background:linear-gradient(135deg,rgba(192,132,252,.08),rgba(0,245,196,.06));border-color:var(--border-med);display:none">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+            <span style="font-size:20px">🧠</span>
+            <div class="card-title">رؤى ذكية</div>
+          </div>
+          <div id="insightsList" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+
+        <!-- ═══ معدل الصرف اليومي ═══ -->
         <div class="card mb20">
           <div class="card-header">
             <div>
@@ -1683,9 +1692,15 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div id="dailyRateLegend" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:12px;font-size:11.5px"></div>
         </div>
 
+        <!-- ═══ دخل vs مصاريف + صافي الثروة ═══ -->
         <div class="g2 mb20">
           <div class="card">
-            <div class="card-header"><div class="card-title">الدخل مقابل الإنفاق — 6 شهور</div></div>
+            <div class="card-header">
+              <div class="card-title">الدخل مقابل الإنفاق</div>
+              <select class="btn btn-sm" id="incExpMonthCount" onchange="renderAnalytics()">
+                <option value="6">6 شهور</option><option value="12">12 شهر</option><option value="3">3 شهور</option>
+              </select>
+            </div>
             <div class="chart-wrap" style="height:210px"><canvas id="incExpChart"></canvas></div>
           </div>
           <div class="card">
@@ -1693,17 +1708,81 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             <div class="chart-wrap" style="height:210px"><canvas id="netWorthChart"></canvas></div>
           </div>
         </div>
+
+        <!-- ═══ إنفاق يومي + توزيع الفئات (FIXED) ═══ -->
         <div class="g2 mb20">
           <div class="card">
-            <div class="card-header"><div class="card-title">إنفاق يومي — الشهر الحالي</div></div>
+            <div class="card-header">
+              <div class="card-title">إنفاق يومي — الشهر الحالي</div>
+              <span id="dailyChartTotalBadge" class="badge badge-purple" style="font-size:11px"></span>
+            </div>
             <div class="chart-wrap" style="height:190px"><canvas id="dailyChart"></canvas></div>
           </div>
+
+          <!-- ✅ توزيع المصاريف حسب الفئة — مصلوح ومطور -->
           <div class="card">
-            <div class="card-header"><div class="card-title">توزيع المصاريف حسب الفئة</div></div>
-            <div class="chart-wrap" style="height:190px"><canvas id="analyticsCatChart"></canvas></div>
+            <div class="card-header">
+              <div>
+                <div class="card-title">توزيع المصاريف حسب الفئة</div>
+                <div class="card-subtitle" id="catChartSubtitle">الشهر الحالي</div>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <select class="btn btn-sm" id="catChartMonth" onchange="renderCatBreakdown()">
+                  <option value="current">الشهر الحالي</option>
+                  <option value="prev">الشهر اللي فات</option>
+                  <option value="3">آخر 3 شهور</option>
+                  <option value="6">آخر 6 شهور</option>
+                </select>
+                <button class="btn btn-sm btn-ghost" onclick="toggleCatChartType()" id="catChartTypeBtn" title="تبديل نوع الرسم">
+                  <i class="ti ti-chart-pie"></i>
+                </button>
+              </div>
+            </div>
+            <!-- الرسم البياني -->
+            <div id="catChartContainer" style="position:relative">
+              <div class="chart-wrap" style="height:190px;display:none" id="catBarWrap"><canvas id="analyticsCatChart"></canvas></div>
+              <div style="height:190px;display:flex;align-items:center;justify-content:center" id="catDoughnutWrap">
+                <canvas id="analyticsCatDoughnut" style="max-height:180px;max-width:180px"></canvas>
+              </div>
+              <!-- empty state -->
+              <div id="catChartEmpty" style="display:none;height:190px;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:var(--text-3)">
+                <i class="ti ti-chart-pie" style="font-size:36px;opacity:.3"></i>
+                <div style="font-size:13px">مفيش مصاريف في هذه الفترة</div>
+              </div>
+            </div>
+            <!-- legend تفصيلي -->
+            <div id="catBreakdownLegend" style="display:flex;flex-direction:column;gap:6px;margin-top:12px;max-height:160px;overflow-y:auto"></div>
           </div>
         </div>
-        <div class="card">
+
+        <!-- ═══ TOP 3 CATEGORIES TREND ═══ -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div>
+              <div class="card-title">📈 تطور أكبر 3 فئات إنفاق</div>
+              <div class="card-subtitle">اتابع إنفاقك في الفئات الأعلى على مدار 6 شهور</div>
+            </div>
+            <select class="btn btn-sm" id="topCatMonthCount" onchange="renderTopCatTrend()">
+              <option value="6">6 شهور</option><option value="12">12 شهر</option><option value="3">3 شهور</option>
+            </select>
+          </div>
+          <div class="chart-wrap" style="height:230px"><canvas id="topCatTrendChart"></canvas></div>
+          <div id="topCatLegend" style="display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px"></div>
+        </div>
+
+        <!-- ═══ HEATMAP أيام الأسبوع ═══ -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🔥 خريطة الإنفاق — أي يوم تصرف أكتر؟</div>
+              <div class="card-subtitle">توزيع الإنفاق حسب أيام الأسبوع</div>
+            </div>
+          </div>
+          <div id="weekdayHeatmap" style="display:flex;gap:8px;justify-content:space-around;padding:12px 0"></div>
+        </div>
+
+        <!-- ═══ مقارنة شهرية ═══ -->
+        <div class="card mb20">
           <div class="card-header">
             <div class="card-title">ملخص المقارنة الشهرية</div>
             <select class="btn btn-sm" id="analyticsMonthCount" onchange="renderAnalytics()">
@@ -1726,6 +1805,15 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             </table>
           </div>
         </div>
+
+        <!-- ═══ أعلى المعاملات هذا الشهر ═══ -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div class="card-title">💸 أعلى 5 مصاريف — الشهر الحالي</div>
+          </div>
+          <div id="topExpensesList" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+
       </div>
 
       <!-- ═══ SETTINGS ═══ -->
@@ -4089,34 +4177,88 @@ function getLastNMonthsData(n=6){
   return res;
 }
 
-function renderAnalytics(){
-  const n=parseInt(document.getElementById('analyticsMonthCount')?.value||6);
-  const data=getLastNMonthsData(n);
-  mkChart('incExpChart',{type:'bar',data:{labels:data.map(d=>d.label),datasets:[{label:'دخل',data:data.map(d=>d.inc),backgroundColor:'rgba(34,197,94,.7)',borderRadius:5},{label:'مصاريف',data:data.map(d=>d.exp),backgroundColor:'rgba(255,77,109,.7)',borderRadius:5}]},options:{...chartDefaults,interaction:{intersect:false,mode:'index'}}});
-  mkChart('netWorthChart',{type:'line',data:{labels:data.map(d=>d.label),datasets:[{data:data.map(d=>d.net),borderColor:'#00d4b4',backgroundColor:'rgba(0,212,180,.1)',borderWidth:2.5,fill:true,tension:.4,pointBackgroundColor:'#00d4b4',pointRadius:4}]},options:chartDefaults});
+// ══════════════════════════════════════════════════════════
+//  ANALYTICS — ENHANCED v2
+// ══════════════════════════════════════════════════════════
 
-  const mk=getCurrentMonthKey();
-  const dailyCats={};
-  const txsThisMonth=getMonthTxs(mk).filter(t=>t.type==='expense');
-  const daysInMonth={};txsThisMonth.forEach(t=>{const d=t.date;daysInMonth[d]=(daysInMonth[d]||0)+toEGP(t.amount,t.currency);});
-  const dLabels=Object.keys(daysInMonth).sort();const dVals=dLabels.map(d=>Math.round(daysInMonth[d]));
-  mkChart('dailyChart',{type:'bar',data:{labels:dLabels.map(d=>new Date(d+'T00:00').getDate()),datasets:[{data:dVals,backgroundColor:'rgba(167,139,250,.75)',borderRadius:5}]},options:{...chartDefaults,scales:{x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,font:{size:9}}},y:chartDefaults.scales.y}}});
+let _catChartMode = 'doughnut'; // 'bar' | 'doughnut'
 
-  txsThisMonth.forEach(t=>{dailyCats[t.cat]=(dailyCats[t.cat]||0)+toEGP(t.amount,t.currency);});
-  const sortedCats=Object.entries(dailyCats).sort((a,b)=>b[1]-a[1]);
-  // ✅ FIX: استخدام new Chart مباشرة بدل mkChart عشان الـ canvas يشتغل حتى لو الصفحة مش كانت واضحة
-  {
-    const ex=Chart.getChart('analyticsCatChart');if(ex)ex.destroy();
-    const catEl=document.getElementById('analyticsCatChart');
-    if(catEl && sortedCats.length){
-      new Chart(catEl,{
+function toggleCatChartType(){
+  _catChartMode = _catChartMode==='doughnut' ? 'bar' : 'doughnut';
+  const btn = document.getElementById('catChartTypeBtn');
+  if(btn) btn.innerHTML = _catChartMode==='doughnut' ? '<i class="ti ti-chart-bar"></i>' : '<i class="ti ti-chart-pie"></i>';
+  renderCatBreakdown();
+}
+
+// ── حساب مصاريف الفئات لفترة زمنية ──
+function getCatExpensesForPeriod(monthKeys){
+  const cats={};
+  monthKeys.forEach(mk=>{
+    getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{
+      cats[t.cat]=(cats[t.cat]||0)+toEGP(t.amount,t.currency);
+    });
+  });
+  return Object.entries(cats).sort((a,b)=>b[1]-a[1]);
+}
+
+// ── توزيع الفئات — الوظيفة الرئيسية ──
+function renderCatBreakdown(){
+  const sel = document.getElementById('catChartMonth')?.value || 'current';
+  const now = getCairoNow();
+  const subEl = document.getElementById('catChartSubtitle');
+
+  let monthKeys = [];
+  if(sel==='current'){
+    monthKeys=[getCurrentMonthKey()];
+    if(subEl) subEl.textContent='الشهر الحالي';
+  } else if(sel==='prev'){
+    monthKeys=[getPrevMonthKey()];
+    if(subEl) subEl.textContent='الشهر اللي فات';
+  } else {
+    const n=parseInt(sel);
+    for(let i=n-1;i>=0;i--){
+      const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+      monthKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+    }
+    if(subEl) subEl.textContent=`آخر ${n} شهور`;
+  }
+
+  const sortedCats = getCatExpensesForPeriod(monthKeys);
+  const total = sortedCats.reduce((s,[,v])=>s+v,0);
+
+  const barWrap  = document.getElementById('catBarWrap');
+  const dnutWrap = document.getElementById('catDoughnutWrap');
+  const emptyEl  = document.getElementById('catChartEmpty');
+  const legendEl = document.getElementById('catBreakdownLegend');
+
+  // حالة فارغة
+  if(!sortedCats.length){
+    if(barWrap) barWrap.style.display='none';
+    if(dnutWrap) dnutWrap.style.display='none';
+    if(emptyEl){emptyEl.style.display='flex';}
+    if(legendEl) legendEl.innerHTML='';
+    return;
+  }
+  if(emptyEl) emptyEl.style.display='none';
+
+  if(_catChartMode==='bar'){
+    if(barWrap) barWrap.style.display='block';
+    if(dnutWrap) dnutWrap.style.display='none';
+    // Destroy doughnut
+    const exD=Chart.getChart('analyticsCatDoughnut');if(exD)exD.destroy();
+    // Bar chart
+    const exB=Chart.getChart('analyticsCatChart');if(exB)exB.destroy();
+    const el=document.getElementById('analyticsCatChart');
+    if(el){
+      new Chart(el,{
         type:'bar',
         data:{
           labels:sortedCats.map(([k])=>getCatInfo(k).label),
           datasets:[{
             data:sortedCats.map(([,v])=>Math.round(v)),
-            backgroundColor:sortedCats.map(([k])=>getCatInfo(k).color),
-            borderRadius:5
+            backgroundColor:sortedCats.map(([k])=>getCatInfo(k).color+'cc'),
+            borderRadius:5,
+            borderSkipped:false
           }]
         },
         options:{
@@ -4127,40 +4269,296 @@ function renderAnalytics(){
             tooltip:{
               ...chartDefaults.plugins.tooltip,
               callbacks:{
-                label:ctx=>`${fmt(ctx.parsed.x)} EGP`
+                label:ctx=>{
+                  const pct=total>0?Math.round(ctx.parsed.x/total*100):0;
+                  return ` ${fmt(ctx.parsed.x)} EGP (${pct}%)`;
+                }
               }
             }
           }
         }
       });
-    } else if(catEl && !sortedCats.length){
-      const ex2=Chart.getChart('analyticsCatChart');if(ex2)ex2.destroy();
+    }
+  } else {
+    if(barWrap) barWrap.style.display='none';
+    if(dnutWrap) dnutWrap.style.display='flex';
+    // Destroy bar
+    const exB=Chart.getChart('analyticsCatChart');if(exB)exB.destroy();
+    // Doughnut
+    const exD=Chart.getChart('analyticsCatDoughnut');if(exD)exD.destroy();
+    const el=document.getElementById('analyticsCatDoughnut');
+    if(el){
+      new Chart(el,{
+        type:'doughnut',
+        data:{
+          labels:sortedCats.map(([k])=>getCatInfo(k).label),
+          datasets:[{
+            data:sortedCats.map(([,v])=>Math.round(v)),
+            backgroundColor:sortedCats.map(([k])=>getCatInfo(k).color+'cc'),
+            borderColor:sortedCats.map(([k])=>getCatInfo(k).color),
+            borderWidth:1.5,
+            hoverOffset:8
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:true,
+          cutout:'62%',
+          plugins:{
+            legend:{display:false},
+            tooltip:{
+              rtl:true,
+              bodyFont:{family:"'Tajawal',sans-serif"},
+              callbacks:{
+                label:ctx=>{
+                  const pct=total>0?Math.round(ctx.parsed/total*100):0;
+                  return ` ${fmt(ctx.parsed)} EGP — ${pct}%`;
+                }
+              }
+            }
+          }
+        }
+      });
     }
   }
 
+  // ── Legend تفصيلي ──
+  if(legendEl){
+    legendEl.innerHTML = sortedCats.slice(0,8).map(([k,v])=>{
+      const ci=getCatInfo(k);
+      const pct=total>0?Math.round(v/total*100):0;
+      const barW=pct;
+      return`<div style="display:flex;align-items:center;gap:8px">
+        <span style="width:10px;height:10px;border-radius:50%;background:${ci.color};flex-shrink:0"></span>
+        <span style="flex:1;font-size:12px;color:var(--text-2);min-width:60px">${ci.label}</span>
+        <div style="flex:2;background:var(--bg-3);border-radius:99px;height:5px;overflow:hidden">
+          <div style="width:${barW}%;height:100%;background:${ci.color};border-radius:99px;transition:width .5s"></div>
+        </div>
+        <span style="font-size:11.5px;font-weight:700;color:var(--text-1);min-width:70px;text-align:left;font-family:'Space Grotesk',monospace">${fmt(v)} EGP</span>
+        <span style="font-size:11px;color:var(--text-3);min-width:32px;text-align:left">${pct}%</span>
+      </div>`;
+    }).join('');
+    if(sortedCats.length>8){
+      const rest=sortedCats.slice(8).reduce((s,[,v])=>s+v,0);
+      legendEl.innerHTML+=`<div style="font-size:11px;color:var(--text-3);padding-top:4px">+ ${sortedCats.length-8} فئات أخرى — ${fmt(rest)} EGP</div>`;
+    }
+  }
+}
+
+// ── تطور أكبر 3 فئات ──
+function renderTopCatTrend(){
+  const n=parseInt(document.getElementById('topCatMonthCount')?.value||6);
+  const now=getCairoNow();
+  const months=[];
+  for(let i=n-1;i>=0;i--){
+    const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+    months.push({
+      mk:`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`,
+      label:d.toLocaleDateString('ar-EG',{month:'short'})
+    });
+  }
+  // ايجاد أكبر 3 فئات إجمالاً
+  const totCats={};
+  months.forEach(({mk})=>{
+    getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{
+      totCats[t.cat]=(totCats[t.cat]||0)+toEGP(t.amount,t.currency);
+    });
+  });
+  const top3=Object.entries(totCats).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k])=>k);
+  if(!top3.length){ return; }
+  const datasets=top3.map(catKey=>{
+    const ci=getCatInfo(catKey);
+    return{
+      label:ci.label,
+      data:months.map(({mk})=>{
+        return Math.round(getMonthTxs(mk).filter(t=>t.type==='expense'&&t.cat===catKey).reduce((s,t)=>s+toEGP(t.amount,t.currency),0));
+      }),
+      borderColor:ci.color,
+      backgroundColor:ci.color+'22',
+      borderWidth:2.5,fill:false,tension:.4,
+      pointBackgroundColor:ci.color,pointRadius:4,
+      borderDash:[]
+    };
+  });
+  const ex=Chart.getChart('topCatTrendChart');if(ex)ex.destroy();
+  const el=document.getElementById('topCatTrendChart');
+  if(!el)return;
+  new Chart(el,{type:'line',data:{labels:months.map(m=>m.label),datasets},options:chartDefaults});
+  const legEl=document.getElementById('topCatLegend');
+  if(legEl){
+    legEl.innerHTML=top3.map(k=>{
+      const ci=getCatInfo(k);
+      const total=totCats[k]||0;
+      return`<span style="display:flex;align-items:center;gap:5px;color:var(--text-2)">
+        <span style="width:12px;height:3px;border-radius:99px;background:${ci.color};display:inline-block"></span>
+        ${ci.label} <span style="color:var(--text-3);font-size:11px">(${fmt(total)} EGP إجمالي)</span>
+      </span>`;
+    }).join('');
+  }
+}
+
+// ── Heatmap أيام الأسبوع ──
+function renderWeekdayHeatmap(){
+  const el=document.getElementById('weekdayHeatmap');
+  if(!el)return;
+  const days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const sums=Array(7).fill(0);const counts=Array(7).fill(0);
+  state.transactions.filter(t=>t.type==='expense'&&t.date).forEach(t=>{
+    const dow=new Date(t.date+'T00:00:00').getDay();
+    sums[dow]+=toEGP(t.amount,t.currency);counts[dow]++;
+  });
+  const avgs=sums.map((s,i)=>counts[i]>0?Math.round(s/counts[i]):0);
+  const maxAvg=Math.max(...avgs,1);
+  el.innerHTML=days.map((d,i)=>{
+    const pct=avgs[i]/maxAvg;
+    const alpha=0.15+pct*0.75;
+    const isMax=avgs[i]===maxAvg&&avgs[i]>0;
+    return`<div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex:1">
+      <div style="width:100%;max-width:52px;height:52px;border-radius:var(--r-md);
+        background:rgba(192,132,252,${alpha});
+        border:1px solid rgba(192,132,252,${alpha*1.2});
+        display:flex;align-items:center;justify-content:center;
+        font-size:11px;font-weight:700;color:#fff;font-family:'Space Grotesk',monospace;
+        ${isMax?'box-shadow:0 0 14px rgba(192,132,252,.5)':''};
+        transition:all .3s">
+        ${avgs[i]>0?fmt(avgs[i]):'—'}
+      </div>
+      <div style="font-size:10px;color:var(--text-3);font-weight:600;text-align:center">${d}</div>
+      ${isMax?`<span class="badge badge-purple" style="font-size:9px;padding:2px 5px">الأعلى</span>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── أعلى 5 مصاريف الشهر ──
+function renderTopExpenses(){
+  const el=document.getElementById('topExpensesList');
+  if(!el)return;
+  const mk=getCurrentMonthKey();
+  const txs=getMonthTxs(mk).filter(t=>t.type==='expense').sort((a,b)=>toEGP(b.amount,b.currency)-toEGP(a.amount,a.currency)).slice(0,5);
+  if(!txs.length){el.innerHTML=`<div style="text-align:center;padding:20px;color:var(--text-3)">مفيش مصاريف هذا الشهر</div>`;return;}
+  const total=txs.reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+  el.innerHTML=txs.map((t,i)=>{
+    const ci=getCatInfo(t.cat);const amt=toEGP(t.amount,t.currency);const pct=total>0?Math.round(amt/total*100):0;
+    const medals=['🥇','🥈','🥉','4️⃣','5️⃣'];
+    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-md);background:var(--bg-2);border:1px solid var(--border)">
+      <span style="font-size:16px">${medals[i]}</span>
+      <div style="width:32px;height:32px;border-radius:50%;background:${ci.color}22;border:1px solid ${ci.color}55;display:flex;align-items:center;justify-content:center;font-size:13px">
+        <i class="ti ${ci.icon}" style="color:${ci.color}"></i>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;color:var(--text-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.note||ci.label}</div>
+        <div style="font-size:11px;color:var(--text-3)">${ci.label} • ${fmtDate(t.date)}</div>
+      </div>
+      <div style="text-align:left">
+        <div style="font-size:14px;font-weight:800;color:var(--red);font-family:'Space Grotesk',monospace">${fmt(amt)} EGP</div>
+        <div style="font-size:10px;color:var(--text-3);text-align:left">${pct}% من الـ Top 5</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── رؤى ذكية ──
+function renderAnalyticsInsights(){
+  const bannerEl=document.getElementById('analyticsInsightsBanner');
+  const listEl=document.getElementById('insightsList');
+  if(!bannerEl||!listEl)return;
+  const insights=[];
+  const mk=getCurrentMonthKey();const pmk=getPrevMonthKey();
+  const curExp=calcMonthExpenses(mk);const prevExp=calcMonthExpenses(pmk);
+  const curInc=calcMonthIncome(mk);
+  // مقارنة بالشهر اللي فات
+  if(prevExp>0&&curExp>0){
+    const diff=Math.round((curExp-prevExp)/prevExp*100);
+    if(diff>15) insights.push({icon:'⚠️',color:'var(--amber)',text:`إنفاقك الشهر الحالي أعلى بـ ${diff}% عن الشهر اللي فات — حاول تراجع الفئات اللي زادت`});
+    else if(diff<-10) insights.push({icon:'✅',color:'var(--green)',text:`برافو! خفضت مصاريفك ${Math.abs(diff)}% عن الشهر اللي فات`});
+  }
+  // نسبة الادخار
+  if(curInc>0){
+    const savPct=Math.round((curInc-curExp)/curInc*100);
+    if(savPct<10&&curInc>0) insights.push({icon:'💡',color:'var(--blue)',text:`نسبة ادخارك الشهر الحالي ${savPct}% — الهدف المثالي 20%+`});
+    else if(savPct>=30) insights.push({icon:'🌟',color:'var(--gold)',text:`رائع! نسبة ادخارك ${savPct}% هذا الشهر — أداء ممتاز`});
+  }
+  // أعلى فئة
+  const catMap={};getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
+  const topCat=Object.entries(catMap).sort((a,b)=>b[1]-a[1])[0];
+  if(topCat&&curExp>0){
+    const ci=getCatInfo(topCat[0]);const pct=Math.round(topCat[1]/curExp*100);
+    if(pct>40) insights.push({icon:'🔍',color:'var(--purple)',text:`${ci.label} تاخد ${pct}% من مصاريفك — هل ممكن تقليلها؟`});
+  }
+  // معدل يومي
+  const today=getCairoNow().getDate();const dInM=getDaysInMonth(getCairoNow().getFullYear(),getCairoNow().getMonth()+1);
+  if(today>0&&curExp>0){
+    const dailyAvg=Math.round(curExp/today);const projected=Math.round(dailyAvg*dInM);
+    if(curInc>0&&projected>curInc) insights.push({icon:'🚨',color:'var(--red)',text:`بالمعدل الحالي، ستصرف ${fmt(projected)} EGP هذا الشهر — أعلى من دخلك!`});
+    else if(curInc>0) insights.push({icon:'📅',color:'var(--cyan)',text:`بالمعدل الحالي، تقدير نهاية الشهر ${fmt(projected)} EGP`});
+  }
+  if(!insights.length){bannerEl.style.display='none';return;}
+  bannerEl.style.display='block';
+  listEl.innerHTML=insights.map(ins=>`
+    <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:var(--r-md);background:var(--bg-2);border-right:3px solid ${ins.color}">
+      <span style="font-size:16px;flex-shrink:0">${ins.icon}</span>
+      <span style="font-size:12.5px;color:var(--text-2);line-height:1.5">${ins.text}</span>
+    </div>
+  `).join('');
+}
+
+function renderAnalytics(){
+  const n=parseInt(document.getElementById('analyticsMonthCount')?.value||6);
+  const incExpN=parseInt(document.getElementById('incExpMonthCount')?.value||n);
+  const data=getLastNMonthsData(n);
+  const incExpData=getLastNMonthsData(incExpN);
+
+  mkChart('incExpChart',{type:'bar',data:{labels:incExpData.map(d=>d.label),datasets:[{label:'دخل',data:incExpData.map(d=>d.inc),backgroundColor:'rgba(34,197,94,.7)',borderRadius:5},{label:'مصاريف',data:incExpData.map(d=>d.exp),backgroundColor:'rgba(255,77,109,.7)',borderRadius:5}]},options:{...chartDefaults,interaction:{intersect:false,mode:'index'}}});
+  mkChart('netWorthChart',{type:'line',data:{labels:data.map(d=>d.label),datasets:[{data:data.map(d=>d.net),borderColor:'#00d4b4',backgroundColor:'rgba(0,212,180,.1)',borderWidth:2.5,fill:true,tension:.4,pointBackgroundColor:'#00d4b4',pointRadius:4}]},options:chartDefaults});
+
+  // daily chart للشهر الحالي
+  const mk=getCurrentMonthKey();
+  const txsThisMonth=getMonthTxs(mk).filter(t=>t.type==='expense');
+  const daysInMonth={};txsThisMonth.forEach(t=>{const d=t.date;daysInMonth[d]=(daysInMonth[d]||0)+toEGP(t.amount,t.currency);});
+  const dLabels=Object.keys(daysInMonth).sort();const dVals=dLabels.map(d=>Math.round(daysInMonth[d]));
+  const maxDay=Math.max(...dVals,1);
+  mkChart('dailyChart',{type:'bar',data:{labels:dLabels.map(d=>new Date(d+'T00:00').getDate()),datasets:[{data:dVals,backgroundColor:dVals.map(v=>v===maxDay&&maxDay>0?'rgba(255,85,128,.85)':'rgba(167,139,250,.75)'),borderRadius:5}]},options:{...chartDefaults,scales:{x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,font:{size:9}}},y:chartDefaults.scales.y}}});
+  const totalThisMonth=dVals.reduce((s,v)=>s+v,0);
+  const badge=document.getElementById('dailyChartTotalBadge');
+  if(badge) badge.textContent=totalThisMonth>0?fmt(totalThisMonth)+' EGP':'';
+
+  // توزيع الفئات (الوظيفة الجديدة)
+  renderCatBreakdown();
+
+  // جدول المقارنة
   const now = new Date();
   const tbl=document.getElementById('analyticsTable');
-  tbl.innerHTML=data.map((d,i)=>{
+  if(tbl) tbl.innerHTML=data.map((d,i)=>{
     const sav=d.inc-d.exp;const pct=d.inc>0?Math.round(sav/d.inc*100):0;
-    // احسب معدل اليوم للشهر ده
     const monthIndex = n - 1 - i;
     const dd = new Date(now.getFullYear(), now.getMonth()-monthIndex, 1);
     const dInM = getDaysInMonth(dd.getFullYear(), dd.getMonth()+1);
     const daysToCount = monthIndex===0 ? Math.min(now.getDate(), dInM) : dInM;
     const dailyAvg = daysToCount>0 ? Math.round(d.exp/daysToCount) : 0;
     const isCurrentMonth = monthIndex===0;
+    const prevIdx=i-1;const prevD=data[prevIdx];
+    const expTrend=prevD&&prevD.exp>0?Math.round((d.exp-prevD.exp)/prevD.exp*100):null;
+    const trendHtml=expTrend!==null?`<span style="font-size:10px;color:${expTrend>0?'var(--red)':'var(--green)'};margin-right:4px">${expTrend>0?'▲':'▼'}${Math.abs(expTrend)}%</span>`:'';
     return`<tr style="border-bottom:1px solid var(--border);transition:background .2s;${isCurrentMonth?'background:var(--bg-2);':''}" onmouseover="this.style.background='var(--bg-2)'" onmouseout="this.style.background='${isCurrentMonth?'var(--bg-2)':''}'">
       <td style="padding:11px 13px;font-weight:700">${d.label}${isCurrentMonth?` <span class="badge badge-blue" style="font-size:9px">الحالي</span>`:''}</td>
-      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--green);text-align:left;font-weight:700">${fmt(d.inc)}</td>
-      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--red);text-align:left;font-weight:700">${fmt(d.exp)}</td>
+      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--green);text-align:left;font-weight:700">${d.inc>0?fmt(d.inc):'—'}</td>
+      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--red);text-align:left;font-weight:700">${trendHtml}${d.exp>0?fmt(d.exp):'—'}</td>
       <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--amber);text-align:left;font-weight:600;font-size:12px">${dailyAvg>0?fmt(dailyAvg)+' EGP/يوم':'—'}</td>
-      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:${sav>=0?'var(--green)':'var(--red)'};text-align:left;font-weight:700">${fmt(sav)}</td>
-      <td style="padding:11px 13px;text-align:left"><span class="badge ${pct>=30?'badge-green':pct>=15?'badge-amber':'badge-red'}">${pct}%</span></td>
+      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:${sav>=0?'var(--green)':'var(--red)'};text-align:left;font-weight:700">${d.inc>0||d.exp>0?fmt(sav):'—'}</td>
+      <td style="padding:11px 13px;text-align:left">${d.inc>0?`<span class="badge ${pct>=30?'badge-green':pct>=15?'badge-amber':'badge-red'}">${pct}%</span>`:'—'}</td>
     </tr>`;
   }).join('');
 
   // رسم معدل الصرف اليومي
   renderDailyRateChart();
+  // تطور أكبر الفئات
+  renderTopCatTrend();
+  // هيت ماب
+  renderWeekdayHeatmap();
+  // أعلى مصاريف
+  renderTopExpenses();
+  // رؤى ذكية
+  renderAnalyticsInsights();
 }
 
 // ── SIMULATOR ──
