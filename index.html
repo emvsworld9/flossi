@@ -4044,17 +4044,22 @@ function renderCatChart(){
   const cats={};
   getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{cats[t.cat]=(cats[t.cat]||0)+toEGP(t.amount,t.currency);});
   const entries=Object.entries(cats).sort((a,b)=>b[1]-a[1]);
-  if(!entries.length)return;
+  const catChartEl=document.getElementById('catChart');
+  const legEl=document.getElementById('catLegend');
+  if(!entries.length){
+    const ex=Chart.getChart('catChart');if(ex)ex.destroy();
+    if(legEl)legEl.innerHTML='<span style="font-size:12px;color:var(--text-3)">لا توجد مصاريف هذا الشهر بعد</span>';
+    return;
+  }
   const ex=Chart.getChart('catChart');if(ex)ex.destroy();
-  new Chart(document.getElementById('catChart'),{
+  new Chart(catChartEl,{
     type:'doughnut',
-    data:{labels:entries.map(([k])=>catInfo[k]?.label||k),datasets:[{data:entries.map(([,v])=>Math.round(v)),backgroundColor:entries.map(([k])=>catInfo[k]?.color||'#888'),borderWidth:2,borderColor:'var(--bg-1)'}]},
+    data:{labels:entries.map(([k])=>getCatInfo(k).label),datasets:[{data:entries.map(([,v])=>Math.round(v)),backgroundColor:entries.map(([k])=>getCatInfo(k).color),borderWidth:2,borderColor:'var(--bg-1)'}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:chartDefaults.plugins.tooltip},cutout:'58%'}
   });
-  const legEl=document.getElementById('catLegend');
   const total=entries.reduce((s,[,v])=>s+v,0);
-  legEl.innerHTML=entries.map(([k,v])=>{
-    const ci=catInfo[k]||catInfo.other;const pct=Math.round(v/total*100);
+  if(legEl)legEl.innerHTML=entries.map(([k,v])=>{
+    const ci=getCatInfo(k);const pct=Math.round(v/total*100);
     return`<span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-2)"><span style="width:8px;height:8px;border-radius:2px;background:${ci.color};display:inline-block"></span>${ci.label} <strong style="color:var(--text-1)">${pct}%</strong></span>`;
   }).join('');
 }
@@ -4099,7 +4104,39 @@ function renderAnalytics(){
 
   txsThisMonth.forEach(t=>{dailyCats[t.cat]=(dailyCats[t.cat]||0)+toEGP(t.amount,t.currency);});
   const sortedCats=Object.entries(dailyCats).sort((a,b)=>b[1]-a[1]);
-  mkChart('analyticsCatChart',{type:'bar',data:{labels:sortedCats.map(([k])=>catInfo[k]?.label||k),datasets:[{data:sortedCats.map(([,v])=>Math.round(v)),backgroundColor:sortedCats.map(([k])=>catInfo[k]?.color||'#888'),borderRadius:5}]},options:{...chartDefaults,indexAxis:'y'}});
+  // ✅ FIX: استخدام new Chart مباشرة بدل mkChart عشان الـ canvas يشتغل حتى لو الصفحة مش كانت واضحة
+  {
+    const ex=Chart.getChart('analyticsCatChart');if(ex)ex.destroy();
+    const catEl=document.getElementById('analyticsCatChart');
+    if(catEl && sortedCats.length){
+      new Chart(catEl,{
+        type:'bar',
+        data:{
+          labels:sortedCats.map(([k])=>getCatInfo(k).label),
+          datasets:[{
+            data:sortedCats.map(([,v])=>Math.round(v)),
+            backgroundColor:sortedCats.map(([k])=>getCatInfo(k).color),
+            borderRadius:5
+          }]
+        },
+        options:{
+          ...chartDefaults,
+          indexAxis:'y',
+          plugins:{
+            ...chartDefaults.plugins,
+            tooltip:{
+              ...chartDefaults.plugins.tooltip,
+              callbacks:{
+                label:ctx=>`${fmt(ctx.parsed.x)} EGP`
+              }
+            }
+          }
+        }
+      });
+    } else if(catEl && !sortedCats.length){
+      const ex2=Chart.getChart('analyticsCatChart');if(ex2)ex2.destroy();
+    }
+  }
 
   const now = new Date();
   const tbl=document.getElementById('analyticsTable');
@@ -4371,7 +4408,7 @@ function renderDailyRateChart(){
     const daysToCount = i===0 ? Math.min(now.getDate(), daysInM) : daysInM;
     const totalExp = calcMonthExpenses(mk);
     const dailyAvg = daysToCount>0 ? Math.round(totalExp/daysToCount) : 0;
-    const label = d.toLocaleDateString('ar-EG',{month:'short',year:'2-digit'});
+    const label = d.toLocaleDateString('ar-EG',{month:'short'});
     data.push({label, dailyAvg, totalExp, mk, daysInM, daysToCount});
     if(dailyAvg>maxDailyAvg) maxDailyAvg = dailyAvg;
   }
@@ -4478,7 +4515,7 @@ function renderMonthlyAvgPills(data, overallAvg){
     </div>
     <div class="avg-pill">
       <div class="avg-pill-val" style="color:var(--green)">${fmt(best?.dailyAvg||0)}</div>
-      <div class="avg-pill-label">أفضل يوم (${best?.label||'—'})</div>
+      <div class="avg-pill-label">أفضل شهر (${best?.label||'—'})</div>
     </div>
     <div class="avg-pill">
       <div class="avg-pill-val" style="color:${prev&&latest&&latest.dailyAvg>prev.dailyAvg?'var(--red)':'var(--green)'}">${prev&&prev.dailyAvg>0?Math.abs(Math.round((latest.dailyAvg-prev.dailyAvg)/prev.dailyAvg*100))+'%':'—'}</div>
