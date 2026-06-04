@@ -285,6 +285,8 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .g21{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:20px}
 .g12{display:grid;grid-template-columns:1fr 2fr;gap:18px;margin-bottom:20px}
 .g5dash{grid-template-columns:repeat(5,1fr)!important}
+@media(max-width:900px){[style*="grid-template-columns:repeat(6,1fr)"]{grid-template-columns:repeat(3,1fr)!important}}
+@media(max-width:600px){[style*="grid-template-columns:repeat(6,1fr)"]{grid-template-columns:repeat(2,1fr)!important}}
 .mb16{margin-bottom:16px}
 .mb20{margin-bottom:20px}
 
@@ -1105,19 +1107,140 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 </div>
 </div>
 
+<!-- ══ QUICK ADD MINI MODAL ══ -->
+<div class="modal-overlay" id="modalQuickAdd">
+<div class="modal" style="width:340px;padding:20px 22px">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="quickAddCatIcon" style="width:36px;height:36px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:16px"></div>
+      <div>
+        <div style="font-size:14px;font-weight:800;color:var(--text-1)" id="quickAddCatName">سجّل سريع</div>
+        <div style="font-size:11px;color:var(--text-3)" id="quickAddWalletName">المحفظة الافتراضية</div>
+      </div>
+    </div>
+    <button class="btn btn-ghost btn-icon btn-sm" onclick="closeModal('modalQuickAdd')"><i class="ti ti-x"></i></button>
+  </div>
+  <input type="hidden" id="quickAddCatKey">
+  <div style="position:relative;margin-bottom:14px">
+    <input type="number" id="quickAddAmount" placeholder="0" min="0" step="0.5"
+      style="width:100%;padding:14px 16px;font-size:28px;font-weight:800;font-family:'Space Grotesk',monospace;
+      background:var(--bg-2);border:2px solid var(--border-med);border-radius:var(--r-lg);
+      color:var(--text-1);outline:none;text-align:center;
+      transition:border-color .2s"
+      oninput="this.style.borderColor=this.value?'var(--blue)':'var(--border-med)'"
+      onkeydown="if(event.key==='Enter')saveQuickAdd()">
+    <div style="text-align:center;font-size:11px;color:var(--text-3);margin-top:5px">EGP</div>
+  </div>
+  <div style="font-size:11px;color:var(--text-3);margin-bottom:8px">الوصف (اختياري)</div>
+  <input type="text" id="quickAddDesc" placeholder="أي تفاصيل..."
+    style="width:100%;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:14px;font-size:13px"
+    onkeydown="if(event.key==='Enter')saveQuickAdd()">
+  <div style="display:flex;gap:8px">
+    <button class="btn" style="flex:1" onclick="closeModal('modalQuickAdd')">إلغاء</button>
+    <button class="btn btn-primary" style="flex:2;font-size:15px;padding:10px" onclick="saveQuickAdd()"><i class="ti ti-check"></i> حفظ</button>
+  </div>
+</div>
+</div>
+
+<!-- ══ "كم معايا؟" MODAL ══ -->
+<div class="modal-overlay" id="modalHowMuch">
+<div class="modal" style="width:420px;padding:24px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+    <div style="width:40px;height:40px;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--teal),var(--blue));display:flex;align-items:center;justify-content:center;font-size:20px">💰</div>
+    <div>
+      <div style="font-size:16px;font-weight:800;color:var(--text-1)">كم معايا فعلاً؟</div>
+      <div style="font-size:11px;color:var(--text-3)">الرصيد الحقيقي بعد خصم الأهداف والديون</div>
+    </div>
+    <button class="btn btn-ghost btn-icon btn-sm" style="margin-right:auto" onclick="closeModal('modalHowMuch')"><i class="ti ti-x"></i></button>
+  </div>
+  <div id="howMuchContent" style="display:flex;flex-direction:column;gap:10px"></div>
+  <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-size:13px;color:var(--text-2);font-weight:600">الرصيد الحقيقي</span>
+      <span style="font-size:24px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--teal)" id="howMuchTotal">—</span>
+    </div>
+    <div style="font-size:11px;color:var(--text-3)" id="howMuchNote">إجمالي المحافظ − الأهداف المتعلقة − الديون عليك</div>
+  </div>
+</div>
+</div>
+
+<!-- ══ RECURRING TRANSACTIONS MODAL ══ -->
+<div class="modal-overlay" id="modalRecurring">
+<div class="modal" style="width:500px;max-height:85vh;overflow-y:auto">
+  <div class="modal-title"><i class="ti ti-repeat" style="color:var(--purple)"></i> المصاريف المتكررة</div>
+  <div style="font-size:12px;color:var(--text-3);margin-bottom:16px;background:var(--bg-2);border-radius:var(--r-md);padding:10px 13px;border:1px solid var(--border)">
+    💡 سجّل مصاريفك الثابتة مرة وبتتضاف تلقائياً كل شهر
+  </div>
+  <div id="recurringList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px"></div>
+  <div style="background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-lg);padding:14px">
+    <div style="font-size:12.5px;font-weight:700;color:var(--text-1);margin-bottom:12px">➕ إضافة مصروف متكرر</div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">الوصف</label><input type="text" id="recDesc" placeholder="مثال: إيجار، Netflix..."></div>
+      <div class="form-group"><label class="form-label">المبلغ (EGP)</label><input type="number" id="recAmount" placeholder="0" min="0"></div>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">الفئة</label><select id="recCat"></select></div>
+      <div class="form-group"><label class="form-label">المحفظة</label><select id="recWallet"></select></div>
+    </div>
+    <div class="form-group"><label class="form-label">يوم التكرار (من الشهر)</label>
+      <input type="number" id="recDay" placeholder="1" min="1" max="28" value="1">
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn btn-primary btn-sm" onclick="saveRecurring()"><i class="ti ti-check"></i> إضافة</button>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" onclick="closeModal('modalRecurring')">إغلاق</button>
+    <button class="btn btn-teal" onclick="applyRecurringNow()"><i class="ti ti-refresh"></i> تطبيق المتكررة الآن</button>
+  </div>
+</div>
+</div>
+
+<!-- ══ WEEK COMPARE MODAL ══ -->
+<div class="modal-overlay" id="modalWeekCompare">
+<div class="modal" style="width:480px">
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+    <div style="width:36px;height:36px;border-radius:var(--r-md);background:var(--purple-dim);display:flex;align-items:center;justify-content:center"><i class="ti ti-arrows-exchange" style="color:var(--purple);font-size:16px"></i></div>
+    <div class="modal-title" style="margin:0">مقارنة الأسابيع</div>
+    <button class="btn btn-ghost btn-icon btn-sm" style="margin-right:auto" onclick="closeModal('modalWeekCompare')"><i class="ti ti-x"></i></button>
+  </div>
+  <div id="weekCompareContent" style="display:flex;flex-direction:column;gap:12px"></div>
+</div>
+</div>
+
 <!-- ADD INVESTMENT -->
 <div class="modal-overlay" id="modalInv">
 <div class="modal">
   <div class="modal-title"><i class="ti ti-trending-up" style="color:var(--gold)"></i> <span id="modalInvTitle">إضافة استثمار</span></div>
   <input type="hidden" id="invEditIdx">
-  <div class="form-group"><label class="form-label">اسم الاستثمار</label><input type="text" id="invName" placeholder="مثال: ذهب، أسهم اتصالات..."></div>
+  <div class="form-group"><label class="form-label">اسم الاستثمار</label><input type="text" id="invName" placeholder="مثال: أسهم فودة، Thundr..."></div>
   <div class="form-grid">
-    <div class="form-group"><label class="form-label">القيمة الحالية</label><input type="number" id="invValue" placeholder="0"></div>
+    <div class="form-group"><label class="form-label">النوع</label><select id="invType"><option value="thundr">⚡ Thundr</option><option value="stocks">📊 أسهم</option><option value="gold">🥇 ذهب</option><option value="crypto">₿ كريبتو</option><option value="cert">🏦 شهادات</option><option value="real">🏠 عقارات</option><option value="other">📦 أخرى</option></select></div>
     <div class="form-group"><label class="form-label">العملة</label><select id="invCurr"><option>EGP</option><option>USD</option></select></div>
   </div>
   <div class="form-grid">
-    <div class="form-group"><label class="form-label">النوع</label><select id="invType"><option value="gold">🥇 ذهب</option><option value="stocks">📊 أسهم</option><option value="crypto">₿ كريبتو</option><option value="cert">🏦 شهادات</option><option value="real">🏠 عقارات</option><option value="other">📦 أخرى</option></select></div>
-    <div class="form-group"><label class="form-label">العائد السنوي %</label><input type="number" id="invReturn" placeholder="0" min="0" max="100"></div>
+    <div class="form-group"><label class="form-label">💸 سعر الشراء (تكلفتك)</label><input type="number" id="invCost" placeholder="0" min="0"></div>
+    <div class="form-group"><label class="form-label">📈 القيمة الحالية</label><input type="number" id="invValue" placeholder="0" oninput="invSyncFromValue()"></div>
+  </div>
+  <!-- حقل نسبة التغيير — يظهر فقط في التعديل -->
+  <div class="form-group" id="invPctGroup" style="display:none">
+    <label class="form-label">🔄 تحديث بالنسبة <span style="color:var(--text-3);font-weight:400">(اختياري — بدل ما تكتب القيمة)</span></label>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="number" id="invChangePct" placeholder="مثال: +12 أو -5" step="0.1"
+        style="flex:1;padding:10px 13px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none"
+        oninput="invSyncFromPct()">
+      <span style="color:var(--text-3);font-size:13px;white-space:nowrap">%</span>
+      <div id="invPctPreview" style="font-size:12px;color:var(--teal);font-weight:700;white-space:nowrap;min-width:80px;text-align:left"></div>
+    </div>
+    <div style="font-size:11px;color:var(--text-3);margin-top:4px">اكتب النسبة وسيتم حساب القيمة الجديدة تلقائياً من سعر الشراء</div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">اسحب من محفظة عند الشراء <span style="color:var(--text-3);font-weight:400">(اختياري)</span></label>
+    <select id="invWalletSrc"><option value="">بدون خصم من محفظة</option></select>
+  </div>
+  <div class="form-group" id="invReturnGroup">
+    <label class="form-label">أرجع فلوس لمحفظة <span style="color:var(--text-3);font-weight:400">(عند التعديل/البيع)</span></label>
+    <select id="invWalletDst"><option value="">بدون إضافة لمحفظة</option></select>
   </div>
   <div class="form-group"><label class="form-label">ملاحظة</label><input type="text" id="invNote" placeholder="أي تفاصيل..."></div>
   <div class="modal-footer">
@@ -1375,6 +1498,14 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
         <div class="quick-add-strip" id="quickAddStrip">
           <span style="font-size:11.5px;color:var(--text-3);font-weight:600;flex-shrink:0">سجّل سريع:</span>
           <div id="quickCatBtns" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <button class="btn btn-sm" onclick="openWeekCompare()" title="مقارنة الأسابيع" style="background:var(--purple-dim);border-color:rgba(192,132,252,.3);color:var(--purple);white-space:nowrap">
+              <i class="ti ti-arrows-exchange" style="font-size:13px"></i><span style="display:none" class="addtx-label"> مقارنة</span>
+            </button>
+            <button class="btn btn-sm btn-teal" onclick="openHowMuch()" title="كم معايا؟" style="white-space:nowrap">
+              <i class="ti ti-wallet" style="font-size:13px"></i> <span>كم معايا؟</span>
+            </button>
+          </div>
         </div>
 
         <div class="ai-insight" id="aiInsight">
@@ -1382,7 +1513,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div class="ai-text" id="aiText"><strong>تحليل ذكي:</strong> جاري التحليل...</div>
         </div>
 
-        <div class="g4 g5dash mb20">
+        <div class="g4 g5dash mb20" style="grid-template-columns:repeat(6,1fr)">
           <div class="metric-card blue">
             <div class="metric-icon" style="background:var(--blue-dim)"><i class="ti ti-coin" style="color:var(--blue);font-size:19px"></i></div>
             <div class="metric-label">إجمالي الأصول</div>
@@ -1412,6 +1543,12 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             <div class="metric-label">متعلق للأهداف</div>
             <div class="metric-value"><span class="curr">EGP</span><span id="totalPinnedGoals" style="color:var(--amber)">—</span></div>
             <div class="metric-change neutral" id="totalPinnedNote" style="font-size:10px">محجوز في محافظك</div>
+          </div>
+          <div class="metric-card" style="border-color:var(--orange)30;cursor:pointer" onclick="showPage('invest',document.querySelectorAll('.nav-item')[5])">
+            <div class="metric-icon" style="background:var(--orange-dim)"><i class="ti ti-trending-up" style="color:var(--orange);font-size:19px"></i></div>
+            <div class="metric-label">الاستثمارات</div>
+            <div class="metric-value"><span class="curr">EGP</span><span id="dashInvTotal" style="color:var(--orange)">—</span></div>
+            <div class="metric-change" id="dashInvPL" style="font-size:10px"><span class="neutral">—</span></div>
           </div>
         </div>
 
@@ -1513,8 +1650,20 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             <select class="btn btn-sm" id="filterMonth" onchange="renderExpenses()">
               <option value="all">كل الأوقات</option>
             </select>
+            <select class="btn btn-sm" id="filterSort" onchange="renderExpenses()" title="الترتيب">
+              <option value="date_desc">⬇ أحدث</option>
+              <option value="date_asc">⬆ أقدم</option>
+              <option value="amount_desc">⬇ أكبر مبلغ</option>
+              <option value="amount_asc">⬆ أصغر مبلغ</option>
+            </select>
+            <input type="number" id="filterAmount" placeholder="بحث بالمبلغ..." class="btn btn-sm"
+              style="width:110px;text-align:center;cursor:text"
+              oninput="renderExpenses()" min="0">
           </div>
-          <button class="btn btn-primary btn-sm" onclick="openAddTx()"><i class="ti ti-plus"></i> إضافة</button>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-sm" onclick="exportMonthSummary()" title="تصدير ملخص الشهر" style="background:var(--teal-dim);border-color:var(--teal);color:var(--teal)"><i class="ti ti-share"></i></button>
+            <button class="btn btn-primary btn-sm" onclick="openAddTx()"><i class="ti ti-plus"></i> إضافة</button>
+          </div>
         </div>
         <div class="card"><div id="expenseList"></div></div>
       </div>
@@ -1552,10 +1701,13 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           </div>
           <div class="chart-wrap" style="height:190px;margin-top:12px"><canvas id="weekChart"></canvas></div>
         </div>
-        <div class="card">
+          <div class="card">
           <div class="card-header">
             <div class="card-title">فئات الميزانية الشهرية</div>
-            <button class="btn btn-sm btn-primary" onclick="openAddBudget()"><i class="ti ti-plus"></i> فئة جديدة</button>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-sm" onclick="openRecurring()" style="background:var(--purple-dim);border-color:rgba(192,132,252,.3);color:var(--purple)"><i class="ti ti-repeat"></i> متكررة</button>
+              <button class="btn btn-sm btn-primary" onclick="openAddBudget()"><i class="ti ti-plus"></i> فئة جديدة</button>
+            </div>
           </div>
           <div id="budgetRows"></div>
         </div>
@@ -1578,6 +1730,35 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
         <div class="modal-footer">
           <button class="btn" onclick="closeModal('modalWeeklyBudget')">إلغاء</button>
           <button class="btn btn-primary" onclick="saveAllWeekBudgets()"><i class="ti ti-check"></i> حفظ الكل</button>
+        </div>
+      </div>
+      </div>
+
+      <!-- مودال تعديل أسبوع واحد بس -->
+      <div class="modal-overlay" id="modalEditSingleWeek">
+      <div class="modal" style="width:420px">
+        <div class="modal-title"><i class="ti ti-calendar-event" style="color:var(--blue)"></i> تعديل ميزانية <span id="singleWeekLabel" style="color:var(--amber)"></span></div>
+        <input type="hidden" id="singleWeekOrigStart">
+        <input type="hidden" id="singleWeekOrigEnd">
+        <div id="singleWeekInfo" style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:11px 14px;margin-bottom:14px;font-size:12px;color:var(--text-2)"></div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">من</label>
+            <input type="date" id="singleWeekStart" style="width:100%;padding:10px 13px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none">
+          </div>
+          <div class="form-group">
+            <label class="form-label">إلى</label>
+            <input type="date" id="singleWeekEnd" style="width:100%;padding:10px 13px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الميزانية (EGP)</label>
+          <input type="number" id="singleWeekLimit" placeholder="0" min="0" step="50" style="font-size:20px;font-weight:700">
+        </div>
+        <div id="singleWeekSpentInfo" style="display:none;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 14px;margin-bottom:4px;font-size:12.5px;color:var(--text-2)"></div>
+        <div class="modal-footer">
+          <button class="btn" onclick="closeModal('modalEditSingleWeek')">إلغاء</button>
+          <button class="btn btn-primary" onclick="saveSingleWeek()"><i class="ti ti-check"></i> حفظ</button>
         </div>
       </div>
       </div>
@@ -1611,7 +1792,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
       <div class="page" id="page-invest">
         <div class="g3 mb20">
           <div class="metric-card amber"><div class="metric-icon" style="background:var(--amber-dim)"><i class="ti ti-trending-up" style="color:var(--amber);font-size:18px"></i></div><div class="metric-label">إجمالي الاستثمارات</div><div class="metric-value mono" id="invTotal">—</div><div class="metric-change neutral">EGP</div></div>
-          <div class="metric-card green"><div class="metric-icon" style="background:var(--green-dim)"><i class="ti ti-chart-line" style="color:var(--green);font-size:18px"></i></div><div class="metric-label">متوسط العائد</div><div class="metric-value"><span id="invAvgReturn">—</span><span style="font-size:16px;color:var(--text-3)">%</span></div><div class="metric-change up">سنوياً</div></div>
+          <div class="metric-card green"><div class="metric-icon" style="background:var(--green-dim)"><i class="ti ti-chart-line" style="color:var(--green);font-size:18px"></i></div><div class="metric-label">ربح / خسارة إجمالي</div><div class="metric-value"><span id="invAvgReturn">—</span><span style="font-size:16px;color:var(--text-3)">%</span></div><div class="metric-change neutral">من إجمالي تكلفتك</div></div>
           <div class="metric-card purple"><div class="metric-icon" style="background:var(--purple-dim)"><i class="ti ti-packages" style="color:var(--purple);font-size:18px"></i></div><div class="metric-label">عدد الاستثمارات</div><div class="metric-value" id="invCount">—</div><div class="metric-change neutral">محافظ متنوعة</div></div>
         </div>
         <div class="g2 mb20">
@@ -1945,13 +2126,14 @@ const DEFAULT_STATE={
   dailyBudget:{limit:0, spentManual:0, lastDate:''},  // ميزانية اليوم
   rates:{USD:49.15},
   sheets:{url:''},
+  recurring:[],           // المصاريف المتكررة
   charts:{}
 };
 
 function loadState(){
   try{
     const saved=localStorage.getItem('floosi_v3');
-    if(saved){const p=JSON.parse(saved);return{...DEFAULT_STATE,...p,charts:{},profile:{...DEFAULT_STATE.profile,...(p.profile||{})},sheets:{...DEFAULT_STATE.sheets,...(p.sheets||{})},weeklyBudget:{...DEFAULT_STATE.weeklyBudget,...(p.weeklyBudget||{})},dailyBudget:{...DEFAULT_STATE.dailyBudget,...(p.dailyBudget||{})},categories:[...(p.categories||[])],weeklyBudgets:[...(p.weeklyBudgets||[])],transactions:[...(p.transactions||[])],wallets:[...(p.wallets||[])],goals:[...(p.goals||[])],investments:[...(p.investments||[])],budget:[...(p.budget||[])]};}
+    if(saved){const p=JSON.parse(saved);return{...DEFAULT_STATE,...p,charts:{},profile:{...DEFAULT_STATE.profile,...(p.profile||{})},sheets:{...DEFAULT_STATE.sheets,...(p.sheets||{})},weeklyBudget:{...DEFAULT_STATE.weeklyBudget,...(p.weeklyBudget||{})},dailyBudget:{...DEFAULT_STATE.dailyBudget,...(p.dailyBudget||{})},categories:[...(p.categories||[])],weeklyBudgets:[...(p.weeklyBudgets||[])],transactions:[...(p.transactions||[])],wallets:[...(p.wallets||[])],goals:[...(p.goals||[])],investments:[...(p.investments||[])],budget:[...(p.budget||[])],recurring:[...(p.recurring||[])]};}
   }catch(e){}
   return{...DEFAULT_STATE,charts:{}};
 }
@@ -2427,6 +2609,7 @@ function _applyLoadedData(data){
   if(data.weeklyBudgets) state.weeklyBudgets = data.weeklyBudgets;
   if(data.rates)        state.rates = {...state.rates, ...data.rates};
   if(data.profile)      state.profile = {...state.profile, ...data.profile};
+  if(data.recurring)    state.recurring = data.recurring;
 
   // الديون — flat أو {owe, lent}
   if(data.debts){
@@ -2509,6 +2692,7 @@ const catInfo=new Proxy({},{
   get(t,key){ return getCatInfo(key); }
 });
 const invTypeInfo={
+  thundr:{label:'Thundr',color:'#ff8c42',icon:'ti-bolt'},
   gold:{label:'ذهب',color:'#fbbf24',icon:'ti-coin'},
   stocks:{label:'أسهم',color:'#4f9cf9',icon:'ti-chart-line'},
   crypto:{label:'كريبتو',color:'#f5a623',icon:'ti-currency-bitcoin'},
@@ -2523,8 +2707,10 @@ function toEGP(amount,currency){
   return amount;
 }
 function fmtDate(d){
-  const cairoToday = getCairoNow().toISOString().slice(0,10);
-  const yest = new Date(getCairoNow() - 86400000).toISOString().slice(0,10);
+  const cairoToday = todayEgypt();
+  const yestDate = new Date(new Date().toLocaleString('en-US',{timeZone:'Africa/Cairo'}));
+  yestDate.setDate(yestDate.getDate()-1);
+  const yest = yestDate.getFullYear()+'-'+String(yestDate.getMonth()+1).padStart(2,'0')+'-'+String(yestDate.getDate()).padStart(2,'0');
   if(d===cairoToday) return 'اليوم';
   if(d===yest) return 'أمس';
   // عرض التاريخ بصيغة dd/mm/yyyy
@@ -2784,7 +2970,7 @@ function openAddTx(){
   document.getElementById('txType').value='expense';
   document.getElementById('txCat').value='food';
   if(state.wallets.length)document.getElementById('txWallet').value=state.wallets[0].key;
-  document.getElementById('txDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('txDate').value=todayEgypt();
   updateTxTypeUI();
   openModal('modalAdd');
 }
@@ -2822,7 +3008,7 @@ function saveTransaction(){
   const toWalletKey=type==='transfer'?document.getElementById('txToWallet').value:'';
   if(type==='transfer'&&toWalletKey===walletKey){toast('المحفظة المصدر والوجهة لازم يكونوا مختلفين','error');return;}
   const editId=document.getElementById('txEditId').value;
-  const data={desc,amount,currency:document.getElementById('txCurrency').value,type,cat:catKey,wallet:walletKey,toWallet:toWalletKey,date:document.getElementById('txDate').value||new Date().toISOString().slice(0,10),note:document.getElementById('txNote').value};
+  const data={desc,amount,currency:document.getElementById('txCurrency').value,type,cat:catKey,wallet:walletKey,toWallet:toWalletKey,date:document.getElementById('txDate').value||todayEgypt(),note:document.getElementById('txNote').value};
 
   if(editId){
     const idx=state.transactions.findIndex(t=>t.id===+editId);
@@ -2838,8 +3024,32 @@ function saveTransaction(){
     const _ok=applyTransaction(data);
     if(_ok===false){return;}
     state.transactions.unshift(data);
-    const typeLabel=type==='expense'?'💸 تم تسجيل المصروف':type==='income'?'💰 تم تسجيل الدخل':'⇔️ تم التحويل بنجاح'
-    toast(typeLabel);
+    const typeLabel=type==='expense'?'💸 تم تسجيل المصروف':type==='income'?'💰 تم تسجيل الدخل':'⇔️ تم التحويل بنجاح';
+
+    // ── نمط الإنفاق الذكي للمصروف ──
+    if(type==='expense'){
+      const mk = getCurrentMonthKey();
+      const catTotal = state.transactions
+        .filter(t=>t.type==='expense'&&t.date&&t.date.startsWith(mk)&&t.cat===catKey)
+        .reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+      const monthTotal = calcMonthExpenses(mk);
+      const pct = monthTotal>0 ? Math.round(catTotal/monthTotal*100) : 0;
+      const catObj = state.categories.find(c=>c.key===catKey);
+      const catLabel = catObj?.name || catKey;
+      // تحذير تجاوز ميزانية
+      const budRow = state.budget.find(b=>(b.catKey||b.cat)===catKey||(catObj&&b.cat===catObj.name));
+      const budLimit = budRow?.total||budRow?.limit||0;
+      if(budLimit>0 && catTotal>budLimit){
+        const over = catTotal - budLimit;
+        setTimeout(()=>toast(`⚠️ تجاوزت ميزانية "${catLabel}" بـ ${fmt(over)} EGP!`,'error'),200);
+      } else if(catTotal>0){
+        setTimeout(()=>toast(`${typeLabel} • ${catLabel} هذا الشهر: ${fmt(catTotal)} EGP (${pct}% من مصاريفك)`),200);
+      } else {
+        toast(typeLabel);
+      }
+    } else {
+      toast(typeLabel);
+    }
   }
   saveState();_syncAfterSave();closeModal('modalAdd');refreshAll();
 }
@@ -3056,7 +3266,7 @@ function confirmAddSaved(){
     amount: addAmt,
     walletKey,
     walletName,
-    date: new Date().toISOString().slice(0,10)
+    date: todayEgypt()
   });
   goal.saved = Math.min(prevSaved+addAmt, goal.target);
   saveState();_syncAfterSave(); closeModal('modalAddSaved'); renderGoals(); refreshAll();
@@ -3103,7 +3313,7 @@ function achieveGoal(idx){
           applyBalanceDelta(key, amt, w.currency||'EGP', -1);
           const tx={id:Date.now()+Math.random(),desc:`تحقيق هدف: ${goal.name}`,
             amount:amt,currency:w.currency||'EGP',type:'expense',cat:'saving',
-            wallet:key,date:new Date().toISOString().slice(0,10),note:`هدف: ${goal.name}`};
+            wallet:key,date:todayEgypt(),note:`هدف: ${goal.name}`};
           state.transactions.unshift(tx);
         }
         if(w.balance>=0 && amt===info.total) deducted.push(info.name);
@@ -3111,7 +3321,7 @@ function achieveGoal(idx){
       }
     });
     goal.saved=goal.target; goal.achieved=true;
-    goal.achievedAt=new Date().toISOString().slice(0,10);
+    goal.achievedAt=todayEgypt();
     // امسح الهدف المحقق من القائمة النشطة فوراً
     state.goals.splice(idx,1);
     saveState(); renderGoals(); refreshAll();
@@ -3124,27 +3334,106 @@ function achieveGoal(idx){
 }
 
 // ── INVESTMENTS CRUD ──
+function _populateInvWallets(){
+  const walletOpts = state.wallets.map(w=>`<option value="${w.key}">${w.icon||'🏦'} ${w.name} (${fmt(w.balance)} ${w.currency})</option>`).join('');
+  document.getElementById('invWalletSrc').innerHTML='<option value="">بدون خصم من محفظة</option>'+walletOpts;
+  document.getElementById('invWalletDst').innerHTML='<option value="">بدون إضافة لمحفظة</option>'+walletOpts;
+}
 function openAddInv(){
   document.getElementById('invEditIdx').value='';document.getElementById('modalInvTitle').textContent='إضافة استثمار';document.getElementById('modalInvBtn').textContent='حفظ';
-  document.getElementById('invName').value='';document.getElementById('invValue').value='';document.getElementById('invCurr').value='EGP';document.getElementById('invType').value='gold';document.getElementById('invReturn').value='';document.getElementById('invNote').value='';
+  document.getElementById('invName').value='';document.getElementById('invValue').value='';document.getElementById('invCost').value='';document.getElementById('invCurr').value='EGP';document.getElementById('invType').value='thundr';document.getElementById('invNote').value='';
+  document.getElementById('invReturnGroup').style.display='none';
+  document.getElementById('invPctGroup').style.display='none';
+  document.getElementById('invChangePct').value='';
+  document.getElementById('invPctPreview').textContent='';
+  _populateInvWallets();
   openModal('modalInv');
 }
 function openEditInv(idx){
   const inv=state.investments[idx];if(!inv)return;
   document.getElementById('invEditIdx').value=idx;document.getElementById('modalInvTitle').textContent='تعديل الاستثمار';document.getElementById('modalInvBtn').textContent='حفظ التعديل';
-  document.getElementById('invName').value=inv.name;document.getElementById('invValue').value=inv.value;document.getElementById('invCurr').value=inv.currency;document.getElementById('invType').value=inv.type;document.getElementById('invReturn').value=inv.returnPct||0;document.getElementById('invNote').value=inv.note||'';
+  document.getElementById('invName').value=inv.name;document.getElementById('invValue').value=inv.value;document.getElementById('invCost').value=inv.cost||0;document.getElementById('invCurr').value=inv.currency;document.getElementById('invType').value=inv.type;document.getElementById('invNote').value=inv.note||'';
+  document.getElementById('invReturnGroup').style.display='';
+  // إظهار حقل النسبة وحساب النسبة الحالية
+  document.getElementById('invPctGroup').style.display='';
+  const cost=inv.cost||inv.value;
+  const currentPct=cost>0?Math.round(((inv.value-cost)/cost)*1000)/10:0;
+  document.getElementById('invChangePct').value=currentPct||'';
+  document.getElementById('invPctPreview').textContent='';
+  _populateInvWallets();
   openModal('modalInv');
 }
 function saveInvestment(){
   const name=document.getElementById('invName').value.trim();const value=parseFloat(document.getElementById('invValue').value);
-  if(!name||!value||value<=0){toast('اكتب الاسم والقيمة','error');return;}
-  const data={name,value,currency:document.getElementById('invCurr').value,type:document.getElementById('invType').value,returnPct:parseFloat(document.getElementById('invReturn').value)||0,note:document.getElementById('invNote').value};
+  if(!name||!value||value<=0){toast('اكتب الاسم والقيمة الحالية','error');return;}
+  const cost=parseFloat(document.getElementById('invCost').value)||value;
+  const data={name,value,cost,currency:document.getElementById('invCurr').value,type:document.getElementById('invType').value,returnPct:0,note:document.getElementById('invNote').value};
   const editIdx=document.getElementById('invEditIdx').value;
-  if(editIdx!==''){state.investments[+editIdx]=data;toast('✏️ تم التعديل');}else{state.investments.push(data);toast('📈 تم إضافة الاستثمار');}
+  const srcKey=document.getElementById('invWalletSrc').value;
+  const dstKey=document.getElementById('invWalletDst').value;
+
+  if(editIdx!==''){
+    // تعديل — ممكن ترجع فلوس لمحفظة
+    if(dstKey){
+      const w=state.wallets.find(x=>x.key===dstKey);
+      if(w){
+        const returnAmt=parseFloat(document.getElementById('invValue').value)||0;
+        w.balance+=toEGP(returnAmt,data.currency);
+        toast(`✅ تم إضافة ${fmt(returnAmt)} ${data.currency} لـ ${w.name}`);
+      }
+    }
+    state.investments[+editIdx]=data;toast('✏️ تم التعديل');
+  } else {
+    // إضافة جديدة — اسحب من محفظة
+    if(srcKey){
+      const w=state.wallets.find(x=>x.key===srcKey);
+      if(w){
+        const deduct=toEGP(cost,data.currency);
+        if(w.balance<deduct){toast(`⚠️ رصيد ${w.name} مش كافي (${fmt(w.balance)} EGP)!`,'error');return;}
+        w.balance-=deduct;
+        toast(`✅ تم خصم ${fmt(cost)} ${data.currency} من ${w.name}`);
+      }
+    }
+    state.investments.push(data);toast('📈 تم إضافة الاستثمار');
+  }
   saveState();_syncAfterSave();closeModal('modalInv');renderInvestments();updateDashboard();
 }
 function deleteInv(idx){confirmDelete('هتحذف الاستثمار ده؟',()=>{state.investments.splice(idx,1);saveState();_syncAfterSave();renderInvestments();updateDashboard();toast('🗑️ تم الحذف','info');});}
 
+// ── sync بين حقل القيمة والنسبة في مودال الاستثمارات ──
+function invSyncFromValue(){
+  // لما المستخدم يكتب القيمة يدوياً — نحسب النسبة منها
+  const cost=parseFloat(document.getElementById('invCost').value)||0;
+  const val=parseFloat(document.getElementById('invValue').value)||0;
+  const pctInput=document.getElementById('invChangePct');
+  const preview=document.getElementById('invPctPreview');
+  if(!pctInput||!preview)return;
+  if(cost>0&&val>0){
+    const pct=((val-cost)/cost)*100;
+    pctInput.value=Math.round(pct*10)/10;
+    preview.textContent='';
+  } else {
+    pctInput.value='';
+    preview.textContent='';
+  }
+}
+function invSyncFromPct(){
+  // لما المستخدم يكتب النسبة — نحسب القيمة الجديدة منها
+  const cost=parseFloat(document.getElementById('invCost').value)||0;
+  const pct=parseFloat(document.getElementById('invChangePct').value);
+  const valInput=document.getElementById('invValue');
+  const preview=document.getElementById('invPctPreview');
+  if(!valInput||!preview)return;
+  if(cost>0&&!isNaN(pct)){
+    const newVal=Math.round(cost*(1+pct/100)*100)/100;
+    valInput.value=newVal;
+    const sign=pct>=0?'+':'';
+    preview.style.color=pct>=0?'var(--green)':'var(--red)';
+    preview.textContent=`= ${fmt(newVal)} ${document.getElementById('invCurr').value}`;
+  } else {
+    preview.textContent='';
+  }
+}
 // ── WALLETS CRUD ──
 function openAddWallet(){
   document.getElementById('walletEditKey').value='';document.getElementById('modalWalletTitle').textContent='محفظة جديدة';document.getElementById('modalWalletBtn').textContent='حفظ';
@@ -3253,7 +3542,7 @@ function saveProfile(){
 function exportData(){
   const s={...state};delete s.charts;
   const blob=new Blob([JSON.stringify(s,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='floosi_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='floosi_backup_'+todayEgypt()+'.json';a.click();
   toast('📥 تم تصدير البيانات');
 }
 function importData(e){
@@ -3301,11 +3590,20 @@ function renderExpenses(){
   const filterCat=document.getElementById('filterCat')?.value||'all';
   const filterType=document.getElementById('filterType')?.value||'all';
   const filterMonth=document.getElementById('filterMonth')?.value||'all';
+  const filterSort=document.getElementById('filterSort')?.value||'date_desc';
+  const filterAmt=parseFloat(document.getElementById('filterAmount')?.value)||0;
   const el=document.getElementById('expenseList');
-  let rows=[...state.transactions].sort((a,b)=>b.date.localeCompare(a.date));
+  let rows=[...state.transactions];
   if(filterCat!=='all')rows=rows.filter(t=>t.cat===filterCat);
   if(filterType!=='all')rows=rows.filter(t=>t.type===filterType);
   if(filterMonth!=='all')rows=rows.filter(t=>t.date&&t.date.startsWith(filterMonth));
+  if(filterAmt>0)rows=rows.filter(t=>Math.abs(toEGP(t.amount,t.currency)-filterAmt)<filterAmt*0.05+1);
+
+  // ترتيب
+  if(filterSort==='date_desc') rows.sort((a,b)=>b.date.localeCompare(a.date));
+  else if(filterSort==='date_asc') rows.sort((a,b)=>a.date.localeCompare(b.date));
+  else if(filterSort==='amount_desc') rows.sort((a,b)=>toEGP(b.amount,b.currency)-toEGP(a.amount,a.currency));
+  else if(filterSort==='amount_asc') rows.sort((a,b)=>toEGP(a.amount,a.currency)-toEGP(b.amount,b.currency));
 
   const inc=rows.filter(t=>t.type==='income').reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
   const exp=rows.filter(t=>t.type==='expense').reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
@@ -3330,9 +3628,9 @@ function renderExpenses(){
       <div class="tx-info"><div class="tx-name">${tx.desc}</div><div class="tx-meta">${fmtDate(tx.date)} • ${walletMeta}${tx.note?' • '+tx.note:''}</div></div>
       <span class="badge ${bdg}" style="flex-shrink:0">${tx.type==='transfer'?'تحويل':ci.label}</span>
       <div class="tx-amount" style="color:${col};margin-right:10px">${sign}${fmt(tx.amount)} <span style="font-size:10px;opacity:.7">${tx.currency}</span></div>
-      <div class="tx-actions">
+      <div class="tx-actions" style="opacity:1">
         <button class="btn btn-ghost btn-icon btn-sm" onclick="openEditTx(${tx.id})" title="تعديل"><i class="ti ti-pencil" style="font-size:13px"></i></button>
-        <button class="btn btn-ghost btn-icon btn-sm" onclick="deleteTx(${tx.id})" title="حذف" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px"></i></button>
+        <button class="btn btn-icon btn-sm" onclick="deleteTx(${tx.id})" title="حذف" style="color:var(--red);background:var(--red-dim);border-color:var(--red)"><i class="ti ti-trash" style="font-size:13px"></i></button>
       </div>
     </div>`;
   }).join('');
@@ -3432,7 +3730,7 @@ function renderBudget(){
   if(noteEl) noteEl.textContent=monthWeeks.length>0?`${monthWeeks.length} أسابيع هذا الشهر`:'من مجموع الأسابيع';
 
   // اليوم من الأسبوع
-  const todayStr = new Date().toISOString().slice(0,10);
+  const todayStr = todayEgypt();
   const todaySpentAmt = state.transactions.filter(t=>t.type==='expense'&&t.date===todayStr).reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
   const todayFromWeekEl = document.getElementById('todayFromWeekCard');
   const curWeekForBudget = getCurrentWeekBudget();
@@ -3632,6 +3930,12 @@ function renderInvestments(){
   el.innerHTML=state.investments.map((inv,i)=>{
     const info=invTypeInfo[inv.type]||invTypeInfo.other;
     const egpVal=inv.currency!=='EGP'?` <span style="font-size:10px;color:var(--text-3)">≈${fmt(toEGP(inv.value,inv.currency))} EGP</span>`:'';
+    const cost=inv.cost||inv.value;
+    const profit=toEGP(inv.value,inv.currency)-toEGP(cost,inv.currency);
+    const profitPct=cost>0?Math.round((profit/toEGP(cost,inv.currency))*100):0;
+    const profitColor=profit>0?'var(--green)':profit<0?'var(--red)':'var(--text-3)';
+    const profitIcon=profit>0?'ti-trending-up':profit<0?'ti-trending-down':'ti-minus';
+    const profitSign=profit>0?'+':'';
     return`<div class="inv-card">
       <div class="card-actions">
         <button class="btn btn-ghost btn-icon btn-sm" onclick="openEditInv(${i})" title="تعديل"><i class="ti ti-pencil" style="font-size:12px"></i></button>
@@ -3640,15 +3944,19 @@ function renderInvestments(){
       <div class="inv-type"><i class="ti ${info.icon}" style="color:${info.color}"></i>${info.label}</div>
       <div style="font-size:13px;font-weight:700;margin-bottom:5px;color:var(--text-1)">${inv.name}</div>
       <div class="inv-val">${fmt(inv.value)} <span style="font-size:11px;color:var(--text-3)">${inv.currency}</span>${egpVal}</div>
-      <div class="inv-pct up"><i class="ti ti-trending-up" style="font-size:13px"></i>${inv.returnPct}% سنوياً</div>
+      ${cost!==inv.value?`<div style="font-size:10.5px;color:var(--text-3);margin-top:3px">تكلفة: ${fmt(cost)} ${inv.currency}</div>`:''}
+      <div class="inv-pct" style="color:${profitColor}"><i class="ti ${profitIcon}" style="font-size:13px"></i>${profitSign}${fmt(profit)} EGP <span style="font-size:10px;opacity:.8">(${profitSign}${profitPct}%)</span></div>
       ${inv.note?`<div style="font-size:10.5px;color:var(--text-3);margin-top:5px">${inv.note}</div>`:''}
     </div>`;
   }).join('');
 
   const totalEGP=state.investments.reduce((s,inv)=>s+toEGP(inv.value,inv.currency),0);
-  const avgReturn=state.investments.length?Math.round(state.investments.reduce((s,inv)=>s+inv.returnPct,0)/state.investments.length):0;
+  const totalCost=state.investments.reduce((s,inv)=>s+toEGP(inv.cost||inv.value,inv.currency),0);
+  const totalProfit=totalEGP-totalCost;
+  const avgProfitPct=totalCost>0?Math.round(totalProfit/totalCost*100):0;
   document.getElementById('invTotal').textContent=fmt(totalEGP);
-  document.getElementById('invAvgReturn').textContent=avgReturn;
+  document.getElementById('invAvgReturn').textContent=(avgProfitPct>=0?'+':'')+avgProfitPct;
+  document.getElementById('invAvgReturn').style.color=avgProfitPct>=0?'var(--green)':'var(--red)';
   document.getElementById('invCount').textContent=state.investments.length;
 
   const ex=Chart.getChart('invChart');if(ex)ex.destroy();
@@ -3833,7 +4141,12 @@ function populateFilterCat(){
 
 // state.weeklyBudgets = [ {start, end, limit}, ... ]  (array per custom week)
 
-function isoDate(d){return d.toISOString().slice(0,10);}
+function isoDate(d){
+  // دايماً بتوقيت القاهرة (Africa/Cairo) عشان مش يعمل مشكلة بعد منتصف الليل
+  const cairo = new Date(d.toLocaleString('en-US',{timeZone:'Africa/Cairo'}));
+  return cairo.getFullYear()+'-'+String(cairo.getMonth()+1).padStart(2,'0')+'-'+String(cairo.getDate()).padStart(2,'0');
+}
+function todayEgypt(){return isoDate(new Date());}
 
 function openWeeklyBudgetModal(){
   // default to current month
@@ -3997,6 +4310,51 @@ function deleteWeekSlotByDates(ws, we){
   toast('🗑️ تم حذف ميزانية الأسبوع','info');
 }
 
+// ── تعديل أسبوع واحد بس ──
+function openEditSingleWeek(ws, we){
+  const saved=(state.weeklyBudgets||[]).find(w=>w.start===ws&&w.end===we);
+  const spent=getSpentBetween(ws,we);
+  document.getElementById('singleWeekOrigStart').value=ws;
+  document.getElementById('singleWeekOrigEnd').value=we;
+  document.getElementById('singleWeekStart').value=ws;
+  document.getElementById('singleWeekEnd').value=we;
+  document.getElementById('singleWeekLimit').value=saved?.limit||'';
+  // label
+  document.getElementById('singleWeekLabel').textContent=`${fmtDateShort(ws)} ← ${fmtDateShort(we)}`;
+  // info
+  document.getElementById('singleWeekInfo').textContent=`فترة الأسبوع: ${fmtDateShort(ws)} إلى ${fmtDateShort(we)}`;
+  // spent info
+  const spentEl=document.getElementById('singleWeekSpentInfo');
+  if(spent>0){
+    const limit=saved?.limit||0;
+    const left=limit-spent;
+    spentEl.style.display='block';
+    spentEl.innerHTML=`منصرف في الأسبوع ده: <strong style="color:var(--red)">${fmt(spent)} EGP</strong>`
+      +(limit>0?` — متبقي: <strong style="color:${left<0?'var(--red)':'var(--green)'}">${fmt(Math.max(left,0))} EGP</strong>`:'');
+  } else {
+    spentEl.style.display='none';
+  }
+  openModal('modalEditSingleWeek');
+}
+function saveSingleWeek(){
+  const origStart=document.getElementById('singleWeekOrigStart').value;
+  const origEnd=document.getElementById('singleWeekOrigEnd').value;
+  const ws=document.getElementById('singleWeekStart').value;
+  const we=document.getElementById('singleWeekEnd').value;
+  const limit=parseFloat(document.getElementById('singleWeekLimit').value)||0;
+  if(!ws||!we){toast('حدد التواريخ الصح','error');return;}
+  if(!state.weeklyBudgets)state.weeklyBudgets=[];
+  // امسح القديم
+  state.weeklyBudgets=state.weeklyBudgets.filter(w=>!(w.start===origStart&&w.end===origEnd));
+  // سيف الجديد لو الميزانية > 0
+  if(limit>0) state.weeklyBudgets.push({start:ws,end:we,limit});
+  saveState();_syncAfterSave();
+  closeModal('modalEditSingleWeek');
+  renderWeeklyBudgetUI();
+  renderBudget();
+  toast('✅ تم حفظ ميزانية الأسبوع');
+}
+
 function getCurrentWeekBudget(){
   // find the custom week slot that contains today
   const today=isoDate(new Date());
@@ -4048,7 +4406,7 @@ function renderWeeklyBudgetUI(){
                 ${isActive?'● ':''}الأسبوع ${i+1} (${fmtDateShort(w.start)} ← ${fmtDateShort(w.end)})
               </span>
               <span style="font-family:'Space Grotesk',monospace;color:${lft<0?'var(--red)':'var(--text-1)'};font-weight:700">${fmt(Math.max(lft,0))} متبقي</span>
-              <button onclick="openEditWeekSlot('${w.start}','${w.end}')" title="تعديل" style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700;white-space:nowrap">✏️ تعديل</button>
+              <button onclick="openEditSingleWeek('${w.start}','${w.end}')" title="تعديل" style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700;white-space:nowrap">✏️ تعديل</button>
               <button onclick="deleteWeekSlotByDates('${w.start}','${w.end}')" title="حذف" style="background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700;white-space:nowrap">🗑 حذف</button>
             </div>
             <div class="progress-track" style="height:4px">
@@ -4141,6 +4499,19 @@ function updateDashboard(){
   updateNotif();
   updateNetWorthUI();
   updateTodayWidget();
+
+  // ── كارد الاستثمارات في الداشبورد ──
+  const totalInvDash=state.investments.reduce((s,inv)=>s+toEGP(inv.value,inv.currency),0);
+  const totalCostDash=state.investments.reduce((s,inv)=>s+toEGP(inv.cost||inv.value,inv.currency),0);
+  const profitDash=totalInvDash-totalCostDash;
+  const profitPctDash=totalCostDash>0?Math.round(profitDash/totalCostDash*100):0;
+  const dashInvTotalEl=document.getElementById('dashInvTotal');
+  const dashInvPLEl=document.getElementById('dashInvPL');
+  if(dashInvTotalEl)dashInvTotalEl.textContent=fmt(totalInvDash);
+  if(dashInvPLEl){
+    if(state.investments.length===0){dashInvPLEl.innerHTML='<span class="neutral">لا توجد استثمارات</span>';}
+    else{dashInvPLEl.innerHTML=`<span class="${profitDash>=0?'up':'down'}">${profitDash>=0?'+':''}${fmt(profitDash)} EGP (${profitPctDash>=0?'+':''}${profitPctDash}%)</span>`;}
+  }
 
   // ── إجمالي المتعلق للأهداف النشطة فقط ──
   const totalPinned=state.goals.filter(g=>!g.achieved).reduce((s,g)=>s+_calcEffectiveSaved(g),0);
@@ -4771,14 +5142,14 @@ document.addEventListener('keydown',e=>{
 // TODAY WIDGET — صرفت كام النهارده
 // ══════════════════════════════════════════════════════════
 function updateTodayWidget(){
-  const cairoNow = getCairoNow();
-  const today = cairoNow.getFullYear()+'-'+String(cairoNow.getMonth()+1).padStart(2,'0')+'-'+String(cairoNow.getDate()).padStart(2,'0');
+  const today = todayEgypt();
   const todayTxs = state.transactions.filter(t=>t.type==='expense'&&t.date===today);
   const todaySpent = todayTxs.reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
   const count = todayTxs.length;
 
-  // عرض التاريخ بالعربي
-  const dateLabel = new Date().toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
+  // عرض التاريخ بالعربي بتوقيت مصر
+  const cairoNow = getCairoNow();
+  const dateLabel = cairoNow.toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
   const el = id => document.getElementById(id);
   if(el('todayDateLabel')) el('todayDateLabel').textContent = dateLabel;
   if(el('todaySpent')) el('todaySpent').textContent = fmt(todaySpent);
@@ -4803,10 +5174,28 @@ function updateTodayWidget(){
     }
   }
 
-  // progress bar من ميزانية الأسبوع ÷ 7
+  // progress bar — الأولوية: ميزانية الأسبوع ÷ 7، وإلا متوسط اليوم من الشهر اللي فات، وإلا مجموع الميزانيات الشهرية ÷ أيام الشهر
   const curWeek = getCurrentWeekBudget();
-  const dailyBudget = curWeek ? Math.round(curWeek.limit / 7) : 0;
-  const pct = dailyBudget>0 ? Math.min(Math.round(todaySpent/dailyBudget*100), 150) : 0;
+  let dailyBudget = curWeek ? Math.round(curWeek.limit / 7) : 0;
+
+  // fallback 1: مجموع ميزانيات الشهر الحالي ÷ أيام الشهر
+  if(!dailyBudget){
+    const now2=new Date();const mo=`${now2.getFullYear()}-${String(now2.getMonth()+1).padStart(2,'0')}`;
+    const monthWeeks=(state.weeklyBudgets||[]).filter(w=>w.start.slice(0,7)===mo||w.end.slice(0,7)===mo);
+    const monthTotal=monthWeeks.reduce((s,w)=>s+(w.limit||0),0);
+    if(monthTotal>0){const daysInM=new Date(now2.getFullYear(),now2.getMonth()+1,0).getDate();dailyBudget=Math.round(monthTotal/daysInM);}
+  }
+
+  // fallback 2: مجموع ميزانيات الفئات ÷ أيام الشهر
+  if(!dailyBudget){
+    const totalCatBudget=(state.budget||[]).reduce((s,b)=>s+(b.total||b.limit||0),0);
+    if(totalCatBudget>0){const daysInM=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();dailyBudget=Math.round(totalCatBudget/daysInM);}
+  }
+
+  // fallback 3: متوسط اليوم من الشهر الحالي (لو صرف حاجة فعلاً)
+  const effectiveDailyRef = dailyBudget || (avgPerDay>0 ? Math.round(avgPerDay) : 0);
+
+  const pct = effectiveDailyRef>0 ? Math.min(Math.round(todaySpent/effectiveDailyRef*100), 150) : (todaySpent>0?100:0);
   if(el('todayBar')){
     const barWidth = Math.min(pct, 100);
     const barColor = pct>=100?'linear-gradient(90deg,var(--red),var(--pink))':pct>=80?'linear-gradient(90deg,var(--amber),var(--gold))':'linear-gradient(90deg,var(--blue),var(--teal))';
@@ -4814,7 +5203,7 @@ function updateTodayWidget(){
     el('todayBar').style.background = barColor;
   }
   if(el('todayPct')){
-    if(dailyBudget>0){
+    if(effectiveDailyRef>0||todaySpent>0){
       const pctColor = pct>=100?'var(--red)':pct>=80?'var(--amber)':'var(--teal)';
       el('todayPct').textContent = pct+'%';
       el('todayPct').style.color = pctColor;
@@ -4826,13 +5215,67 @@ function updateTodayWidget(){
     if(dailyBudget>0){
       const remaining = Math.max(dailyBudget - todaySpent, 0);
       el('todayBudgetHint').innerHTML = `متبقي اليوم: <strong style="color:var(--green)">${fmt(remaining)} EGP</strong> من ${fmt(dailyBudget)} EGP`;
+    } else if(avgPerDay>0){
+      el('todayBudgetHint').innerHTML = `معدلك اليومي هذا الشهر: <strong style="color:var(--blue)">${fmt(Math.round(avgPerDay))} EGP</strong>`;
     } else {
       el('todayBudgetHint').textContent = 'حدد ميزانية أسبوعية لتفعيل التتبع اليومي';
     }
   }
 
+  // ── كارد ملخص الليلة (بعد 11 مساءً) ──
+  _renderLateNightCard(todayTxs, todaySpent, avgPerDay);
+
   // Quick Add Strip — أسرع فئات الشهر
   renderQuickAddStrip(todayTxs);
+}
+
+function _renderLateNightCard(todayTxs, todaySpent, avgPerDay){
+  // أزل الكارد القديم لو موجود
+  const existing = document.getElementById('lateNightCard');
+  if(existing) existing.remove();
+
+  const cairoHour = getCairoNow().getHours();
+  if(cairoHour < 23) return; // بعد 11 مساءً بس
+
+  if(todaySpent===0) return; // مفيش مصاريف النهارده
+
+  const catMap = {};
+  todayTxs.forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
+  const topCat = Object.entries(catMap).sort((a,b)=>b[1]-a[1])[0];
+  const ci = topCat ? getCatInfo(topCat[0]) : null;
+  const vsAvgText = avgPerDay>0
+    ? (todaySpent>avgPerDay ? `أكتر من معدلك بـ ${fmt(todaySpent-avgPerDay)} EGP` : `أقل من معدلك بـ ${fmt(avgPerDay-todaySpent)} EGP`)
+    : '';
+
+  const card = document.createElement('div');
+  card.id = 'lateNightCard';
+  card.style.cssText = `
+    background:linear-gradient(135deg,#1a0f35,#16102b);
+    border:1px solid rgba(192,132,252,.3);
+    border-radius:var(--r-xl);padding:16px 18px;
+    margin-bottom:20px;
+    display:flex;align-items:center;gap:14px;
+    box-shadow:0 0 30px rgba(192,132,252,.1);
+    animation:fadeIn .4s ease;
+  `;
+  card.innerHTML = `
+    <div style="font-size:28px">🌙</div>
+    <div style="flex:1">
+      <div style="font-size:13.5px;font-weight:800;color:var(--text-1);margin-bottom:4px">ملخص يومك</div>
+      <div style="font-size:12px;color:var(--text-2);line-height:1.7">
+        صرفت <strong style="color:var(--red)">${fmt(todaySpent)} EGP</strong> في ${todayTxs.length} معاملة
+        ${ci ? ` — أكبر فئة: <strong style="color:${ci.color}">${ci.label} (${fmt(topCat[1])} EGP)</strong>` : ''}
+        ${vsAvgText ? `<br><span style="color:${todaySpent>avgPerDay?'var(--amber)':'var(--green);'}">${vsAvgText}</span>` : ''}
+      </div>
+    </div>
+    <button onclick="document.getElementById('lateNightCard').remove()" style="background:transparent;border:none;color:var(--text-3);cursor:pointer;font-size:18px;padding:4px;flex-shrink:0">×</button>
+  `;
+
+  // أضف الكارد بعد today card
+  const todayCard = document.getElementById('todayCard');
+  if(todayCard && todayCard.nextSibling){
+    todayCard.parentNode.insertBefore(card, todayCard.nextSibling);
+  }
 }
 
 function renderQuickAddStrip(todayTxs){
@@ -4858,22 +5301,58 @@ function renderQuickAddStrip(todayTxs){
 }
 
 function openQuickAddTx(catKey, catName){
-  populateWalletSelect();
-  populateTxCatSelect();
-  document.getElementById('txEditId').value='';
-  document.getElementById('modalAddTitle').textContent='إضافة مصروف سريع — '+catName;
-  document.getElementById('modalAddBtn').textContent='حفظ المعاملة';
-  ['txDesc','txNote'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('txAmount').value='';
-  document.getElementById('txCurrency').value='EGP';
-  document.getElementById('txType').value='expense';
-  document.getElementById('txCat').value=catKey;
-  if(state.wallets.length) document.getElementById('txWallet').value=state.wallets[0].key;
-  document.getElementById('txDate').value=new Date().toISOString().slice(0,10);
-  updateTxTypeUI();
-  openModal('modalAdd');
-  // focus على المبلغ
-  setTimeout(()=>document.getElementById('txAmount')?.focus(), 200);
+  // ── مودال خفيف بالمبلغ بس ──
+  const cat = state.categories.find(c=>c.key===catKey);
+  const wallet = state.wallets[0];
+  document.getElementById('quickAddCatKey').value = catKey;
+  document.getElementById('quickAddCatName').textContent = catName;
+  document.getElementById('quickAddWalletName').textContent = wallet ? `${wallet.icon||'🏦'} ${wallet.name}` : 'لا توجد محافظ';
+  const iconEl = document.getElementById('quickAddCatIcon');
+  iconEl.style.background = (cat?.color||'var(--blue)')+'22';
+  iconEl.innerHTML = `<i class="ti ${cat?.icon||'ti-circle'}" style="color:${cat?.color||'var(--blue)'};font-size:16px"></i>`;
+  document.getElementById('quickAddAmount').value = '';
+  document.getElementById('quickAddAmount').style.borderColor = 'var(--border-med)';
+  document.getElementById('quickAddDesc').value = '';
+  openModal('modalQuickAdd');
+  setTimeout(()=>document.getElementById('quickAddAmount')?.focus(), 200);
+}
+
+function saveQuickAdd(){
+  const catKey = document.getElementById('quickAddCatKey').value;
+  const amount = parseFloat(document.getElementById('quickAddAmount').value);
+  if(!amount||amount<=0){ toast('اكتب المبلغ الصح','error'); return; }
+  const cat = state.categories.find(c=>c.key===catKey);
+  const wallet = state.wallets[0];
+  if(!wallet){ toast('أضف محفظة أولاً','error'); return; }
+  const desc = document.getElementById('quickAddDesc').value.trim() || (cat?.name||'مصروف');
+  const data = {
+    id: Date.now(), desc, amount, currency: 'EGP',
+    type: 'expense', cat: catKey,
+    wallet: wallet.key, date: todayEgypt(), note: ''
+  };
+  const ok = applyTransaction(data);
+  if(ok===false) return;
+  state.transactions.unshift(data);
+
+  // ── نمط الإنفاق الذكي: احسب إجمالي الفئة هذا الشهر ──
+  const mk = getCurrentMonthKey();
+  const catTotal = state.transactions
+    .filter(t=>t.type==='expense'&&t.date&&t.date.startsWith(mk)&&t.cat===catKey)
+    .reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+  const monthTotal = calcMonthExpenses(mk);
+  const pct = monthTotal>0 ? Math.round(catTotal/monthTotal*100) : 0;
+
+  // تحذير تجاوز الميزانية
+  const budgetRow = state.budget.find(b=>(b.catKey||b.cat)===catKey||(cat&&b.cat===cat.name));
+  const budgetLimit = budgetRow?.total||budgetRow?.limit||0;
+  if(budgetLimit>0 && catTotal>budgetLimit){
+    const over = catTotal - budgetLimit;
+    toast(`⚠️ تجاوزت ميزانية "${cat?.name||catKey}" بـ ${fmt(over)} EGP!`, 'error');
+  } else {
+    toast(`💸 صرفت على ${cat?.name||catKey} هذا الشهر ${fmt(catTotal)} EGP — ${pct}% من مصاريفك`);
+  }
+
+  saveState(); _syncAfterSave(); closeModal('modalQuickAdd'); refreshAll();
 }
 
 // ══════════════════════════════════════════════════════════
@@ -5012,6 +5491,297 @@ function renderMonthlyAvgPills(data, overallAvg){
 }
 
 
+// ══════════════════════════════════════════════════════════
+// "كم معايا؟" — الرصيد الحقيقي
+// ══════════════════════════════════════════════════════════
+function openHowMuch(){
+  const pinnedByWallet = calcEffectivePinnedByWallet();
+  const totalPinned = Object.values(pinnedByWallet).reduce((s,v)=>s+v,0);
+  const totalWallets = getTotalAssets();
+  const totalInv = state.investments.reduce((s,inv)=>s+toEGP(inv.value,inv.currency),0);
+  const oweEGP = state.debts.owe.reduce((s,d)=>s+toEGP(d.amount,d.currency),0);
+  const realBalance = totalWallets - totalPinned - oweEGP;
+
+  const content = document.getElementById('howMuchContent');
+  const rows = [];
+
+  state.wallets.forEach(w=>{
+    const pinned = pinnedByWallet[w.key]||0;
+    const free = Math.max(w.balance - pinned, 0);
+    rows.push(`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md)">
+      <span style="font-size:18px">${w.icon||'🏦'}</span>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;color:var(--text-1)">${w.name}</div>
+        ${pinned>0?`<div style="font-size:11px;color:var(--amber)">متعلق للأهداف: ${fmt(pinned)} ${w.currency}</div>`:''}
+      </div>
+      <div style="text-align:left">
+        <div style="font-size:16px;font-weight:800;color:var(--green);font-family:'Space Grotesk',monospace">${fmt(free)}</div>
+        <div style="font-size:10px;color:var(--text-3)">${w.currency} متاح</div>
+      </div>
+    </div>`);
+  });
+
+  if(oweEGP>0){
+    rows.push(`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--red-dim);border:1px solid rgba(255,85,128,.2);border-radius:var(--r-md)">
+      <span style="font-size:18px">💸</span>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--red)">ديون عليك</div></div>
+      <div style="font-size:16px;font-weight:800;color:var(--red);font-family:'Space Grotesk',monospace">-${fmt(oweEGP)} EGP</div>
+    </div>`);
+  }
+
+  content.innerHTML = rows.join('');
+  document.getElementById('howMuchTotal').textContent = fmt(realBalance) + ' EGP';
+  document.getElementById('howMuchTotal').style.color = realBalance>=0?'var(--teal)':'var(--red)';
+  document.getElementById('howMuchNote').textContent = `${fmt(totalWallets)} أصول − ${fmt(totalPinned)} متعلق − ${fmt(oweEGP)} ديون`;
+  openModal('modalHowMuch');
+}
+
+// ══════════════════════════════════════════════════════════
+// مقارنة الأسابيع
+// ══════════════════════════════════════════════════════════
+function openWeekCompare(){
+  const today = todayEgypt();
+  const weeks = (state.weeklyBudgets||[]).slice().sort((a,b)=>a.start.localeCompare(b.start));
+
+  let week1Start, week1End, week2Start, week2End;
+
+  // الأسبوع الحالي = أول أسبوع يحتوي اليوم
+  const curIdx = weeks.findIndex(w => today >= w.start && today <= w.end);
+  if(curIdx >= 0){
+    week1Start = weeks[curIdx].start;
+    week1End   = weeks[curIdx].end;
+    // الأسبوع اللي فات = الأسبوع السابق في القائمة
+    if(curIdx > 0){
+      week2Start = weeks[curIdx-1].start;
+      week2End   = weeks[curIdx-1].end;
+    } else {
+      // مفيش سابق — ارجع 7 أيام قبل بداية الأسبوع الحالي
+      const d = new Date(week1Start+'T00:00:00');
+      d.setDate(d.getDate()-7);
+      week2Start = isoDate(d);
+      const d2 = new Date(week1Start+'T00:00:00'); d2.setDate(d2.getDate()-1);
+      week2End = isoDate(d2);
+    }
+  } else {
+    // مفيش أسابيع محددة — fallback لآخر 7 أيام
+    const now = new Date();
+    const d7 = new Date(now); d7.setDate(d7.getDate()-6);
+    week1Start = isoDate(d7); week1End = today;
+    const d14 = new Date(now); d14.setDate(d14.getDate()-13);
+    const d8  = new Date(now); d8.setDate(d8.getDate()-7);
+    week2Start = isoDate(d14); week2End = isoDate(d8);
+  }
+
+  const w1 = getSpentBetween(week1Start, week1End);
+  const w2 = getSpentBetween(week2Start, week2End);
+  const diff = w1 - w2;
+  const diffPct = w2>0 ? Math.round(Math.abs(diff)/w2*100) : 0;
+  const isMore = diff > 0;
+
+  // أكثر الفئات هذا الأسبوع
+  const catMap = {};
+  state.transactions.filter(t=>t.type==='expense'&&t.date>=week1Start&&t.date<=week1End)
+    .forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
+  const topCats = Object.entries(catMap).sort((a,b)=>b[1]-a[1]).slice(0,3);
+
+  const content = document.getElementById('weekCompareContent');
+  content.innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;direction:rtl">
+      <div style="background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-lg);padding:14px;text-align:center;border-top:3px solid var(--blue)">
+        <div style="font-size:11px;color:var(--text-3);margin-bottom:8px">الأسبوع الحالي</div>
+        <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">${week1End} ← ${week1Start}</div>
+        <div style="font-size:22px;font-weight:800;color:var(--blue);font-family:'Space Grotesk',monospace">${fmt(w1)}</div>
+        <div style="font-size:11px;color:var(--text-3)">EGP</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px;text-align:center;border-top:3px solid var(--text-3)">
+        <div style="font-size:11px;color:var(--text-3);margin-bottom:8px">الأسبوع اللي فات</div>
+        <div style="font-size:11px;color:var(--text-3);margin-bottom:4px">${week2End} ← ${week2Start}</div>
+        <div style="font-size:22px;font-weight:800;color:var(--text-2);font-family:'Space Grotesk',monospace">${fmt(w2)}</div>
+        <div style="font-size:11px;color:var(--text-3)">EGP</div>
+      </div>
+    </div>
+    <div style="background:${isMore?'var(--red-dim)':'var(--green-dim)'};border:1px solid ${isMore?'rgba(255,85,128,.2)':'rgba(34,197,94,.2)'};border-radius:var(--r-lg);padding:14px;text-align:center">
+      <div style="font-size:13px;font-weight:700;color:${isMore?'var(--red)':'var(--green)'}">
+        ${isMore?'📈':'📉'} ${isMore?'زادت':'قلت'} بـ ${fmt(Math.abs(diff))} EGP (${diffPct}%) عن الأسبوع اللي فات
+      </div>
+    </div>
+    ${topCats.length?`<div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px">
+      <div style="font-size:12px;font-weight:700;color:var(--text-1);margin-bottom:10px">أكثر الفئات هذا الأسبوع</div>
+      ${topCats.map(([k,v])=>{
+        const ci=getCatInfo(k);
+        return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+          <i class="ti ${ci.icon}" style="color:${ci.color};font-size:14px"></i>
+          <span style="flex:1;font-size:12.5px;color:var(--text-2)">${ci.label}</span>
+          <span style="font-size:13px;font-weight:700;color:var(--text-1);font-family:'Space Grotesk',monospace">${fmt(v)} EGP</span>
+        </div>`;
+      }).join('')}
+    </div>`:''}
+  `;
+  openModal('modalWeekCompare');
+}
+
+// ══════════════════════════════════════════════════════════
+// تصدير ملخص الشهر
+// ══════════════════════════════════════════════════════════
+function exportMonthSummary(){
+  const mk = getCurrentMonthKey();
+  const txs = getMonthTxs(mk).filter(t=>t.type==='expense');
+  const inc = calcMonthIncome(mk);
+  const exp = calcMonthExpenses(mk);
+  const net = inc - exp;
+  const catMap = {};
+  txs.forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
+  const topCats = Object.entries(catMap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const d = new Date(mk+'-01');
+  const monthLabel = d.toLocaleDateString('ar-EG',{year:'numeric',month:'long'});
+
+  let text = `📊 ملخص فلوسي — ${monthLabel}\n`;
+  text += `━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `💰 الدخل: ${fmt(inc)} EGP\n`;
+  text += `💸 المصاريف: ${fmt(exp)} EGP\n`;
+  text += `📈 الصافي: ${fmt(net)} EGP\n`;
+  if(inc>0) text += `🏦 نسبة الادخار: ${Math.round((net/inc)*100)}%\n`;
+  text += `\n📂 أكبر الفئات:\n`;
+  topCats.forEach(([k,v])=>{
+    const ci=getCatInfo(k);
+    const pct = exp>0?Math.round(v/exp*100):0;
+    text += `  • ${ci.label}: ${fmt(v)} EGP (${pct}%)\n`;
+  });
+  text += `\n💳 أرصدة المحافظ:\n`;
+  state.wallets.forEach(w=>{text+=`  • ${w.name}: ${fmt(w.balance)} ${w.currency}\n`;});
+  text += `━━━━━━━━━━━━━━━━━━━━\n`;
+  text += `تم التصدير من فلوسي 🚀`;
+
+  if(navigator.share){
+    navigator.share({text}).catch(()=>{
+      navigator.clipboard.writeText(text).then(()=>toast('✅ تم نسخ الملخص للـ Clipboard'));
+    });
+  } else {
+    navigator.clipboard.writeText(text).then(()=>toast('✅ تم نسخ ملخص الشهر! الصقه في أي مكان 📋')).catch(()=>{
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      toast('✅ تم نسخ ملخص الشهر!');
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// المصاريف المتكررة
+// ══════════════════════════════════════════════════════════
+function openRecurring(){
+  // تأكد إن state.recurring موجود
+  if(!state.recurring) state.recurring = [];
+  // populate category and wallet selects
+  const recCat = document.getElementById('recCat');
+  if(recCat) recCat.innerHTML = state.categories.map(c=>`<option value="${c.key}">${c.name}</option>`).join('');
+  const recWallet = document.getElementById('recWallet');
+  if(recWallet) recWallet.innerHTML = state.wallets.map(w=>`<option value="${w.key}">${w.icon||'🏦'} ${w.name}</option>`).join('');
+  renderRecurringList();
+  openModal('modalRecurring');
+}
+
+function renderRecurringList(){
+  const el = document.getElementById('recurringList');
+  if(!el) return;
+  if(!state.recurring||!state.recurring.length){
+    el.innerHTML='<div style="text-align:center;padding:14px;color:var(--text-3);font-size:12.5px">لا توجد مصاريف متكررة بعد</div>';
+    return;
+  }
+  el.innerHTML = state.recurring.map((r,i)=>{
+    const cat = state.categories.find(c=>c.key===r.catKey)||{name:r.catKey,color:'var(--blue)',icon:'ti-circle'};
+    const wallet = state.wallets.find(w=>w.key===r.walletKey);
+    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md)">
+      <i class="ti ${cat.icon||'ti-circle'}" style="color:${cat.color||'var(--blue)'};font-size:16px;flex-shrink:0"></i>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;color:var(--text-1)">${r.desc}</div>
+        <div style="font-size:11px;color:var(--text-3)">${cat.name} • يوم ${r.day} كل شهر${wallet?' • '+wallet.name:''}</div>
+      </div>
+      <div style="font-size:14px;font-weight:800;color:var(--red);font-family:'Space Grotesk',monospace;white-space:nowrap">${fmt(r.amount)} EGP</div>
+      <button class="btn btn-ghost btn-icon btn-sm" onclick="deleteRecurring(${i})" style="color:var(--red)"><i class="ti ti-trash" style="font-size:13px"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function saveRecurring(){
+  const desc = document.getElementById('recDesc').value.trim();
+  const amount = parseFloat(document.getElementById('recAmount').value);
+  const catKey = document.getElementById('recCat').value;
+  const walletKey = document.getElementById('recWallet').value;
+  const day = parseInt(document.getElementById('recDay').value)||1;
+  if(!desc||!amount||amount<=0){toast('اكتب الوصف والمبلغ','error');return;}
+  if(!state.recurring) state.recurring = [];
+  state.recurring.push({desc, amount, catKey, walletKey, day});
+  saveState();
+  document.getElementById('recDesc').value='';
+  document.getElementById('recAmount').value='';
+  renderRecurringList();
+  toast('✅ تم إضافة المصروف المتكرر');
+}
+
+function deleteRecurring(i){
+  confirmDelete('هتحذف المصروف المتكرر ده؟',()=>{
+    state.recurring.splice(i,1);
+    saveState();
+    renderRecurringList();
+    toast('🗑️ تم الحذف','info');
+  });
+}
+
+function applyRecurringNow(){
+  if(!state.recurring||!state.recurring.length){toast('مفيش مصاريف متكررة','info');return;}
+  const today = todayEgypt();
+  let added = 0;
+  state.recurring.forEach(r=>{
+    // تحقق إن مش اتضاف قبل كده النهارده
+    const alreadyToday = state.transactions.some(t=>
+      t.type==='expense'&&t.date===today&&t.cat===r.catKey&&t.desc===r.desc&&t.amount===r.amount&&t.recurring===true
+    );
+    if(alreadyToday) return;
+    const wallet = state.wallets.find(w=>w.key===r.walletKey)||state.wallets[0];
+    if(!wallet) return;
+    const data = {
+      id: Date.now()+Math.random(),
+      desc: r.desc, amount: r.amount, currency: 'EGP',
+      type: 'expense', cat: r.catKey, wallet: wallet.key,
+      date: today, note: 'متكرر تلقائي', recurring: true
+    };
+    const ok = applyTransaction(data);
+    if(ok!==false){ state.transactions.unshift(data); added++; }
+  });
+  saveState(); _syncAfterSave(); refreshAll();
+  toast(added>0?`✅ تم إضافة ${added} مصاريف متكررة`:'الكل اتضاف قبل كده النهارده','info');
+}
+
+// فحص تلقائي للمصاريف المتكررة عند فتح التطبيق (في يوم التكرار)
+function _checkAndApplyRecurring(){
+  if(!state.recurring||!state.recurring.length) return;
+  const today = todayEgypt();
+  const dayOfMonth = new Date().getDate();
+  let applied = 0;
+  state.recurring.forEach(r=>{
+    if(r.day !== dayOfMonth) return;
+    const alreadyToday = state.transactions.some(t=>
+      t.type==='expense'&&t.date===today&&t.cat===r.catKey&&t.desc===r.desc&&t.amount===r.amount&&t.recurring===true
+    );
+    if(alreadyToday) return;
+    const wallet = state.wallets.find(w=>w.key===r.walletKey)||state.wallets[0];
+    if(!wallet) return;
+    const data = {
+      id: Date.now()+Math.random(),
+      desc: r.desc, amount: r.amount, currency: 'EGP',
+      type: 'expense', cat: r.catKey, wallet: wallet.key,
+      date: today, note: 'متكرر تلقائي', recurring: true
+    };
+    const ok = applyTransaction(data);
+    if(ok!==false){ state.transactions.unshift(data); applied++; }
+  });
+  if(applied>0){
+    saveState(); refreshAll();
+    setTimeout(()=>toast(`🔄 تم إضافة ${applied} مصاريف متكررة تلقائياً`),1500);
+  }
+}
+
 // ── REFRESH ALL ──
 function refreshAll(){
   renderRecentTx();renderExpenses();renderCatChart();
@@ -5055,6 +5825,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // ── تحميل آخر وقت مزامنة محفوظ ──
   _loadLastSyncTime();
+
+  // ── فحص وتطبيق المصاريف المتكررة ──
+  _checkAndApplyRecurring();
 
   // تحديث ويدجت اليوم كل دقيقة
   setInterval(updateTodayWidget, 60000);
