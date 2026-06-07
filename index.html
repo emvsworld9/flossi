@@ -2174,7 +2174,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div class="card-header">
             <div>
               <div class="card-title">🔥 خريطة الإنفاق — أي يوم تصرف أكتر؟</div>
-              <div class="card-subtitle">توزيع الإنفاق حسب أيام الأسبوع</div>
+              <div class="card-subtitle">توزيع الإنفاق حسب أيام الأسبوع — الشهر الحالي</div>
             </div>
           </div>
           <div id="weekdayHeatmap" style="display:flex;gap:8px;justify-content:space-around;padding:12px 0"></div>
@@ -5282,12 +5282,23 @@ function renderWeekdayHeatmap(){
   const el=document.getElementById('weekdayHeatmap');
   if(!el)return;
   const days=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  const sums=Array(7).fill(0);const counts=Array(7).fill(0);
-  state.transactions.filter(t=>t.type==='expense'&&t.date).forEach(t=>{
+  const sums=Array(7).fill(0);
+  const mk=getCurrentMonthKey();
+  const monthTxs=getMonthTxs(mk).filter(t=>t.type==='expense'&&t.date);
+  monthTxs.forEach(t=>{
     const dow=new Date(t.date+'T00:00:00').getDay();
-    sums[dow]+=toEGP(t.amount,t.currency);counts[dow]++;
+    sums[dow]+=toEGP(t.amount,t.currency);
   });
-  const avgs=sums.map((s,i)=>counts[i]>0?Math.round(s/counts[i]):0);
+  // عدد الأيام الفعلية اللي مرت لكل يوم في الأسبوع — من أول الشهر لـ اليوم
+  const now=new Date();
+  const year=now.getFullYear();const month=now.getMonth();
+  const todayDate=now.getDate();
+  const actualCounts=Array(7).fill(0);
+  for(let d=1;d<=todayDate;d++){
+    const dow=new Date(year,month,d).getDay();
+    actualCounts[dow]++;
+  }
+  const avgs=sums.map((s,i)=>actualCounts[i]>0?(s/actualCounts[i]):0);
   const maxAvg=Math.max(...avgs,1);
   el.innerHTML=days.map((d,i)=>{
     const pct=avgs[i]/maxAvg;
@@ -5957,16 +5968,34 @@ function calcSim(){
 // ── TAB SWITCH ──
 function switchSpendTab(btn,mode){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  const ch=state.charts.main;if(!ch)return;
+  const ch=Chart.getChart("mainChart")||state.charts.main;if(!ch)return;
   const data=getLastNMonthsData(6);
   if(mode==='weekly'){
-    const mk=getCurrentMonthKey();const txs=getMonthTxs(mk).filter(t=>t.type==='expense');const weeks=[0,0,0,0,0];
-    txs.forEach(t=>{const day=new Date(t.date+'T00:00:00').getDate();const wk=Math.min(Math.floor((day-1)/7),4);weeks[wk]+=toEGP(t.amount,t.currency);});
-    ch.data.labels=['الأسبوع 1','الأسبوع 2','الأسبوع 3','الأسبوع 4','الأسبوع 5'];
-    const monthInc=calcMonthIncome(mk);
-    ch.data.datasets[0].data=[monthInc/5,monthInc/5,monthInc/5,monthInc/5,monthInc/5].map(Math.round);
-    ch.data.datasets[1].data=weeks.map(Math.round);
-    ch.data.datasets[2].data=ch.data.datasets[0].data.map((inc,i)=>inc-ch.data.datasets[1].data[i]);
+    const mk=getCurrentMonthKey();
+    const allTxs=getMonthTxs(mk);
+    const expTxs=allTxs.filter(t=>t.type==='expense');
+    const incTxs=allTxs.filter(t=>t.type==='income');
+    const now=new Date();
+    const todayDay=now.getDate();
+    // نحدد الأسابيع اللي مرت فعلاً — كل أسبوع 7 أيام من أول الشهر
+    const numWeeks=Math.ceil(todayDay/7); // عدد الأسابيع اللي عدت أو بدأت
+    const weekExp=Array(numWeeks).fill(0);
+    const weekInc=Array(numWeeks).fill(0);
+    expTxs.forEach(t=>{
+      const day=new Date(t.date+'T00:00:00').getDate();
+      const wk=Math.min(Math.floor((day-1)/7),numWeeks-1);
+      weekExp[wk]+=toEGP(t.amount,t.currency);
+    });
+    incTxs.forEach(t=>{
+      const day=new Date(t.date+'T00:00:00').getDate();
+      const wk=Math.min(Math.floor((day-1)/7),numWeeks-1);
+      weekInc[wk]+=toEGP(t.amount,t.currency);
+    });
+    const labels=Array.from({length:numWeeks},(_,i)=>'الأسبوع '+(i+1));
+    ch.data.labels=labels;
+    ch.data.datasets[0].data=weekInc.map(Math.round);
+    ch.data.datasets[1].data=weekExp.map(Math.round);
+    ch.data.datasets[2].data=weekInc.map((inc,i)=>Math.round(inc-weekExp[i]));
   }else{
     ch.data.labels=data.map(d=>d.label);ch.data.datasets[0].data=data.map(d=>d.inc);ch.data.datasets[1].data=data.map(d=>d.exp);ch.data.datasets[2].data=data.map(d=>d.net);
   }
