@@ -472,6 +472,43 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .goal-pct{font-size:12px;font-weight:700;margin-top:7px}
 
 /* ── INVEST CARDS ── */
+/* ── INVESTMENT PORTFOLIO — Thndr style ── */
+.inv-portfolio-header{
+  background:linear-gradient(135deg,#0d1f3c 0%,#0f2a1e 100%);
+  border:1px solid rgba(34,232,122,.15);
+  border-radius:var(--r-2xl);padding:22px 22px 18px;margin-bottom:16px;
+}
+.inv-portfolio-total-lbl{font-size:12px;color:var(--text-3);font-weight:600;margin-bottom:4px;letter-spacing:.05em}
+.inv-portfolio-total{font-size:36px;font-weight:900;font-family:'Space Grotesk',monospace;color:#fff;margin-bottom:2px;display:flex;align-items:baseline;gap:6px}
+.inv-portfolio-total span.curr{font-size:14px;color:var(--text-3);font-weight:600}
+.inv-portfolio-pl{font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;margin-top:6px}
+.inv-portfolio-pl .pl-amt{font-family:'Space Grotesk',monospace}
+.inv-portfolio-pl .pl-pct{font-size:11.5px;opacity:.85}
+
+/* بطاقة السهم / الأصل */
+.inv-row{
+  display:flex;align-items:center;gap:14px;
+  padding:13px 16px;
+  background:var(--bg-2);border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  transition:all var(--trans);position:relative;cursor:default;
+}
+.inv-row:hover{border-color:var(--border-hi);background:var(--bg-3)}
+.inv-row:hover .card-actions{opacity:1}
+.inv-row-logo{
+  width:42px;height:42px;border-radius:var(--r-md);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;font-weight:900;font-family:'Space Grotesk',monospace;
+  letter-spacing:-.5px;
+}
+.inv-row-info{flex:1;min-width:0}
+.inv-row-name{font-size:14px;font-weight:700;color:var(--text-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inv-row-sub{font-size:11px;color:var(--text-3);margin-top:2px;display:flex;align-items:center;gap:5px}
+.inv-row-right{text-align:left;flex-shrink:0}
+.inv-row-val{font-size:15px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--text-1)}
+.inv-row-pl{font-size:12px;font-weight:700;margin-top:2px;font-family:'Space Grotesk',monospace;display:flex;align-items:center;justify-content:flex-end;gap:4px}
+
+/* الكارد القديم — keep for fallback */
 .inv-card{
   background:var(--bg-2);border:1px solid var(--border);
   border-radius:var(--r-xl);padding:16px 18px;
@@ -483,6 +520,14 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .inv-type i{font-size:15px}
 .inv-val{font-size:22px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--text-1)}
 .inv-pct{font-size:12px;font-weight:700;margin-top:5px;display:flex;align-items:center;gap:4px}
+
+/* مودال الـ portfolio update بالنسبة الكلية */
+.inv-bulk-wrap{background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:12px}
+.inv-bulk-label{font-size:12px;color:var(--text-3);font-weight:600;margin-bottom:8px}
+.inv-bulk-pct-input{display:flex;gap:8px;align-items:center}
+.inv-bulk-pct-input input{flex:1;padding:11px 14px;background:var(--bg-1);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;font-family:'Space Grotesk',monospace;font-size:16px;font-weight:700}
+.inv-bulk-pct-input input:focus{border-color:var(--teal)}
+.inv-bulk-preview{font-size:12px;color:var(--teal);font-weight:700;margin-top:8px;min-height:18px}
 
 /* ── BUDGET ITEMS ── */
 .budget-row{padding:14px 0;border-bottom:1px solid var(--border);position:relative}
@@ -917,6 +962,49 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 .badge-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(79,156,249,.2)}
 .badge-purple{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(167,139,250,.2)}
 .mb20{margin-bottom:20px}
+
+/* ── ANALYTICS ENHANCED v3 ── */
+.analytics-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+@media(max-width:900px){.analytics-kpi-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.analytics-kpi-grid{grid-template-columns:1fr 1fr}}
+.akpi-card{
+  background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-xl);
+  padding:14px 16px;position:relative;overflow:hidden;transition:all var(--trans);
+}
+.akpi-card:hover{border-color:var(--border-med);transform:translateY(-1px)}
+.akpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
+.akpi-card.c-green::before{background:linear-gradient(90deg,var(--green),var(--teal))}
+.akpi-card.c-red::before{background:linear-gradient(90deg,var(--red),var(--pink))}
+.akpi-card.c-blue::before{background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.akpi-card.c-amber::before{background:linear-gradient(90deg,var(--amber),var(--orange))}
+.akpi-card.c-purple::before{background:linear-gradient(90deg,var(--purple),var(--pink))}
+.akpi-card.c-teal::before{background:linear-gradient(90deg,var(--teal),var(--green))}
+.akpi-label{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.akpi-val{font-size:21px;font-weight:800;font-family:'Space Grotesk',monospace;line-height:1}
+.akpi-sub{font-size:11px;color:var(--text-3);margin-top:5px;line-height:1.4}
+.streak-dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:8px}
+.streak-dot{width:10px;height:10px;border-radius:3px;transition:all .2s}
+.income-source-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r-md);background:var(--bg-2);border:1px solid var(--border);transition:all var(--trans);margin-bottom:6px}
+.income-source-row:hover{border-color:var(--border-med)}
+.cat-eff-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.cat-eff-row:last-child{border-bottom:none}
+/* ── AI CHAT ── */
+.ai-msg{display:flex;gap:10px;align-items:flex-start;animation:slideUp .2s ease}
+.ai-msg.user{flex-direction:row-reverse}
+.ai-msg-bubble{max-width:84%;padding:11px 14px;border-radius:var(--r-xl);font-size:13.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.ai-msg.user .ai-msg-bubble{background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;border-bottom-right-radius:4px;box-shadow:0 3px 16px rgba(124,58,237,.4)}
+.ai-msg.bot .ai-msg-bubble{background:var(--bg-2);border:1px solid var(--border-med);color:var(--text-1);border-bottom-left-radius:4px}
+.ai-msg-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.ai-msg.bot .ai-msg-avatar{background:linear-gradient(135deg,var(--purple),var(--teal))}
+.ai-msg.user .ai-msg-avatar{background:linear-gradient(135deg,var(--blue),var(--purple));font-size:12px;font-weight:800;color:#fff}
+.ai-typing-wrap{display:flex;gap:5px;align-items:center;padding:2px 0}
+.ai-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);animation:aidot 1.2s infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes aidot{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.qprompt{width:100%;padding:8px 11px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);color:var(--text-2);font-size:12px;cursor:pointer;text-align:right;transition:all var(--trans);font-family:'Tajawal',sans-serif}
+.qprompt:hover{background:var(--bg-3);border-color:var(--purple);color:var(--text-1)}
+.snap-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border)}
+.snap-row:last-child{border-bottom:none}
 </style>
 </head>
 <body>
@@ -1213,26 +1301,51 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 <div class="modal">
   <div class="modal-title"><i class="ti ti-trending-up" style="color:var(--gold)"></i> <span id="modalInvTitle">إضافة استثمار</span></div>
   <input type="hidden" id="invEditIdx">
-  <div class="form-group"><label class="form-label">اسم الاستثمار</label><input type="text" id="invName" placeholder="مثال: أسهم فودة، Thundr..."></div>
+  <div class="form-group"><label class="form-label">اسم الاستثمار / الورقة المالية</label><input type="text" id="invName" placeholder="مثال: ASPI، BSB، ذهب عيار 21..."></div>
   <div class="form-grid">
-    <div class="form-group"><label class="form-label">النوع</label><select id="invType"><option value="thundr">⚡ Thundr</option><option value="stocks">📊 أسهم</option><option value="gold">🥇 ذهب</option><option value="crypto">₿ كريبتو</option><option value="cert">🏦 شهادات</option><option value="real">🏠 عقارات</option><option value="other">📦 أخرى</option></select></div>
+    <div class="form-group"><label class="form-label">النوع</label><select id="invType"><option value="thundr">⚡ Thndr</option><option value="stocks">📊 أسهم</option><option value="gold">🥇 ذهب</option><option value="crypto">₿ كريبتو</option><option value="cert">🏦 شهادات</option><option value="real">🏠 عقارات</option><option value="other">📦 أخرى</option></select></div>
     <div class="form-group"><label class="form-label">العملة</label><select id="invCurr"><option>EGP</option><option>USD</option></select></div>
   </div>
-  <div class="form-grid">
-    <div class="form-group"><label class="form-label">💸 سعر الشراء (تكلفتك)</label><input type="number" id="invCost" placeholder="0" min="0"></div>
-    <div class="form-group"><label class="form-label">📈 القيمة الحالية</label><input type="number" id="invValue" placeholder="0" oninput="invSyncFromValue()"></div>
+
+  <!-- وضع الإدخال: بالسهم أو بالمبلغ الكلي -->
+  <div style="display:flex;gap:8px;margin-bottom:12px" id="invModeToggle">
+    <button type="button" id="invModeSharesBtn" class="btn btn-sm btn-primary" onclick="setInvMode('shares')" style="flex:1">📦 بالسهم (عدد × سعر)</button>
+    <button type="button" id="invModeTotalBtn" class="btn btn-sm" onclick="setInvMode('total')" style="flex:1">💰 بالمبلغ الكلي</button>
   </div>
-  <!-- حقل نسبة التغيير — يظهر فقط في التعديل -->
-  <div class="form-group" id="invPctGroup" style="display:none">
-    <label class="form-label">🔄 تحديث بالنسبة <span style="color:var(--text-3);font-weight:400">(اختياري — بدل ما تكتب القيمة)</span></label>
-    <div style="display:flex;gap:8px;align-items:center">
-      <input type="number" id="invChangePct" placeholder="مثال: +12 أو -5" step="0.1"
-        style="flex:1;padding:10px 13px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none"
-        oninput="invSyncFromPct()">
-      <span style="color:var(--text-3);font-size:13px;white-space:nowrap">%</span>
-      <div id="invPctPreview" style="font-size:12px;color:var(--teal);font-weight:700;white-space:nowrap;min-width:80px;text-align:left"></div>
+
+  <!-- وضع الأسهم -->
+  <div id="invSharesMode">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">🔢 عدد الأسهم / الوحدات</label><input type="number" id="invShares" placeholder="0" min="0" step="any" oninput="invCalcFromShares()"></div>
+      <div class="form-group"><label class="form-label">💵 سعر الشراء للوحدة</label><input type="number" id="invPricePerShare" placeholder="0.00" min="0" step="any" oninput="invCalcFromShares()"></div>
     </div>
-    <div style="font-size:11px;color:var(--text-3);margin-top:4px">اكتب النسبة وسيتم حساب القيمة الجديدة تلقائياً من سعر الشراء</div>
+    <div class="form-group">
+      <label class="form-label">📈 السعر الحالي للوحدة</label>
+      <input type="number" id="invCurrentPrice" placeholder="0.00" min="0" step="any" oninput="invCalcFromShares()">
+    </div>
+    <div id="invSharesPreview" style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;font-size:12.5px;color:var(--text-2);margin-bottom:8px;display:none">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>التكلفة الكلية</span><strong id="invSharesCost" style="color:var(--text-1);font-family:'Space Grotesk',monospace">—</strong></div>
+      <div style="display:flex;justify-content:space-between"><span>القيمة الحالية</span><strong id="invSharesVal" style="color:var(--teal);font-family:'Space Grotesk',monospace">—</strong></div>
+    </div>
+  </div>
+
+  <!-- وضع المبلغ الكلي -->
+  <div id="invTotalMode" style="display:none">
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">💸 سعر الشراء (تكلفتك)</label><input type="number" id="invCost" placeholder="0" min="0"></div>
+      <div class="form-group"><label class="form-label">📈 القيمة الحالية</label><input type="number" id="invValue" placeholder="0" oninput="invSyncFromValue()"></div>
+    </div>
+    <!-- حقل نسبة التغيير — يظهر فقط في التعديل -->
+    <div class="form-group" id="invPctGroup" style="display:none">
+      <label class="form-label">🔄 تحديث بالنسبة <span style="color:var(--text-3);font-weight:400">(اختياري)</span></label>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="number" id="invChangePct" placeholder="مثال: +12 أو -5" step="0.1"
+          style="flex:1;padding:10px 13px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none"
+          oninput="invSyncFromPct()">
+        <span style="color:var(--text-3);font-size:13px;white-space:nowrap">%</span>
+        <div id="invPctPreview" style="font-size:12px;color:var(--teal);font-weight:700;white-space:nowrap;min-width:80px;text-align:left"></div>
+      </div>
+    </div>
   </div>
   <div class="form-group">
     <label class="form-label">اسحب من محفظة عند الشراء <span style="color:var(--text-3);font-weight:400">(اختياري)</span></label>
@@ -1246,6 +1359,37 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <div class="modal-footer">
     <button class="btn" onclick="closeModal('modalInv')">إلغاء</button>
     <button class="btn btn-primary" onclick="saveInvestment()"><i class="ti ti-check"></i> <span id="modalInvBtn">حفظ</span></button>
+  </div>
+</div>
+</div>
+
+<!-- BULK UPDATE INVESTMENTS -->
+<div class="modal-overlay" id="modalBulkUpdate">
+<div class="modal">
+  <div class="modal-title"><i class="ti ti-percentage" style="color:var(--teal)"></i> تحديث المحفظة الكلية</div>
+  <div style="font-size:12.5px;color:var(--text-2);margin-bottom:14px;line-height:1.7">
+    دخّل نسبة التغيير الكلية لمحفظتك (من Thndr مثلاً)، وسيتم تطبيقها على إجمالي التكلفة لحساب القيمة الحالية.
+  </div>
+
+  <!-- تحديث المحفظة كلها بنسبة واحدة -->
+  <div class="inv-bulk-wrap">
+    <div class="inv-bulk-label">📊 تحديث كل المحفظة بنسبة واحدة</div>
+    <div class="inv-bulk-pct-input">
+      <input type="number" id="bulkAllPct" placeholder="مثال: +12.5 أو -3.2" step="0.01" oninput="previewBulkAll()">
+      <span style="color:var(--text-3);font-size:14px;white-space:nowrap">%</span>
+    </div>
+    <div class="inv-bulk-preview" id="bulkAllPreview"></div>
+  </div>
+
+  <!-- أو تحديث كل ورقة لوحدها -->
+  <div class="inv-bulk-wrap">
+    <div class="inv-bulk-label">📋 أو حدّث كل ورقة لوحدها</div>
+    <div id="bulkIndividualRows" style="display:flex;flex-direction:column;gap:10px"></div>
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn" onclick="closeModal('modalBulkUpdate')">إلغاء</button>
+    <button class="btn btn-primary" onclick="applyBulkUpdate()"><i class="ti ti-check"></i> تطبيق</button>
   </div>
 </div>
 </div>
@@ -1276,12 +1420,12 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 <div class="modal">
   <div class="modal-title"><i class="ti ti-chart-pie" style="color:var(--amber)"></i> <span id="modalBudgetTitle">إضافة فئة ميزانية</span></div>
   <input type="hidden" id="budgetEditIdx">
-  <div class="form-group"><label class="form-label">اسم الفئة</label><input type="text" id="budgetCat" placeholder="مثال: طعام، مواصلات..."></div>
+  <div class="form-group"><label class="form-label">الفئة</label><select id="budgetCat" style="width:100%;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;font-size:14px"></select></div>
   <div class="form-grid">
     <div class="form-group"><label class="form-label">الحد الشهري</label><input type="number" id="budgetLimit" placeholder="0"></div>
     <div class="form-group"><label class="form-label">المُنفق حتى الآن</label><input type="number" id="budgetSpent" placeholder="0"></div>
   </div>
-  <div class="form-grid">
+  <div class="form-grid" style="display:none">
     <div class="form-group"><label class="form-label">الأيقونة</label><select id="budgetIcon"><option value="ti-shopping-cart">🛒 تسوق</option><option value="ti-car">🚗 مواصلات</option><option value="ti-bolt">💡 فواتير</option><option value="ti-heart">❤️ صحة</option><option value="ti-device-tv">🎬 ترفيه</option><option value="ti-book">📚 تعليم</option><option value="ti-home">🏠 إيجار</option><option value="ti-plane">✈️ سفر</option><option value="ti-gift">🎁 هدايا</option><option value="ti-phone">📱 اتصالات</option><option value="ti-circle">⚪ عام</option></select></div>
     <div class="form-group"><label class="form-label">اللون</label><select id="budgetColor"><option value="#4f9cf9">🔵 أزرق</option><option value="#22c55e">🟢 أخضر</option><option value="#f5a623">🟡 ذهبي</option><option value="#ff4d6d">🔴 أحمر</option><option value="#a78bfa">🟣 بنفسجي</option><option value="#00d4b4">🩵 تيل</option></select></div>
   </div>
@@ -1502,11 +1646,17 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             <button class="btn btn-sm" onclick="openWeekCompare()" title="مقارنة الأسابيع" style="background:var(--purple-dim);border-color:rgba(192,132,252,.3);color:var(--purple);white-space:nowrap">
               <i class="ti ti-arrows-exchange" style="font-size:13px"></i><span style="display:none" class="addtx-label"> مقارنة</span>
             </button>
+            <button class="btn btn-sm" onclick="openSummaryPicker()" title="ملخص مالي" style="background:rgba(192,132,252,.12);border-color:rgba(192,132,252,.35);color:var(--purple);white-space:nowrap">
+              <i class="ti ti-moon" style="font-size:13px"></i> <span>ملخص</span>
+            </button>
             <button class="btn btn-sm btn-teal" onclick="openHowMuch()" title="كم معايا؟" style="white-space:nowrap">
               <i class="ti ti-wallet" style="font-size:13px"></i> <span>كم معايا؟</span>
             </button>
           </div>
         </div>
+
+        <!-- ══ SUMMARY CARD SLOT ══ -->
+        <div id="summaryCardSlot"></div>
 
         <div class="ai-insight" id="aiInsight">
           <div class="ai-icon">🤖</div>
@@ -1790,25 +1940,44 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 
       <!-- ═══ INVEST ═══ -->
       <div class="page" id="page-invest">
-        <div class="g3 mb20">
-          <div class="metric-card amber"><div class="metric-icon" style="background:var(--amber-dim)"><i class="ti ti-trending-up" style="color:var(--amber);font-size:18px"></i></div><div class="metric-label">إجمالي الاستثمارات</div><div class="metric-value mono" id="invTotal">—</div><div class="metric-change neutral">EGP</div></div>
-          <div class="metric-card green"><div class="metric-icon" style="background:var(--green-dim)"><i class="ti ti-chart-line" style="color:var(--green);font-size:18px"></i></div><div class="metric-label">ربح / خسارة إجمالي</div><div class="metric-value"><span id="invAvgReturn">—</span><span style="font-size:16px;color:var(--text-3)">%</span></div><div class="metric-change neutral">من إجمالي تكلفتك</div></div>
-          <div class="metric-card purple"><div class="metric-icon" style="background:var(--purple-dim)"><i class="ti ti-packages" style="color:var(--purple);font-size:18px"></i></div><div class="metric-label">عدد الاستثمارات</div><div class="metric-value" id="invCount">—</div><div class="metric-change neutral">محافظ متنوعة</div></div>
+        <!-- ── Portfolio Header — Thndr style ── -->
+        <div class="inv-portfolio-header" id="invPortfolioHeader">
+          <div class="inv-portfolio-total-lbl">قيمة محفظتك الاستثمارية</div>
+          <div class="inv-portfolio-total"><span class="curr">EGP</span><span id="invTotal">—</span></div>
+          <div class="inv-portfolio-pl" id="invPortfolioPL">
+            <span class="pl-amt" id="invPLAmt">—</span>
+            <span class="pl-pct" id="invPLPct">—</span>
+          </div>
         </div>
+
+        <!-- ── Stats row ── -->
+        <div class="g3 mb20">
+          <div class="metric-card amber"><div class="metric-icon" style="background:var(--amber-dim)"><i class="ti ti-packages" style="color:var(--amber);font-size:18px"></i></div><div class="metric-label">عدد الاستثمارات</div><div class="metric-value" id="invCount">—</div><div class="metric-change neutral">ورقة / أصل</div></div>
+          <div class="metric-card green"><div class="metric-icon" style="background:var(--green-dim)"><i class="ti ti-chart-line" style="color:var(--green);font-size:18px"></i></div><div class="metric-label">ربح / خسارة إجمالي</div><div class="metric-value"><span id="invAvgReturn">—</span><span style="font-size:16px;color:var(--text-3)">%</span></div><div class="metric-change neutral">من إجمالي تكلفتك</div></div>
+          <div class="metric-card purple"><div class="metric-icon" style="background:var(--purple-dim)"><i class="ti ti-coin" style="color:var(--purple);font-size:18px"></i></div><div class="metric-label">إجمالي التكلفة</div><div class="metric-value mono" id="invTotalCost">—</div><div class="metric-change neutral">EGP</div></div>
+        </div>
+
         <div class="g2 mb20">
+          <!-- ── قائمة الأسهم ── -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">محفظتي الاستثمارية</div>
-              <button class="btn btn-sm btn-primary" onclick="openAddInv()"><i class="ti ti-plus"></i> إضافة</button>
+              <div class="card-title">محفظتي</div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-sm" style="background:var(--teal-dim);border-color:rgba(0,245,196,.3);color:var(--teal)" onclick="openBulkUpdate()" title="تحديث الكل بنسبة"><i class="ti ti-percentage"></i> تحديث الكل</button>
+                <button class="btn btn-sm btn-primary" onclick="openAddInv()"><i class="ti ti-plus"></i> إضافة</button>
+              </div>
             </div>
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px" id="invGrid"></div>
+            <div style="display:flex;flex-direction:column;gap:10px" id="invGrid"></div>
           </div>
+          <!-- ── Chart ── -->
           <div class="card">
             <div class="card-header"><div class="card-title">توزيع المحفظة</div></div>
             <div class="chart-wrap" style="height:210px"><canvas id="invChart"></canvas></div>
             <div style="display:flex;flex-wrap:wrap;gap:9px;margin-top:12px;font-size:11.5px" id="invLegend"></div>
           </div>
         </div>
+
+        <!-- ── محاكي الفائدة ── -->
         <div class="card mb20">
           <div class="card-header"><div class="card-title">محاكي الفائدة المركبة 🧮</div></div>
           <div style="display:flex;flex-direction:column;gap:14px">
@@ -1850,7 +2019,6 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
               <div style="font-size:11.5px;color:var(--text-2);line-height:1.6">تحوط من التضخم — سيولة عالية</div>
               <div class="badge badge-blue" style="margin-top:10px">تحوط</div>
             </div>
-
           </div>
         </div>
       </div>
@@ -1872,16 +2040,38 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
       <!-- ═══ ANALYTICS ═══ -->
       <div class="page" id="page-analytics">
 
-        <!-- ═══ KPI PILLS ═══ -->
-        <div class="monthly-avg-row" id="monthlyAvgRow"></div>
+        <!-- ═══ KPI GRID — 4 كارد في الأعلى ═══ -->
+        <div class="analytics-kpi-grid" id="analyticsKpiGrid">
+          <div class="akpi-card c-blue">
+            <div class="akpi-label">متوسط يومي — الشهر الحالي</div>
+            <div class="akpi-val" id="akpiDailyAvg">—</div>
+            <div class="akpi-sub" id="akpiDailyAvgSub">جاري الحساب...</div>
+          </div>
+          <div class="akpi-card c-green">
+            <div class="akpi-label">معدل الادخار</div>
+            <div class="akpi-val" id="akpiSavRate">—</div>
+            <div class="akpi-sub" id="akpiSavRateSub">من إجمالي الدخل</div>
+          </div>
+          <div class="akpi-card c-amber">
+            <div class="akpi-label">توقع نهاية الشهر</div>
+            <div class="akpi-val" id="akpiForecast">—</div>
+            <div class="akpi-sub" id="akpiForecastSub">بالمعدل الحالي</div>
+          </div>
+          <div class="akpi-card c-purple">
+            <div class="akpi-label">أيام الالتزام بالميزانية</div>
+            <div class="akpi-val" id="akpiStreak">—</div>
+            <div class="akpi-sub" id="akpiStreakSub">الشهر الحالي</div>
+          </div>
+        </div>
 
         <!-- ═══ SMART INSIGHTS BANNER ═══ -->
         <div id="analyticsInsightsBanner" class="card mb20" style="background:linear-gradient(135deg,rgba(192,132,252,.08),rgba(0,245,196,.06));border-color:var(--border-med);display:none">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
             <span style="font-size:20px">🧠</span>
             <div class="card-title">رؤى ذكية</div>
+            <span class="badge badge-purple" style="font-size:10px">AI</span>
           </div>
-          <div id="insightsList" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div id="insightsList" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
 
         <!-- ═══ معدل الصرف اليومي ═══ -->
@@ -2023,7 +2213,79 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div id="topExpensesList" style="display:flex;flex-direction:column;gap:8px"></div>
         </div>
 
+        <!-- ═══ مصادر الدخل + كفاءة الميزانية ═══ -->
+        <div class="g2 mb20">
+          <!-- مصادر الدخل -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">💰 مصادر الدخل</div>
+                <div class="card-subtitle" id="incomeSourceSubtitle">توزيع الدخل حسب الوصف</div>
+              </div>
+              <select class="btn btn-sm" id="incomeSourceMonth" onchange="renderIncomeSources()">
+                <option value="current">الشهر الحالي</option>
+                <option value="3">آخر 3 شهور</option>
+                <option value="6">آخر 6 شهور</option>
+              </select>
+            </div>
+            <div id="incomeSourcesList" style="display:flex;flex-direction:column;gap:6px"></div>
+          </div>
+
+          <!-- كفاءة الميزانية -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <div class="card-title">📊 كفاءة الميزانية</div>
+                <div class="card-subtitle">الصرف الفعلي مقابل الميزانية المحددة</div>
+              </div>
+            </div>
+            <div id="budgetEfficiencyList" style="display:flex;flex-direction:column"></div>
+          </div>
+        </div>
+
+        <!-- ═══ Cashflow — التدفق النقدي اليومي ═══ -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🌊 التدفق النقدي اليومي</div>
+              <div class="card-subtitle">صافي الدخل ناقص المصاريف لكل يوم في الشهر الحالي</div>
+            </div>
+            <span id="cashflowNetBadge" class="badge" style="font-size:11px"></span>
+          </div>
+          <div class="chart-wrap" style="height:200px"><canvas id="cashflowChart"></canvas></div>
+        </div>
+
+        <!-- ═══ ANOMALY DETECTION ═══ -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🔍 كشف الشهور الشاذة</div>
+              <div class="card-subtitle">شهور صرفت فيها أكتر أو أقل من المعتاد بشكل واضح</div>
+            </div>
+            <span class="badge badge-purple" style="font-size:10px">ذكاء اصطناعي</span>
+          </div>
+          <div id="anomalyList" style="display:flex;flex-direction:column;gap:8px;min-height:40px"></div>
+        </div>
+
+        <!-- ═══ WALLET HISTORY ═══ -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div>
+              <div class="card-title">🏦 تطور رصيد المحافظ</div>
+              <div class="card-subtitle">الرصيد بعد كل معاملة — مع الوقت</div>
+            </div>
+            <select class="btn btn-sm" id="walletHistorySelect" onchange="renderWalletHistory()">
+              <option value="all">كل المحافظ</option>
+            </select>
+          </div>
+          <div class="chart-wrap" style="height:240px"><canvas id="walletHistoryChart"></canvas></div>
+          <div id="walletHistoryLegend" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px"></div>
+        </div>
+
       </div>
+
+      <!-- ═══ AI CHAT ═══ -->
+      
 
       <!-- ═══ SETTINGS ═══ -->
       <div class="page" id="page-settings">
@@ -2701,7 +2963,12 @@ const invTypeInfo={
   other:{label:'أخرى',color:'#7a96c4',icon:'ti-package'},
 };
 
-function fmt(n,dec=0){return(+n||0).toLocaleString('ar-EG',{minimumFractionDigits:dec,maximumFractionDigits:dec})}
+function fmt(n,dec=2){
+  const val=+n||0;
+  const parts=val.toFixed(dec).split('.');
+  parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,',');
+  return dec>0?parts.join('.'):parts[0];
+}
 function toEGP(amount,currency){
   if(currency==='USD')return amount*(state.rates?.USD||49.15);
   return amount;
@@ -3342,64 +3609,169 @@ function _populateInvWallets(){
 function openAddInv(){
   document.getElementById('invEditIdx').value='';document.getElementById('modalInvTitle').textContent='إضافة استثمار';document.getElementById('modalInvBtn').textContent='حفظ';
   document.getElementById('invName').value='';document.getElementById('invValue').value='';document.getElementById('invCost').value='';document.getElementById('invCurr').value='EGP';document.getElementById('invType').value='thundr';document.getElementById('invNote').value='';
+  document.getElementById('invShares').value='';document.getElementById('invPricePerShare').value='';document.getElementById('invCurrentPrice').value='';
+  document.getElementById('invSharesPreview').style.display='none';
   document.getElementById('invReturnGroup').style.display='none';
   document.getElementById('invPctGroup').style.display='none';
   document.getElementById('invChangePct').value='';
   document.getElementById('invPctPreview').textContent='';
+  setInvMode('shares');
   _populateInvWallets();
   openModal('modalInv');
 }
 function openEditInv(idx){
   const inv=state.investments[idx];if(!inv)return;
   document.getElementById('invEditIdx').value=idx;document.getElementById('modalInvTitle').textContent='تعديل الاستثمار';document.getElementById('modalInvBtn').textContent='حفظ التعديل';
-  document.getElementById('invName').value=inv.name;document.getElementById('invValue').value=inv.value;document.getElementById('invCost').value=inv.cost||0;document.getElementById('invCurr').value=inv.currency;document.getElementById('invType').value=inv.type;document.getElementById('invNote').value=inv.note||'';
+  document.getElementById('invName').value=inv.name;document.getElementById('invCurr').value=inv.currency;document.getElementById('invType').value=inv.type;document.getElementById('invNote').value=inv.note||'';
   document.getElementById('invReturnGroup').style.display='';
-  // إظهار حقل النسبة وحساب النسبة الحالية
-  document.getElementById('invPctGroup').style.display='';
-  const cost=inv.cost||inv.value;
-  const currentPct=cost>0?Math.round(((inv.value-cost)/cost)*1000)/10:0;
-  document.getElementById('invChangePct').value=currentPct||'';
-  document.getElementById('invPctPreview').textContent='';
+  if(inv.shares>0){
+    setInvMode('shares');
+    document.getElementById('invShares').value=inv.shares||'';
+    document.getElementById('invPricePerShare').value=inv.pricePerShare||'';
+    document.getElementById('invCurrentPrice').value=inv.shares>0&&inv.value>0?(inv.value/inv.shares).toFixed(4):'';
+    invCalcFromShares();
+  } else {
+    setInvMode('total');
+    document.getElementById('invValue').value=inv.value;document.getElementById('invCost').value=inv.cost||0;
+    document.getElementById('invPctGroup').style.display='';
+    const cost=inv.cost||inv.value;
+    const currentPct=cost>0?Math.round(((inv.value-cost)/cost)*1000)/10:0;
+    document.getElementById('invChangePct').value=currentPct||'';
+    document.getElementById('invPctPreview').textContent='';
+  }
   _populateInvWallets();
   openModal('modalInv');
 }
 function saveInvestment(){
-  const name=document.getElementById('invName').value.trim();const value=parseFloat(document.getElementById('invValue').value);
-  if(!name||!value||value<=0){toast('اكتب الاسم والقيمة الحالية','error');return;}
-  const cost=parseFloat(document.getElementById('invCost').value)||value;
-  const data={name,value,cost,currency:document.getElementById('invCurr').value,type:document.getElementById('invType').value,returnPct:0,note:document.getElementById('invNote').value};
+  const name=document.getElementById('invName').value.trim();
+  if(!name){toast('اكتب اسم الاستثمار','error');return;}
+  const mode=document.getElementById('invSharesMode').style.display==='none'?'total':'shares';
+  let value,cost,shares=0,pricePerShare=0;
+  if(mode==='shares'){
+    shares=parseFloat(document.getElementById('invShares').value)||0;
+    pricePerShare=parseFloat(document.getElementById('invPricePerShare').value)||0;
+    const currentPrice=parseFloat(document.getElementById('invCurrentPrice').value)||pricePerShare;
+    if(!shares||!pricePerShare){toast('أدخل عدد الأسهم وسعر الشراء','error');return;}
+    cost=shares*pricePerShare;
+    value=shares*currentPrice;
+  } else {
+    value=parseFloat(document.getElementById('invValue').value);
+    cost=parseFloat(document.getElementById('invCost').value)||value;
+    if(!value||value<=0){toast('أدخل القيمة الحالية','error');return;}
+  }
+  const data={name,value,cost,shares,pricePerShare,currency:document.getElementById('invCurr').value,type:document.getElementById('invType').value,returnPct:0,note:document.getElementById('invNote').value};
   const editIdx=document.getElementById('invEditIdx').value;
   const srcKey=document.getElementById('invWalletSrc').value;
   const dstKey=document.getElementById('invWalletDst').value;
-
   if(editIdx!==''){
-    // تعديل — ممكن ترجع فلوس لمحفظة
-    if(dstKey){
-      const w=state.wallets.find(x=>x.key===dstKey);
-      if(w){
-        const returnAmt=parseFloat(document.getElementById('invValue').value)||0;
-        w.balance+=toEGP(returnAmt,data.currency);
-        toast(`✅ تم إضافة ${fmt(returnAmt)} ${data.currency} لـ ${w.name}`);
-      }
-    }
+    if(dstKey){const w=state.wallets.find(x=>x.key===dstKey);if(w){w.balance+=toEGP(value,data.currency);toast(`✅ تم إضافة ${fmt(value)} ${data.currency} لـ ${w.name}`);}}
     state.investments[+editIdx]=data;toast('✏️ تم التعديل');
   } else {
-    // إضافة جديدة — اسحب من محفظة
-    if(srcKey){
-      const w=state.wallets.find(x=>x.key===srcKey);
-      if(w){
-        const deduct=toEGP(cost,data.currency);
-        if(w.balance<deduct){toast(`⚠️ رصيد ${w.name} مش كافي (${fmt(w.balance)} EGP)!`,'error');return;}
-        w.balance-=deduct;
-        toast(`✅ تم خصم ${fmt(cost)} ${data.currency} من ${w.name}`);
-      }
-    }
+    if(srcKey){const w=state.wallets.find(x=>x.key===srcKey);if(w){const deduct=toEGP(cost,data.currency);if(w.balance<deduct){toast(`⚠️ رصيد ${w.name} مش كافي (${fmt(w.balance)} EGP)!`,'error');return;}w.balance-=deduct;toast(`✅ تم خصم ${fmt(cost)} ${data.currency} من ${w.name}`);}}
     state.investments.push(data);toast('📈 تم إضافة الاستثمار');
   }
   saveState();_syncAfterSave();closeModal('modalInv');renderInvestments();updateDashboard();
 }
 function deleteInv(idx){confirmDelete('هتحذف الاستثمار ده؟',()=>{state.investments.splice(idx,1);saveState();_syncAfterSave();renderInvestments();updateDashboard();toast('🗑️ تم الحذف','info');});}
 
+// ── وضع الإدخال: أسهم أو مبلغ كلي ──
+function setInvMode(mode){
+  const sharesEl=document.getElementById('invSharesMode');
+  const totalEl=document.getElementById('invTotalMode');
+  const sharesBtnEl=document.getElementById('invModeSharesBtn');
+  const totalBtnEl=document.getElementById('invModeTotalBtn');
+  if(!sharesEl||!totalEl) return;
+  if(mode==='shares'){
+    sharesEl.style.display='';totalEl.style.display='none';
+    if(sharesBtnEl){sharesBtnEl.className='btn btn-sm btn-primary';totalBtnEl.className='btn btn-sm';}
+  } else {
+    sharesEl.style.display='none';totalEl.style.display='';
+    if(sharesBtnEl){totalBtnEl.className='btn btn-sm btn-primary';sharesBtnEl.className='btn btn-sm';}
+  }
+}
+
+// ── حساب تلقائي من عدد الأسهم × السعر ──
+function invCalcFromShares(){
+  const shares=parseFloat(document.getElementById('invShares').value)||0;
+  const buyPrice=parseFloat(document.getElementById('invPricePerShare').value)||0;
+  const curPrice=parseFloat(document.getElementById('invCurrentPrice').value)||buyPrice;
+  const preview=document.getElementById('invSharesPreview');
+  if(!preview) return;
+  if(shares>0&&buyPrice>0){
+    const cost=shares*buyPrice;
+    const val=shares*curPrice;
+    const profit=val-cost;
+    const pct=((profit/cost)*100).toFixed(2);
+    const pColor=profit>=0?'var(--green)':'var(--red)';
+    const pSign=profit>=0?'+':'';
+    preview.style.display='';
+    document.getElementById('invSharesCost').textContent=fmt(cost)+' EGP';
+    document.getElementById('invSharesVal').innerHTML=`<span style="color:${pColor}">${fmt(val)} EGP <small>(${pSign}${pct}%)</small></span>`;
+  } else {
+    preview.style.display='none';
+  }
+}
+
+// ── فتح مودال تحديث المحفظة الكلية ──
+function openBulkUpdate(){
+  document.getElementById('bulkAllPct').value='';
+  document.getElementById('bulkAllPreview').textContent='';
+  const rows=document.getElementById('bulkIndividualRows');
+  rows.innerHTML=state.investments.map((inv,i)=>{
+    const info=invTypeInfo[inv.type]||invTypeInfo.other;
+    const cost=inv.cost||inv.value;
+    const curPct=cost>0?((inv.value-cost)/cost*100).toFixed(2):0;
+    return`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1;font-size:13px;font-weight:700;color:var(--text-1)">${inv.name}</div>
+      <div style="font-size:11px;color:var(--text-3)">${fmt(inv.value,2)} ${inv.currency}</div>
+      <div style="display:flex;align-items:center;gap:4px">
+        <input type="number" id="bulkPct_${i}" placeholder="${curPct}%" step="0.01" value=""
+          style="width:90px;padding:7px 10px;background:var(--bg-1);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:'Space Grotesk',monospace;font-size:13px;outline:none">
+        <span style="color:var(--text-3);font-size:12px">%</span>
+      </div>
+    </div>`;
+  }).join('');
+  openModal('modalBulkUpdate');
+}
+
+// ── معاينة التحديث الكلي ──
+function previewBulkAll(){
+  const pct=parseFloat(document.getElementById('bulkAllPct').value);
+  const prev=document.getElementById('bulkAllPreview');
+  if(!prev) return;
+  if(isNaN(pct)){prev.textContent='';return;}
+  const totalCost=state.investments.reduce((s,inv)=>s+toEGP(inv.cost||inv.value,inv.currency),0);
+  const newVal=totalCost*(1+pct/100);
+  const profit=newVal-totalCost;
+  const pSign=profit>=0?'+':'';
+  const pColor=profit>=0?'var(--green)':'var(--red)';
+  prev.innerHTML=`<span style="color:${pColor}">الإجمالي سيصبح: <strong>${fmt(newVal,2)} EGP</strong> (${pSign}${fmt(profit,2)} EGP)</span>`;
+  // ملء حقول الأسهم الفردية بنفس النسبة
+  state.investments.forEach((_,i)=>{
+    const el=document.getElementById('bulkPct_'+i);
+    if(el) el.value=pct;
+  });
+}
+
+// ── تطبيق التحديث ──
+function applyBulkUpdate(){
+  let changed=0;
+  state.investments.forEach((inv,i)=>{
+    const el=document.getElementById('bulkPct_'+i);
+    if(!el) return;
+    const pct=parseFloat(el.value);
+    if(isNaN(pct)) return;
+    const cost=inv.cost||inv.value;
+    inv.value=parseFloat((cost*(1+pct/100)).toFixed(4));
+    // لو بالأسهم — حدّث السعر الحالي للوحدة
+    if(inv.shares>0) inv.pricePerShare=inv.pricePerShare||(cost/inv.shares);
+    changed++;
+  });
+  if(!changed){toast('مفيش تغييرات','info');closeModal('modalBulkUpdate');return;}
+  saveState();_syncAfterSave();renderInvestments();updateDashboard();
+  closeModal('modalBulkUpdate');
+  toast(`✅ تم تحديث ${changed} استثمار`);
+}
 // ── sync بين حقل القيمة والنسبة في مودال الاستثمارات ──
 function invSyncFromValue(){
   // لما المستخدم يكتب القيمة يدوياً — نحسب النسبة منها
@@ -3460,20 +3832,38 @@ function deleteWallet(key){
 }
 
 // ── BUDGET CRUD ──
+function _populateBudgetCatSelect(selectedKey){
+  const sel=document.getElementById('budgetCat');if(!sel)return;
+  const used=new Set((state.budget||[]).map(b=>b.catKey||b.cat));
+  const editIdx=document.getElementById('budgetEditIdx').value;
+  // عند التعديل نشيل الفئة الحالية من القائمة المحجوزة
+  if(editIdx!==''){const cur=state.budget[+editIdx];if(cur)used.delete(cur.catKey||cur.cat);}
+  sel.innerHTML=(state.categories||[])
+    .filter(c=>selectedKey===c.key||!used.has(c.key))
+    .map(c=>`<option value="${c.key}" ${c.key===selectedKey?'selected':''}>${c.name}</option>`)
+    .join('');
+  if(!sel.options.length)sel.innerHTML='<option value="">لا توجد فئات متاحة</option>';
+}
 function openAddBudget(){
   document.getElementById('budgetEditIdx').value='';document.getElementById('modalBudgetTitle').textContent='إضافة فئة ميزانية';document.getElementById('modalBudgetBtn').textContent='حفظ';
-  document.getElementById('budgetCat').value='';document.getElementById('budgetLimit').value='';document.getElementById('budgetSpent').value='';document.getElementById('budgetIcon').value='ti-circle';document.getElementById('budgetColor').value='#4f9cf9';
+  document.getElementById('budgetLimit').value='';document.getElementById('budgetSpent').value='';document.getElementById('budgetIcon').value='ti-circle';document.getElementById('budgetColor').value='#4f9cf9';
+  _populateBudgetCatSelect('');
   openModal('modalBudget');
 }
 function openEditBudget(idx){
   const b=state.budget[idx];if(!b)return;
   document.getElementById('budgetEditIdx').value=idx;document.getElementById('modalBudgetTitle').textContent='تعديل الفئة';document.getElementById('modalBudgetBtn').textContent='حفظ التعديل';
-  document.getElementById('budgetCat').value=b.cat;document.getElementById('budgetLimit').value=b.total||b.limit||0;document.getElementById('budgetSpent').value=b.spent||0;document.getElementById('budgetIcon').value=b.icon||'ti-circle';document.getElementById('budgetColor').value=b.color||'#4f9cf9';
+  const ck=b.catKey||b.cat;
+  _populateBudgetCatSelect(ck);
+  document.getElementById('budgetLimit').value=b.total||b.limit||0;document.getElementById('budgetSpent').value=b.spent||0;document.getElementById('budgetIcon').value=b.icon||'ti-circle';document.getElementById('budgetColor').value=b.color||'#4f9cf9';
   openModal('modalBudget');
 }
 function saveBudget(){
-  const cat=document.getElementById('budgetCat').value.trim();const total=parseFloat(document.getElementById('budgetLimit').value)||0;const spent=parseFloat(document.getElementById('budgetSpent').value)||0;
-  if(!cat){toast('اكتب اسم الفئة','error');return;}
+  const catKey=document.getElementById('budgetCat').value.trim();
+  const catObj=state.categories.find(c=>c.key===catKey);
+  const cat=catObj?catObj.name:catKey; // للتوافق مع البيانات القديمة
+  const total=parseFloat(document.getElementById('budgetLimit').value)||0;const spent=parseFloat(document.getElementById('budgetSpent').value)||0;
+  if(!catKey){toast('اختار الفئة','error');return;}
   if(total<0){toast('الميزانية لا تكون أقل من صفر','error');return;}
 
   // ✅ تحقق إن ميزانية الفئة مش أكبر من ميزانية الشهر الكلية
@@ -3490,8 +3880,8 @@ function saveBudget(){
     }
   }
 
-  const data={cat,total,limit:total,spent,icon:document.getElementById('budgetIcon').value||'ti-circle',color:document.getElementById('budgetColor').value};
-  if(editIdx!==''){const old=state.budget[+editIdx];if(old&&old.catKey)data.catKey=old.catKey;state.budget[+editIdx]=data;toast('✏️ تم التعديل');}else{state.budget.push(data);toast('✅ تم إضافة الفئة');}
+  const data={catKey,cat,total,limit:total,spent,icon:catObj?catObj.icon||'ti-circle':document.getElementById('budgetIcon').value||'ti-circle',color:catObj?catObj.color||'#4f9cf9':document.getElementById('budgetColor').value};
+  if(editIdx!==''){state.budget[+editIdx]=data;toast('✏️ تم التعديل');}else{state.budget.push(data);toast('✅ تم إضافة الفئة');}
   saveState();_syncAfterSave();closeModal('modalBudget');renderBudget();
 }
 function toggleSkipBudget(idx){
@@ -3510,6 +3900,7 @@ function openSetBudgetLimit(idx){
   document.getElementById('budgetSpent').value=b.spent||0;
   document.getElementById('budgetIcon').value=b.icon||'ti-circle';
   document.getElementById('budgetColor').value=b.color||'#4f9cf9';
+  _populateBudgetCatSelect(b.catKey||b.cat);
   openModal('modalBudget');
   setTimeout(()=>document.getElementById('budgetLimit').focus(),200);
 }
@@ -3649,17 +4040,22 @@ function renderBudget(){
   // ✅ FIX: حدّث spent في state.budget من المعاملات الحقيقية عشان يتحفظ ويتبعت للشيت صح
   state.budget.forEach(r=>{
     const ck=r.catKey||r.cat;
-    const c2=state.categories.find(c=>c.key===ck||c.name===r.cat);
-    r.spent=Math.round(spentByCat[ck]||spentByCat[c2?.key]||0);
+    const c2=state.categories.find(c=>c.key===ck||c.name===ck||c.name===r.cat);
+    const rk=c2?c2.key:ck;
+    r.spent=Math.round(spentByCat[rk]||spentByCat[ck]||0);
+    // لو البيانات قديمة وعندنا catKey صح، حدّثه
+    if(c2&&!r.catKey){r.catKey=c2.key;}
   });
   saveState();
 
   el.innerHTML=state.budget.map((r,i)=>{
     // الـ catKey ممكن يكون مخزون أو نفس الـ cat
     const catKey=r.catKey||r.cat;
-    const cat=state.categories.find(c=>c.key===catKey||c.name===r.cat);
-    // spent الحقيقي من المعاملات
-    const realSpent=Math.round((spentByCat[catKey]||spentByCat[cat?.key]||0));
+    const cat=state.categories.find(c=>c.key===catKey||c.name===catKey||c.name===r.cat);
+    const resolvedKey=cat?cat.key:catKey;
+    const ci=getCatInfo(resolvedKey);
+    // spent الحقيقي من المعاملات مع reverse lookup للبيانات القديمة
+    const realSpent=Math.round(spentByCat[resolvedKey]||spentByCat[catKey]||0);
     const budget=r.total||r.limit||0;
     const pct=budget>0?Math.round(realSpent/budget*100):0;
     const col=pct>90?'var(--red)':pct>70?'var(--amber)':'var(--green)';
@@ -3670,8 +4066,8 @@ function renderBudget(){
     return`<div class="budget-row" id="brow_${i}" style="${skipMonth?'opacity:.55':''}}">
       <div class="budget-row-head">
         <div class="budget-cat">
-          <i class="ti ${r.icon||'ti-circle'}" style="color:${r.color||'var(--blue)'};font-size:17px"></i>
-          ${r.cat}
+          <i class="ti ${ci.icon||r.icon||'ti-circle'}" style="color:${ci.color||r.color||'var(--blue)'};font-size:17px"></i>
+          ${ci.label||r.cat}
           ${skipMonth?'<span class="badge badge-amber" style="margin-right:6px;font-size:9px">⏸ مؤجلة</span>':noLimit?'<span class="badge badge-amber" style="margin-right:6px;font-size:9px">بدون حد</span>':''} 
         </div>
         <div style="display:flex;align-items:center;gap:10px">
@@ -3927,48 +4323,72 @@ function renderWalletTxBreakdown(){
 function renderInvestments(){
   const el=document.getElementById('invGrid');
   const legEl=document.getElementById('invLegend');
+  if(!el) return;
+
+  // ── حساب الإجماليات ──
+  const totalEGP=state.investments.reduce((s,inv)=>s+toEGP(inv.value,inv.currency),0);
+  const totalCost=state.investments.reduce((s,inv)=>s+toEGP(inv.cost||inv.value,inv.currency),0);
+  const totalProfit=totalEGP-totalCost;
+  const avgProfitPct=totalCost>0?(totalProfit/totalCost*100):0;
+
+  // ── Portfolio header ──
+  const plColor=totalProfit>=0?'var(--green)':'var(--red)';
+  const plSign=totalProfit>=0?'+':'';
+  document.getElementById('invTotal').textContent=fmt(totalEGP);
+  const plEl=document.getElementById('invPortfolioPL');
+  if(plEl){
+    plEl.style.color=plColor;
+    document.getElementById('invPLAmt').textContent=plSign+fmt(totalProfit)+' EGP';
+    document.getElementById('invPLPct').textContent='('+plSign+fmt(avgProfitPct,2)+'%)';
+  }
+  document.getElementById('invAvgReturn').textContent=(avgProfitPct>=0?'+':'')+fmt(avgProfitPct,2);
+  document.getElementById('invAvgReturn').style.color=avgProfitPct>=0?'var(--green)':'var(--red)';
+  document.getElementById('invCount').textContent=state.investments.length;
+  const costEl=document.getElementById('invTotalCost');
+  if(costEl) costEl.textContent=fmt(totalCost);
+
+  // ── بناء الـ rows — Thndr style ──
   el.innerHTML=state.investments.map((inv,i)=>{
     const info=invTypeInfo[inv.type]||invTypeInfo.other;
-    const egpVal=inv.currency!=='EGP'?` <span style="font-size:10px;color:var(--text-3)">≈${fmt(toEGP(inv.value,inv.currency))} EGP</span>`:'';
     const cost=inv.cost||inv.value;
-    const profit=toEGP(inv.value,inv.currency)-toEGP(cost,inv.currency);
-    const profitPct=cost>0?Math.round((profit/toEGP(cost,inv.currency))*100):0;
-    const profitColor=profit>0?'var(--green)':profit<0?'var(--red)':'var(--text-3)';
-    const profitIcon=profit>0?'ti-trending-up':profit<0?'ti-trending-down':'ti-minus';
-    const profitSign=profit>0?'+':'';
-    return`<div class="inv-card">
+    const val=toEGP(inv.value,inv.currency);
+    const costEGP=toEGP(cost,inv.currency);
+    const profit=val-costEGP;
+    const profitPct=costEGP>0?(profit/costEGP*100):0;
+    const pColor=profit>0?'var(--green)':profit<0?'var(--red)':'var(--text-3)';
+    const pSign=profit>=0?'+':'';
+    const pIcon=profit>0?'▲':profit<0?'▼':'—';
+    // اختصار الاسم للـ logo
+    const abbr=inv.name.replace(/\s+/g,'').toUpperCase().slice(0,4);
+    // عدد الأسهم لو موجود
+    const sharesSub=inv.shares>0?`<span>${fmt(inv.shares,inv.shares%1===0?0:2)} وحدة</span><span>·</span><span>${fmt(inv.pricePerShare||0,2)} / وحدة</span>`:'<span>'+info.label+'</span>';
+    return`<div class="inv-row">
       <div class="card-actions">
         <button class="btn btn-ghost btn-icon btn-sm" onclick="openEditInv(${i})" title="تعديل"><i class="ti ti-pencil" style="font-size:12px"></i></button>
         <button class="btn btn-ghost btn-icon btn-sm" onclick="deleteInv(${i})" title="حذف" style="color:var(--red)"><i class="ti ti-trash" style="font-size:12px"></i></button>
       </div>
-      <div class="inv-type"><i class="ti ${info.icon}" style="color:${info.color}"></i>${info.label}</div>
-      <div style="font-size:13px;font-weight:700;margin-bottom:5px;color:var(--text-1)">${inv.name}</div>
-      <div class="inv-val">${fmt(inv.value)} <span style="font-size:11px;color:var(--text-3)">${inv.currency}</span>${egpVal}</div>
-      ${cost!==inv.value?`<div style="font-size:10.5px;color:var(--text-3);margin-top:3px">تكلفة: ${fmt(cost)} ${inv.currency}</div>`:''}
-      <div class="inv-pct" style="color:${profitColor}"><i class="ti ${profitIcon}" style="font-size:13px"></i>${profitSign}${fmt(profit)} EGP <span style="font-size:10px;opacity:.8">(${profitSign}${profitPct}%)</span></div>
-      ${inv.note?`<div style="font-size:10.5px;color:var(--text-3);margin-top:5px">${inv.note}</div>`:''}
+      <div class="inv-row-logo" style="background:${info.color}22;color:${info.color}">${abbr}</div>
+      <div class="inv-row-info">
+        <div class="inv-row-name">${inv.name}</div>
+        <div class="inv-row-sub">${sharesSub}</div>
+      </div>
+      <div class="inv-row-right">
+        <div class="inv-row-val">EGP ${fmt(val)}</div>
+        <div class="inv-row-pl" style="color:${pColor}">${pIcon} ${pSign}${fmt(Math.abs(profit),2)} <span style="font-size:10.5px;opacity:.8">(${pSign}${fmt(profitPct,2)}%)</span></div>
+      </div>
     </div>`;
   }).join('');
 
-  const totalEGP=state.investments.reduce((s,inv)=>s+toEGP(inv.value,inv.currency),0);
-  const totalCost=state.investments.reduce((s,inv)=>s+toEGP(inv.cost||inv.value,inv.currency),0);
-  const totalProfit=totalEGP-totalCost;
-  const avgProfitPct=totalCost>0?Math.round(totalProfit/totalCost*100):0;
-  document.getElementById('invTotal').textContent=fmt(totalEGP);
-  document.getElementById('invAvgReturn').textContent=(avgProfitPct>=0?'+':'')+avgProfitPct;
-  document.getElementById('invAvgReturn').style.color=avgProfitPct>=0?'var(--green)':'var(--red)';
-  document.getElementById('invCount').textContent=state.investments.length;
-
   const ex=Chart.getChart('invChart');if(ex)ex.destroy();
-  if(!state.investments.length)return;
+  if(!state.investments.length){el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-3)"><i class="ti ti-chart-pie" style="font-size:32px;display:block;margin-bottom:8px"></i>لا توجد استثمارات بعد</div>';return;}
   new Chart(document.getElementById('invChart'),{
     type:'doughnut',
     data:{labels:state.investments.map(inv=>inv.name),datasets:[{data:state.investments.map(inv=>toEGP(inv.value,inv.currency)),backgroundColor:state.investments.map(inv=>(invTypeInfo[inv.type]||invTypeInfo.other).color),borderWidth:2,borderColor:'var(--bg-1)',hoverBorderWidth:3}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...chartDefaults.plugins.tooltip,callbacks:{label:function(c){const t=c.dataset.data.reduce((a,b)=>a+b,0);const pct=Math.round(c.parsed/t*100);return` ${c.label}: ${fmt(c.parsed)} EGP (${pct}%)`;}}}},cutout:'62%'}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...chartDefaults.plugins.tooltip,callbacks:{label:function(c){const t=c.dataset.data.reduce((a,b)=>a+b,0);const pct=(c.parsed/t*100).toFixed(1);return` ${c.label}: ${fmt(c.parsed)} EGP (${pct}%)`;}}}}  ,cutout:'62%'}
   });
   legEl.innerHTML=state.investments.map(inv=>{
     const info=invTypeInfo[inv.type]||invTypeInfo.other;
-    const pct=totalEGP>0?Math.round(toEGP(inv.value,inv.currency)/totalEGP*100):0;
+    const pct=totalEGP>0?(toEGP(inv.value,inv.currency)/totalEGP*100).toFixed(1):0;
     return`<span style="display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-2)"><span style="width:9px;height:9px;border-radius:3px;background:${info.color};display:inline-block"></span>${inv.name} <strong style="color:var(--text-1)">${pct}%</strong></span>`;
   }).join('');
 }
@@ -4926,41 +5346,392 @@ function renderAnalyticsInsights(){
   const mk=getCurrentMonthKey();const pmk=getPrevMonthKey();
   const curExp=calcMonthExpenses(mk);const prevExp=calcMonthExpenses(pmk);
   const curInc=calcMonthIncome(mk);
-  // مقارنة بالشهر اللي فات
+  const now=getCairoNow();
+  const today=now.getDate();
+  const dInM=getDaysInMonth(now.getFullYear(),now.getMonth()+1);
+
+  // 1. مقارنة بالشهر اللي فات
   if(prevExp>0&&curExp>0){
     const diff=Math.round((curExp-prevExp)/prevExp*100);
-    if(diff>15) insights.push({icon:'⚠️',color:'var(--amber)',text:`إنفاقك الشهر الحالي أعلى بـ ${diff}% عن الشهر اللي فات — حاول تراجع الفئات اللي زادت`});
-    else if(diff<-10) insights.push({icon:'✅',color:'var(--green)',text:`برافو! خفضت مصاريفك ${Math.abs(diff)}% عن الشهر اللي فات`});
+    if(diff>20) insights.push({icon:'⚠️',color:'var(--amber)',text:`إنفاقك ارتفع ${diff}% عن الشهر اللي فات (${fmt(curExp-prevExp)} EGP زيادة) — راجع الفئات اللي زادت`});
+    else if(diff>5) insights.push({icon:'📈',color:'var(--orange)',text:`إنفاقك أعلى بـ ${diff}% من الشهر اللي فات — الفرق ${fmt(curExp-prevExp)} EGP`});
+    else if(diff<-15) insights.push({icon:'🎉',color:'var(--green)',text:`ممتاز! وفرت ${fmt(prevExp-curExp)} EGP مقارنة بالشهر اللي فات (${Math.abs(diff)}% تحسن)`});
+    else if(diff<-5) insights.push({icon:'✅',color:'var(--teal)',text:`قلّلت مصاريفك ${Math.abs(diff)}% عن الشهر اللي فات — استمر`});
   }
-  // نسبة الادخار
+
+  // 2. نسبة الادخار
   if(curInc>0){
     const savPct=Math.round((curInc-curExp)/curInc*100);
-    if(savPct<10&&curInc>0) insights.push({icon:'💡',color:'var(--blue)',text:`نسبة ادخارك الشهر الحالي ${savPct}% — الهدف المثالي 20%+`});
-    else if(savPct>=30) insights.push({icon:'🌟',color:'var(--gold)',text:`رائع! نسبة ادخارك ${savPct}% هذا الشهر — أداء ممتاز`});
+    const saved=curInc-curExp;
+    if(savPct<0) insights.push({icon:'🚨',color:'var(--red)',text:`مصاريفك أعلى من دخلك بـ ${fmt(Math.abs(saved))} EGP هذا الشهر!`});
+    else if(savPct<10) insights.push({icon:'💡',color:'var(--blue)',text:`نسبة الادخار ${savPct}% فقط (${fmt(saved)} EGP) — الهدف المثالي 20%+`});
+    else if(savPct>=30) insights.push({icon:'🌟',color:'var(--gold)',text:`رائع! ادخرت ${savPct}% من دخلك (${fmt(saved)} EGP) — أداء مالي ممتاز`});
+    else if(savPct>=20) insights.push({icon:'💪',color:'var(--green)',text:`نسبة ادخار ${savPct}% (${fmt(saved)} EGP) — أنت في المسار الصح`});
   }
-  // أعلى فئة
+
+  // 3. أعلى فئة إنفاق
   const catMap={};getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
   const topCat=Object.entries(catMap).sort((a,b)=>b[1]-a[1])[0];
   if(topCat&&curExp>0){
     const ci=getCatInfo(topCat[0]);const pct=Math.round(topCat[1]/curExp*100);
-    if(pct>40) insights.push({icon:'🔍',color:'var(--purple)',text:`${ci.label} تاخد ${pct}% من مصاريفك — هل ممكن تقليلها؟`});
+    if(pct>50) insights.push({icon:'🔍',color:'var(--purple)',text:`تنبّه: ${ci.label} تستهلك ${pct}% من مصاريفك (${fmt(topCat[1])} EGP) — هذا الشهر`});
+    else if(pct>35) insights.push({icon:'👀',color:'var(--blue)',text:`أعلى فئة إنفاق: ${ci.label} بـ ${pct}% (${fmt(topCat[1])} EGP) — هل هذا طبيعي؟`});
   }
-  // معدل يومي
-  const today=getCairoNow().getDate();const dInM=getDaysInMonth(getCairoNow().getFullYear(),getCairoNow().getMonth()+1);
-  if(today>0&&curExp>0){
+
+  // 4. توقع نهاية الشهر
+  if(today>3&&curExp>0){
     const dailyAvg=Math.round(curExp/today);const projected=Math.round(dailyAvg*dInM);
-    if(curInc>0&&projected>curInc) insights.push({icon:'🚨',color:'var(--red)',text:`بالمعدل الحالي، ستصرف ${fmt(projected)} EGP هذا الشهر — أعلى من دخلك!`});
-    else if(curInc>0) insights.push({icon:'📅',color:'var(--cyan)',text:`بالمعدل الحالي، تقدير نهاية الشهر ${fmt(projected)} EGP`});
+    const remaining=dInM-today;
+    if(curInc>0&&projected>curInc*1.1) insights.push({icon:'🚨',color:'var(--red)',text:`خطر: بالمعدل الحالي، ستصرف ${fmt(projected)} EGP — أعلى من دخلك بـ ${fmt(projected-curInc)} EGP!`});
+    else if(curInc>0&&projected<curInc*0.8) insights.push({icon:'📅',color:'var(--cyan)',text:`توقع نهاية الشهر: ${fmt(projected)} EGP — ستوفر ~${fmt(curInc-projected)} EGP 🎯`});
+    else insights.push({icon:'📊',color:'var(--text-2)',text:`بالمعدل الحالي (${fmt(dailyAvg)} EGP/يوم)، المتوقع نهاية الشهر: ${fmt(projected)} EGP — باقي ${remaining} يوم`});
   }
+
+  // 5. تحقق ميزانية الفئات
+  const budgets=state.budget||[];
+  const overBudget=budgets.filter(b=>{
+    const ck=b.catKey||b.cat;const lim=b.total||b.limit||0;
+    const spent=(catMap[ck]||0);
+    return lim>0&&spent>lim;
+  });
+  if(overBudget.length>0){
+    const names=overBudget.slice(0,2).map(b=>getCatInfo(b.catKey||b.cat).label).join('، ');
+    insights.push({icon:'💸',color:'var(--red)',text:`تجاوزت ميزانية ${overBudget.length} فئة: ${names}${overBudget.length>2?' وأكثر':''} — راجع صفحة الميزانية`});
+  }
+
+  // 6. الديون
+  const oweTotal=state.debts.owe.reduce((s,d)=>s+toEGP(d.amount,d.currency),0);
+  if(oweTotal>0&&curInc>0&&oweTotal/curInc>0.5){
+    insights.push({icon:'⚡',color:'var(--amber)',text:`ديونك ${fmt(oweTotal)} EGP — أكثر من 50% من دخلك الشهري. خطط لسدادها تدريجياً`});
+  }
+
   if(!insights.length){bannerEl.style.display='none';return;}
   bannerEl.style.display='block';
   listEl.innerHTML=insights.map(ins=>`
-    <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:var(--r-md);background:var(--bg-2);border-right:3px solid ${ins.color}">
+    <div style="display:flex;align-items:flex-start;gap:8px;padding:9px 11px;border-radius:var(--r-md);background:var(--bg-2);border-right:3px solid ${ins.color}">
       <span style="font-size:16px;flex-shrink:0">${ins.icon}</span>
-      <span style="font-size:12.5px;color:var(--text-2);line-height:1.5">${ins.text}</span>
+      <span style="font-size:12.5px;color:var(--text-2);line-height:1.55">${ins.text}</span>
     </div>
   `).join('');
 }
+
+// ══════════════════════════════════════════════════════════
+//  ANALYTICS KPI — تحديث الكاردات العلوية
+// ══════════════════════════════════════════════════════════
+function renderAnalyticsKPIs(){
+  const mk = getCurrentMonthKey();
+  const now = getCairoNow();
+  const dayOfM = now.getDate();
+  const dInM = getDaysInMonth(now.getFullYear(), now.getMonth()+1);
+  const curExp = calcMonthExpenses(mk);
+  const curInc = calcMonthIncome(mk);
+
+  // 1. متوسط يومي
+  const dailyAvg = dayOfM > 0 ? Math.round(curExp / dayOfM) : 0;
+  const el_da = document.getElementById('akpiDailyAvg');
+  const el_das = document.getElementById('akpiDailyAvgSub');
+  if(el_da){
+    el_da.textContent = dailyAvg > 0 ? fmt(dailyAvg) : '—';
+    el_da.style.color = 'var(--text-1)';
+  }
+  if(el_das) el_das.textContent = `اليوم ${dayOfM} من ${dInM} — إجمالي ${fmt(curExp)} EGP`;
+
+  // 2. معدل الادخار
+  const saved = curInc - curExp;
+  const savRate = curInc > 0 ? Math.round(saved / curInc * 100) : null;
+  const el_sr = document.getElementById('akpiSavRate');
+  const el_srs = document.getElementById('akpiSavRateSub');
+  if(el_sr){
+    el_sr.textContent = savRate !== null ? savRate + '%' : '—';
+    el_sr.style.color = savRate === null ? 'var(--text-3)'
+      : savRate >= 30 ? 'var(--green)'
+      : savRate >= 15 ? 'var(--amber)'
+      : savRate >= 0  ? 'var(--red)'
+      : 'var(--red)';
+  }
+  if(el_srs){
+    if(curInc === 0) el_srs.textContent = 'لا يوجد دخل مسجل';
+    else el_srs.innerHTML = saved >= 0
+      ? `وفّرت <strong style="color:var(--green)">${fmt(saved)} EGP</strong>`
+      : `عجز <strong style="color:var(--red)">${fmt(Math.abs(saved))} EGP</strong>`;
+  }
+
+  // 3. توقع نهاية الشهر
+  const remainingDays = dInM - dayOfM;
+  const projected = dayOfM > 0 ? Math.round(curExp / dayOfM * dInM) : 0;
+  const el_fc = document.getElementById('akpiForecast');
+  const el_fcs = document.getElementById('akpiForecastSub');
+  if(el_fc){
+    el_fc.textContent = projected > 0 ? fmt(projected) : '—';
+    el_fc.style.color = curInc > 0 && projected > curInc ? 'var(--red)'
+      : projected > 0 ? 'var(--amber)' : 'var(--text-1)';
+  }
+  if(el_fcs){
+    if(projected === 0){ el_fcs.textContent = 'سجّل مصاريف أولاً'; }
+    else if(curInc > 0){
+      const diff = projected - curInc;
+      el_fcs.innerHTML = diff > 0
+        ? `<span style="color:var(--red)">⚠ تجاوز بـ ${fmt(diff)}</span>`
+        : `<span style="color:var(--green)">✓ وفر ~${fmt(Math.abs(diff))}</span>`;
+    } else {
+      el_fcs.textContent = `${remainingDays} يوم متبقي`;
+    }
+  }
+
+  // 4. أيام تحت الميزانية اليومية
+  const el_st = document.getElementById('akpiStreak');
+  const el_sts = document.getElementById('akpiStreakSub');
+  // احسب مصاريف كل يوم في الشهر الحالي
+  const dayMap = {};
+  getMonthTxs(mk).filter(t => t.type === 'expense' && t.date).forEach(t => {
+    dayMap[t.date] = (dayMap[t.date] || 0) + toEGP(t.amount, t.currency);
+  });
+  const spendDays = Object.values(dayMap);
+  const totalDaysWithData = spendDays.length;
+
+  // اعتبر الحد اليومي = ميزانية أسبوع ÷ 7، أو متوسط الشهر اللي فات
+  const curWeek = getCurrentWeekBudget();
+  let dailyLimit = curWeek ? Math.round(curWeek.limit / 7) : 0;
+  if(!dailyLimit && dailyAvg > 0){
+    // استخدم متوسط الشهر اللي فات كمرجع
+    const pmk = getPrevMonthKey();
+    const prevExp = calcMonthExpenses(pmk);
+    const pNow = new Date(now.getFullYear(), now.getMonth()-1, 1);
+    const pDays = getDaysInMonth(pNow.getFullYear(), pNow.getMonth()+1);
+    dailyLimit = pDays > 0 && prevExp > 0 ? Math.round(prevExp / pDays) : dailyAvg;
+  }
+
+  const goodDays = dailyLimit > 0
+    ? spendDays.filter(v => v <= dailyLimit).length
+    : spendDays.filter(v => v <= (dailyAvg || 1)).length;
+
+  if(el_st){
+    if(totalDaysWithData === 0){ el_st.textContent = '—'; el_st.style.color = 'var(--text-3)'; }
+    else {
+      el_st.textContent = `${goodDays}/${totalDaysWithData}`;
+      el_st.style.color = goodDays/totalDaysWithData >= 0.7 ? 'var(--green)'
+        : goodDays/totalDaysWithData >= 0.5 ? 'var(--amber)' : 'var(--red)';
+    }
+  }
+  if(el_sts){
+    el_sts.textContent = dailyLimit > 0
+      ? `أيام تحت ${fmt(dailyLimit)} EGP/يوم`
+      : totalDaysWithData > 0 ? `أيام تحت المتوسط (${fmt(Math.round(dailyAvg))} EGP)`
+      : 'لا توجد بيانات كافية';
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  INCOME SOURCES
+// ══════════════════════════════════════════════════════════
+function renderIncomeSources(){
+  const sel = document.getElementById('incomeSourceMonth')?.value || 'current';
+  const now = getCairoNow();
+  let monthKeys = [];
+  if(sel === 'current'){
+    monthKeys = [getCurrentMonthKey()];
+    const el = document.getElementById('incomeSourceSubtitle');
+    if(el) el.textContent = 'الشهر الحالي';
+  } else {
+    const n = parseInt(sel);
+    for(let i = n-1; i >= 0; i--){
+      const d = new Date(now.getFullYear(), now.getMonth()-i, 1);
+      monthKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+    }
+    const el = document.getElementById('incomeSourceSubtitle');
+    if(el) el.textContent = `آخر ${sel} شهور`;
+  }
+
+  // جمع الدخل من كل الفترة حسب الوصف
+  const srcMap = {};
+  monthKeys.forEach(mk => {
+    getMonthTxs(mk).filter(t => t.type === 'income').forEach(t => {
+      const key = t.desc || 'دخل عام';
+      srcMap[key] = (srcMap[key] || 0) + toEGP(t.amount, t.currency);
+    });
+  });
+
+  const el = document.getElementById('incomeSourcesList');
+  if(!el) return;
+  const entries = Object.entries(srcMap).sort((a,b) => b[1]-a[1]);
+  const total = entries.reduce((s,[,v]) => s+v, 0);
+
+  if(!entries.length){
+    el.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-3)"><i class="ti ti-mood-empty" style="font-size:28px;opacity:.3;display:block;margin-bottom:8px"></i>لا يوجد دخل مسجل</div>`;
+    return;
+  }
+
+  const colors = ['var(--green)', 'var(--teal)', 'var(--blue)', 'var(--cyan)', 'var(--purple)', 'var(--amber)'];
+  el.innerHTML = entries.slice(0, 6).map(([desc, amt], i) => {
+    const pct = total > 0 ? Math.round(amt / total * 100) : 0;
+    const col = colors[i % colors.length];
+    return `<div class="income-source-row">
+      <div style="width:8px;height:8px;border-radius:50%;background:${col};flex-shrink:0"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;color:var(--text-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${desc}</div>
+        <div style="height:4px;background:var(--bg-3);border-radius:99px;margin-top:5px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:${col};border-radius:99px;transition:width .5s"></div>
+        </div>
+      </div>
+      <div style="text-align:left;flex-shrink:0">
+        <div style="font-size:13px;font-weight:800;color:${col};font-family:'Space Grotesk',monospace">${fmt(amt)}</div>
+        <div style="font-size:10px;color:var(--text-3);text-align:left">${pct}%</div>
+      </div>
+    </div>`;
+  }).join('');
+  if(entries.length > 6){
+    const rest = entries.slice(6).reduce((s,[,v]) => s+v, 0);
+    el.innerHTML += `<div style="font-size:11px;color:var(--text-3);padding:6px 12px">+ ${entries.length-6} مصدر آخر — ${fmt(rest)} EGP</div>`;
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  BUDGET EFFICIENCY
+// ══════════════════════════════════════════════════════════
+function renderBudgetEfficiency(){
+  const el = document.getElementById('budgetEfficiencyList');
+  if(!el) return;
+  const mk = getCurrentMonthKey();
+  const budgets = state.budget || [];
+
+  if(!budgets.length){
+    el.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px"><i class="ti ti-chart-bar" style="font-size:28px;opacity:.3;display:block;margin-bottom:8px"></i>لم تحدد ميزانيات بعد<br><a style="color:var(--blue);cursor:pointer;font-size:12px" onclick="showPage('budget',document.querySelectorAll('.nav-item')[4])">اضبط ميزانية ←</a></div>`;
+    return;
+  }
+
+  const spentMap = {};
+  getMonthTxs(mk).filter(t => t.type === 'expense').forEach(t => {
+    spentMap[t.cat] = (spentMap[t.cat] || 0) + toEGP(t.amount, t.currency);
+  });
+
+  const rows = budgets.map(b => {
+    const catKey = b.catKey || b.cat;
+    // reverse lookup: لو catKey اسم قديم مش key، دور على الفئة بالاسم
+    const catObj = state.categories.find(c => c.key === catKey || c.name === catKey || c.name === b.cat);
+    const resolvedKey = catObj ? catObj.key : catKey;
+    const ci = getCatInfo(resolvedKey);
+    const limit = b.total || b.limit || 0;
+    const spent = Math.round(spentMap[resolvedKey] || spentMap[catKey] || 0);
+    const pct = limit > 0 ? Math.min(Math.round(spent / limit * 100), 200) : 0;
+    return { ci, limit, spent, pct, catKey: resolvedKey };
+  }).filter(r => r.limit > 0).sort((a,b) => b.pct - a.pct);
+
+  if(!rows.length){
+    el.innerHTML = `<div style="text-align:center;padding:16px;color:var(--text-3);font-size:13px">لا توجد ميزانيات محددة</div>`;
+    return;
+  }
+
+  el.innerHTML = rows.map(({ ci, limit, spent, pct }) => {
+    const barColor = pct >= 100 ? 'var(--red)' : pct >= 80 ? 'var(--amber)' : 'var(--green)';
+    const statusIcon = pct >= 100 ? '🔴' : pct >= 80 ? '🟡' : '🟢';
+    const barW = Math.min(pct, 100);
+    return `<div class="cat-eff-row">
+      <span style="font-size:15px">${statusIcon}</span>
+      <div style="width:28px;height:28px;border-radius:var(--r-sm);background:${ci.color}22;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i class="ti ${ci.icon}" style="color:${ci.color};font-size:13px"></i>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
+          <span style="font-weight:600;color:var(--text-1)">${ci.label}</span>
+          <span style="color:${barColor};font-weight:700;font-family:'Space Grotesk',monospace">${fmt(spent)} / ${fmt(limit)}</span>
+        </div>
+        <div class="progress-track" style="height:5px">
+          <div class="progress-fill" style="width:${barW}%;background:${barColor}"></div>
+        </div>
+      </div>
+      <span class="badge ${pct >= 100 ? 'badge-red' : pct >= 80 ? 'badge-amber' : 'badge-green'}" style="font-size:10px;flex-shrink:0">${pct}%</span>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+//  CASHFLOW CHART — التدفق النقدي اليومي
+// ══════════════════════════════════════════════════════════
+function renderCashflowChart(){
+  const mk = getCurrentMonthKey();
+  const txs = getMonthTxs(mk);
+
+  // جمع الدخل والمصاريف لكل يوم
+  const incMap = {}, expMap = {};
+  txs.forEach(t => {
+    if(!t.date) return;
+    if(t.type === 'income')  incMap[t.date] = (incMap[t.date]||0) + toEGP(t.amount, t.currency);
+    if(t.type === 'expense') expMap[t.date] = (expMap[t.date]||0) + toEGP(t.amount, t.currency);
+  });
+
+  // كل الأيام اللي فيها أي حاجة
+  const allDates = [...new Set([...Object.keys(incMap), ...Object.keys(expMap)])].sort();
+  if(!allDates.length){
+    const ex = Chart.getChart('cashflowChart'); if(ex) ex.destroy();
+    const badge = document.getElementById('cashflowNetBadge');
+    if(badge){ badge.textContent = 'لا توجد معاملات'; badge.className = 'badge'; }
+    return;
+  }
+
+  const netData  = allDates.map(d => Math.round((incMap[d]||0) - (expMap[d]||0)));
+  const totalInc = allDates.reduce((s,d) => s+(incMap[d]||0), 0);
+  const totalExp = allDates.reduce((s,d) => s+(expMap[d]||0), 0);
+  const totalNet = totalInc - totalExp;
+
+  // Badge — يعرض الصافي
+  const badge = document.getElementById('cashflowNetBadge');
+  if(badge){
+    badge.textContent = (totalNet >= 0 ? '+' : '') + fmt(Math.round(totalNet)) + ' EGP صافي';
+    badge.className = 'badge ' + (totalNet >= 0 ? 'badge-green' : 'badge-red');
+  }
+
+  mkChart('cashflowChart', {
+    type: 'bar',
+    data: {
+      labels: allDates.map(d => new Date(d+'T00:00').getDate()),
+      datasets: [
+        {
+          label: 'صافي اليوم',
+          data: netData,
+          backgroundColor: netData.map(v => v > 0 ? 'rgba(34,197,94,.8)' : v < 0 ? 'rgba(255,77,109,.8)' : 'rgba(100,100,100,.3)'),
+          borderRadius: 5,
+          borderSkipped: false,
+          order: 1
+        }
+      ]
+    },
+    options: {
+      ...chartDefaults,
+      plugins: {
+        ...chartDefaults.plugins,
+        legend: { display: false },
+        tooltip: {
+          ...chartDefaults.plugins.tooltip,
+          callbacks: {
+            title: items => `يوم ${items[0].label}`,
+            beforeBody: items => {
+              const d = allDates[items[0].dataIndex];
+              const inc = incMap[d]||0;
+              const exp = expMap[d]||0;
+              const lines = [];
+              if(inc > 0) lines.push(` دخل: +${fmt(Math.round(inc))} EGP`);
+              if(exp > 0) lines.push(` مصاريف: -${fmt(Math.round(exp))} EGP`);
+              return lines;
+            },
+            label: ctx => ` صافي: ${ctx.parsed.y >= 0 ? '+' : ''}${fmt(ctx.parsed.y)} EGP`
+          }
+        }
+      },
+      scales: {
+        ...chartDefaults.scales,
+        y: {
+          ...chartDefaults.scales.y,
+          ticks: {
+            ...chartDefaults.scales.y.ticks,
+            callback: v => (v >= 0 ? '' : '-') + fmt(Math.abs(v))
+          }
+        }
+      }
+    }
+  });
+}
+
+// ══════════════════════════════════════════════════════════
 
 function renderAnalytics(){
   const n=parseInt(document.getElementById('analyticsMonthCount')?.value||6);
@@ -4968,44 +5739,182 @@ function renderAnalytics(){
   const data=getLastNMonthsData(n);
   const incExpData=getLastNMonthsData(incExpN);
 
-  mkChart('incExpChart',{type:'bar',data:{labels:incExpData.map(d=>d.label),datasets:[{label:'دخل',data:incExpData.map(d=>d.inc),backgroundColor:'rgba(34,197,94,.7)',borderRadius:5},{label:'مصاريف',data:incExpData.map(d=>d.exp),backgroundColor:'rgba(255,77,109,.7)',borderRadius:5}]},options:{...chartDefaults,interaction:{intersect:false,mode:'index'}}});
-  mkChart('netWorthChart',{type:'line',data:{labels:data.map(d=>d.label),datasets:[{data:data.map(d=>d.net),borderColor:'#00d4b4',backgroundColor:'rgba(0,212,180,.1)',borderWidth:2.5,fill:true,tension:.4,pointBackgroundColor:'#00d4b4',pointRadius:4}]},options:chartDefaults});
+  // ── دخل vs مصاريف ──
+  mkChart('incExpChart',{
+    type:'bar',
+    data:{
+      labels:incExpData.map(d=>d.label),
+      datasets:[
+        {label:'دخل',data:incExpData.map(d=>d.inc),backgroundColor:'rgba(34,197,94,.75)',borderRadius:6,borderSkipped:false},
+        {label:'مصاريف',data:incExpData.map(d=>d.exp),backgroundColor:'rgba(255,77,109,.75)',borderRadius:6,borderSkipped:false}
+      ]
+    },
+    options:{
+      ...chartDefaults,
+      interaction:{intersect:false,mode:'index'},
+      plugins:{
+        ...chartDefaults.plugins,
+        tooltip:{
+          ...chartDefaults.plugins.tooltip,
+          callbacks:{
+            label:ctx=>{
+              const label = ctx.dataset.label;
+              return ` ${label}: ${fmt(ctx.parsed.y)} EGP`;
+            },
+            afterBody: items => {
+              const inc = items.find(i=>i.datasetIndex===0)?.parsed.y||0;
+              const exp = items.find(i=>i.datasetIndex===1)?.parsed.y||0;
+              const sav = inc - exp;
+              if(inc>0||exp>0) return [``, ` صافي: ${sav>=0?'+':''}${fmt(sav)} EGP`];
+              return [];
+            }
+          }
+        }
+      }
+    }
+  });
 
-  // daily chart للشهر الحالي
+  // ── صافي الثروة المتراكم (cumulative) ──
+  // بنبني الثروة كل شهر من الأصول + الاستثمارات كتقريب
+  const totalAssetsNow = getTotalAssets();
+  const totalInvNow = state.investments.reduce((s,inv)=>s+toEGP(inv.value,inv.currency),0);
+  const netWorthNow = totalAssetsNow + totalInvNow - state.debts.owe.reduce((s,d)=>s+toEGP(d.amount,d.currency),0);
+  // نبني backward من الثروة الحالية
+  const nwData = [];
+  let runningNW = netWorthNow;
+  for(let i = data.length-1; i >= 0; i--){
+    nwData[i] = Math.round(runningNW);
+    runningNW -= data[i].net; // نطرح الصافي للوصول للشهر السابق
+  }
+  mkChart('netWorthChart',{
+    type:'line',
+    data:{
+      labels:data.map(d=>d.label),
+      datasets:[{
+        label:'الثروة الصافية',
+        data:nwData,
+        borderColor:'#00d4b4',
+        backgroundColor:'rgba(0,212,180,.08)',
+        borderWidth:2.5,fill:true,tension:.35,
+        pointBackgroundColor: nwData.map((v,i)=> i===nwData.length-1 ? '#00d4b4' : '#1d1638'),
+        pointBorderColor:'#00d4b4',
+        pointRadius: nwData.map((v,i)=> i===nwData.length-1 ? 6 : 3),
+        pointHoverRadius:7
+      }]
+    },
+    options:{
+      ...chartDefaults,
+      plugins:{
+        ...chartDefaults.plugins,
+        tooltip:{
+          ...chartDefaults.plugins.tooltip,
+          callbacks:{label:ctx=>` ${fmt(ctx.parsed.y)} EGP`}
+        }
+      }
+    }
+  });
+
+  // ── إنفاق يومي الشهر الحالي ──
   const mk=getCurrentMonthKey();
   const txsThisMonth=getMonthTxs(mk).filter(t=>t.type==='expense');
-  const daysInMonth={};txsThisMonth.forEach(t=>{const d=t.date;daysInMonth[d]=(daysInMonth[d]||0)+toEGP(t.amount,t.currency);});
-  const dLabels=Object.keys(daysInMonth).sort();const dVals=dLabels.map(d=>Math.round(daysInMonth[d]));
+  const daysInMonth={};
+  txsThisMonth.forEach(t=>{const d=t.date;daysInMonth[d]=(daysInMonth[d]||0)+toEGP(t.amount,t.currency);});
+  const dLabels=Object.keys(daysInMonth).sort();
+  const dVals=dLabels.map(d=>Math.round(daysInMonth[d]));
+  const avgDaily = dVals.length>0 ? dVals.reduce((s,v)=>s+v,0)/dVals.length : 0;
   const maxDay=Math.max(...dVals,1);
-  mkChart('dailyChart',{type:'bar',data:{labels:dLabels.map(d=>new Date(d+'T00:00').getDate()),datasets:[{data:dVals,backgroundColor:dVals.map(v=>v===maxDay&&maxDay>0?'rgba(255,85,128,.85)':'rgba(167,139,250,.75)'),borderRadius:5}]},options:{...chartDefaults,scales:{x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,font:{size:9}}},y:chartDefaults.scales.y}}});
+  mkChart('dailyChart',{
+    type:'bar',
+    data:{
+      labels:dLabels.map(d=>new Date(d+'T00:00').getDate()),
+      datasets:[
+        {
+          data:dVals,
+          backgroundColor:dVals.map(v=>{
+            if(v===maxDay&&maxDay>0) return 'rgba(255,85,128,.9)';
+            if(v>avgDaily*1.3) return 'rgba(245,166,35,.8)';
+            return 'rgba(167,139,250,.7)';
+          }),
+          borderRadius:5
+        },
+        // خط المتوسط
+        {
+          type:'line',
+          data:dVals.map(()=>Math.round(avgDaily)),
+          borderColor:'rgba(79,156,249,.6)',
+          borderWidth:1.5,
+          borderDash:[4,3],
+          pointRadius:0,
+          tension:0
+        }
+      ]
+    },
+    options:{
+      ...chartDefaults,
+      plugins:{
+        ...chartDefaults.plugins,
+        tooltip:{
+          ...chartDefaults.plugins.tooltip,
+          callbacks:{
+            label:(ctx)=>{
+              if(ctx.datasetIndex===1) return ` متوسط: ${fmt(Math.round(avgDaily))} EGP`;
+              return ` ${fmt(ctx.parsed.y)} EGP`;
+            }
+          }
+        },
+        legend:{display:false}
+      },
+      scales:{x:{...chartDefaults.scales.x,ticks:{...chartDefaults.scales.x.ticks,font:{size:9}}},y:chartDefaults.scales.y}
+    }
+  });
   const totalThisMonth=dVals.reduce((s,v)=>s+v,0);
   const badge=document.getElementById('dailyChartTotalBadge');
   if(badge) badge.textContent=totalThisMonth>0?fmt(totalThisMonth)+' EGP':'';
 
-  // توزيع الفئات (الوظيفة الجديدة)
+  // توزيع الفئات
   renderCatBreakdown();
 
-  // جدول المقارنة
+  // ── جدول المقارنة — يعرض حتى لو مفيش دخل ──
   const now = new Date();
   const tbl=document.getElementById('analyticsTable');
   if(tbl) tbl.innerHTML=data.map((d,i)=>{
-    const sav=d.inc-d.exp;const pct=d.inc>0?Math.round(sav/d.inc*100):0;
+    const sav=d.inc-d.exp;
+    const pct=d.inc>0?Math.round(sav/d.inc*100):null;
     const monthIndex = n - 1 - i;
     const dd = new Date(now.getFullYear(), now.getMonth()-monthIndex, 1);
     const dInM = getDaysInMonth(dd.getFullYear(), dd.getMonth()+1);
     const daysToCount = monthIndex===0 ? Math.min(now.getDate(), dInM) : dInM;
-    const dailyAvg = daysToCount>0 ? Math.round(d.exp/daysToCount) : 0;
+    const dailyAvg = daysToCount>0&&d.exp>0 ? Math.round(d.exp/daysToCount) : 0;
     const isCurrentMonth = monthIndex===0;
-    const prevIdx=i-1;const prevD=data[prevIdx];
-    const expTrend=prevD&&prevD.exp>0?Math.round((d.exp-prevD.exp)/prevD.exp*100):null;
-    const trendHtml=expTrend!==null?`<span style="font-size:10px;color:${expTrend>0?'var(--red)':'var(--green)'};margin-right:4px">${expTrend>0?'▲':'▼'}${Math.abs(expTrend)}%</span>`:'';
-    return`<tr style="border-bottom:1px solid var(--border);transition:background .2s;${isCurrentMonth?'background:var(--bg-2);':''}" onmouseover="this.style.background='var(--bg-2)'" onmouseout="this.style.background='${isCurrentMonth?'var(--bg-2)':''}'">
-      <td style="padding:11px 13px;font-weight:700">${d.label}${isCurrentMonth?` <span class="badge badge-blue" style="font-size:9px">الحالي</span>`:''}</td>
-      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--green);text-align:left;font-weight:700">${d.inc>0?fmt(d.inc):'—'}</td>
-      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--red);text-align:left;font-weight:700">${trendHtml}${d.exp>0?fmt(d.exp):'—'}</td>
-      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:var(--amber);text-align:left;font-weight:600;font-size:12px">${dailyAvg>0?fmt(dailyAvg)+' EGP/يوم':'—'}</td>
-      <td style="padding:11px 13px;font-family:'Space Grotesk',monospace;color:${sav>=0?'var(--green)':'var(--red)'};text-align:left;font-weight:700">${d.inc>0||d.exp>0?fmt(sav):'—'}</td>
-      <td style="padding:11px 13px;text-align:left">${d.inc>0?`<span class="badge ${pct>=30?'badge-green':pct>=15?'badge-amber':'badge-red'}">${pct}%</span>`:'—'}</td>
+    const prevIdx=i-1; const prevD=data[prevIdx];
+    const expTrend=prevD&&prevD.exp>0&&d.exp>0 ? Math.round((d.exp-prevD.exp)/prevD.exp*100) : null;
+    const trendHtml=expTrend!==null
+      ?`<span style="font-size:10px;color:${expTrend>0?'var(--red)':'var(--green)'};margin-left:4px">${expTrend>0?'▲':'▼'}${Math.abs(expTrend)}%</span>`:'';
+    // لون الصف
+    const rowBg = isCurrentMonth ? 'background:rgba(79,156,249,.06);' : '';
+    const hasData = d.inc>0 || d.exp>0;
+    return`<tr style="border-bottom:1px solid var(--border);transition:background .15s;${rowBg}"
+      onmouseover="this.style.background='var(--bg-2)'"
+      onmouseout="this.style.background='${isCurrentMonth?'rgba(79,156,249,.06)':'transparent'}'">
+      <td style="padding:10px 13px;font-weight:700;white-space:nowrap">
+        ${d.label}${isCurrentMonth?` <span class="badge badge-blue" style="font-size:9px">الحالي</span>`:''}
+      </td>
+      <td style="padding:10px 13px;font-family:'Space Grotesk',monospace;color:var(--green);text-align:left;font-weight:700">
+        ${d.inc>0?fmt(d.inc):'<span style="color:var(--text-3)">—</span>'}
+      </td>
+      <td style="padding:10px 13px;font-family:'Space Grotesk',monospace;color:var(--red);text-align:left;font-weight:700">
+        ${d.exp>0?fmt(d.exp):'<span style="color:var(--text-3)">—</span>'}${trendHtml}
+      </td>
+      <td style="padding:10px 13px;font-family:'Space Grotesk',monospace;color:var(--amber);text-align:left;font-weight:600;font-size:12px">
+        ${dailyAvg>0?fmt(dailyAvg)+' EGP':'<span style="color:var(--text-3)">—</span>'}
+      </td>
+      <td style="padding:10px 13px;font-family:'Space Grotesk',monospace;text-align:left;font-weight:700;color:${hasData?(sav>=0?'var(--green)':'var(--red)'):'var(--text-3)'}">
+        ${hasData?(sav>=0?'+':'')+fmt(sav):'—'}
+      </td>
+      <td style="padding:10px 13px;text-align:left">
+        ${pct!==null?`<span class="badge ${pct>=30?'badge-green':pct>=15?'badge-amber':'badge-red'}">${pct}%</span>`
+          :d.exp>0?`<span style="color:var(--text-3);font-size:11px">لا دخل</span>`:'—'}
+      </td>
     </tr>`;
   }).join('');
 
@@ -5019,6 +5928,18 @@ function renderAnalytics(){
   renderTopExpenses();
   // رؤى ذكية
   renderAnalyticsInsights();
+  // KPI كاردات
+  renderAnalyticsKPIs();
+  // مصادر الدخل
+  renderIncomeSources();
+  // كفاءة الميزانية
+  renderBudgetEfficiency();
+  // التدفق النقدي
+  renderCashflowChart();
+  // كشف الشذوذ
+  renderAnomalyDetection();
+  // تطور رصيد المحافظ
+  renderWalletHistory();
 }
 
 // ── SIMULATOR ──
@@ -5229,130 +6150,333 @@ function updateTodayWidget(){
   renderQuickAddStrip(todayTxs);
 }
 
-function _renderLateNightCard(todayTxs, todaySpent, avgPerDay){
-  // أزل الكارد القديم لو موجود
-  const existing = document.getElementById('lateNightCard');
-  if(existing) existing.remove();
+// ── حساب متوسط يومي دقيق: متوسط الأيام اللي فيها مصاريف فقط ──
+function _calcAccurateAvg(monthKey){
+  var txs=state.transactions.filter(function(t){return t.type==='expense'&&t.date&&t.date.startsWith(monthKey);});
+  if(!txs.length) return 0;
+  var dayMap={};
+  txs.forEach(function(t){dayMap[t.date]=(dayMap[t.date]||0)+toEGP(t.amount,t.currency);});
+  var days=Object.values(dayMap);
+  return days.reduce(function(s,v){return s+v;},0)/days.length;
+}
 
-  const cairoHour = getCairoNow().getHours();
-  if(cairoHour < 23) return; // بعد 11 مساءً بس
+function _dateInRange(date,rangeKey){
+  var cairoNow=getCairoNow();
+  var today=isoDate(cairoNow);
+  var yest=new Date(cairoNow.getFullYear(),cairoNow.getMonth(),cairoNow.getDate()-1);
+  var yesterday=isoDate(yest);
+  var mk=getCurrentMonthKey();
+  var dow=cairoNow.getDay()||7;
+  var wStartD=new Date(cairoNow.getFullYear(),cairoNow.getMonth(),cairoNow.getDate()-dow+1);
+  var wStart=isoDate(wStartD);
+  if(rangeKey==='day')       return date===today;
+  if(rangeKey==='yesterday') return date===yesterday;
+  if(rangeKey==='week')      return date>=wStart&&date<=today;
+  if(rangeKey==='month')     return date.startsWith(mk);
+  return true;
+}
 
-  if(todaySpent===0) return; // مفيش مصاريف النهارده
-
-  const catMap = {};
-  todayTxs.forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
-  const topCat = Object.entries(catMap).sort((a,b)=>b[1]-a[1])[0];
-  const ci = topCat ? getCatInfo(topCat[0]) : null;
-  const vsAvgText = avgPerDay>0
-    ? (todaySpent>avgPerDay ? `أكتر من معدلك بـ ${fmt(todaySpent-avgPerDay)} EGP` : `أقل من معدلك بـ ${fmt(avgPerDay-todaySpent)} EGP`)
-    : '';
-
-  const card = document.createElement('div');
-  card.id = 'lateNightCard';
-  card.style.cssText = `
-    background:linear-gradient(135deg,#1a0f35,#16102b);
-    border:1px solid rgba(192,132,252,.3);
-    border-radius:var(--r-xl);padding:16px 18px;
-    margin-bottom:20px;
-    display:flex;align-items:center;gap:14px;
-    box-shadow:0 0 30px rgba(192,132,252,.1);
-    animation:fadeIn .4s ease;
-  `;
-  card.innerHTML = `
-    <div style="font-size:28px">🌙</div>
-    <div style="flex:1">
-      <div style="font-size:13.5px;font-weight:800;color:var(--text-1);margin-bottom:4px">ملخص يومك</div>
-      <div style="font-size:12px;color:var(--text-2);line-height:1.7">
-        صرفت <strong style="color:var(--red)">${fmt(todaySpent)} EGP</strong> في ${todayTxs.length} معاملة
-        ${ci ? ` — أكبر فئة: <strong style="color:${ci.color}">${ci.label} (${fmt(topCat[1])} EGP)</strong>` : ''}
-        ${vsAvgText ? `<br><span style="color:${todaySpent>avgPerDay?'var(--amber)':'var(--green);'}">${vsAvgText}</span>` : ''}
-      </div>
-    </div>
-    <button onclick="document.getElementById('lateNightCard').remove()" style="background:transparent;border:none;color:var(--text-3);cursor:pointer;font-size:18px;padding:4px;flex-shrink:0">×</button>
-  `;
-
-  // أضف الكارد بعد today card
-  const todayCard = document.getElementById('todayCard');
-  if(todayCard && todayCard.nextSibling){
-    todayCard.parentNode.insertBefore(card, todayCard.nextSibling);
+function _renderLateNightCard(todayTxs,todaySpent,avgPerDay){
+  // بيشتغل بس بين 11 بليل و 6 الصبح — غير كده مفيش ملخص تلقائي
+  var cairoNow=getCairoNow();
+  var h=cairoNow.getHours();
+  if(!(h>=23||h<6)){
+    // مش وقت الملخص التلقائي — امسح لو موجود من قبل (من shift الوقت)
+    // بس متمسحش لو المستخدم فتحه يدوياً (بيتحكم فيه هو)
+    return;
   }
+  // لو الكارت موجود فعلاً (من refresh تاني) — ما تعيدش الرسم
+  var slot=document.getElementById('summaryCardSlot');
+  if(slot && slot.innerHTML.trim() !== '') return;
+  var rangeKey=h<6?'yesterday':'day';
+  var lbl=h<6?'ملخص أمس 🌙':'ملخص يومك 🌙';
+  _renderSummaryCard(rangeKey,lbl);
 }
 
-function renderQuickAddStrip(todayTxs){
-  const el = document.getElementById('quickCatBtns');
-  if(!el) return;
-  // أكثر الفئات استخداماً هذا الشهر
-  const mk = getCurrentMonthKey();
-  const catCount = {};
-  state.transactions.filter(t=>t.type==='expense'&&t.date&&t.date.startsWith(mk))
-    .forEach(t=>{ catCount[t.cat] = (catCount[t.cat]||0)+1; });
-  const topCats = Object.entries(catCount).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([k])=>k);
-
-  // لو مفيش تاريخ شهري، نعرض الفئات الافتراضية
-  const displayCats = topCats.length ? topCats : (state.categories.slice(0,5).map(c=>c.key));
-  el.innerHTML = displayCats.map(key=>{
-    const cat = state.categories.find(c=>c.key===key);
-    if(!cat) return '';
-    return `<button class="quick-cat-btn" onclick="openQuickAddTx('${cat.key}','${cat.name}')">
-      <i class="ti ${cat.icon||'ti-circle'}" style="color:${cat.color||'var(--blue)'};font-size:14px"></i>
-      ${cat.name}
-    </button>`;
-  }).join('');
-}
-
-function openQuickAddTx(catKey, catName){
-  // ── مودال خفيف بالمبلغ بس ──
-  const cat = state.categories.find(c=>c.key===catKey);
-  const wallet = state.wallets[0];
-  document.getElementById('quickAddCatKey').value = catKey;
-  document.getElementById('quickAddCatName').textContent = catName;
-  document.getElementById('quickAddWalletName').textContent = wallet ? `${wallet.icon||'🏦'} ${wallet.name}` : 'لا توجد محافظ';
-  const iconEl = document.getElementById('quickAddCatIcon');
-  iconEl.style.background = (cat?.color||'var(--blue)')+'22';
-  iconEl.innerHTML = `<i class="ti ${cat?.icon||'ti-circle'}" style="color:${cat?.color||'var(--blue)'};font-size:16px"></i>`;
-  document.getElementById('quickAddAmount').value = '';
-  document.getElementById('quickAddAmount').style.borderColor = 'var(--border-med)';
-  document.getElementById('quickAddDesc').value = '';
-  openModal('modalQuickAdd');
-  setTimeout(()=>document.getElementById('quickAddAmount')?.focus(), 200);
-}
-
-function saveQuickAdd(){
-  const catKey = document.getElementById('quickAddCatKey').value;
-  const amount = parseFloat(document.getElementById('quickAddAmount').value);
-  if(!amount||amount<=0){ toast('اكتب المبلغ الصح','error'); return; }
-  const cat = state.categories.find(c=>c.key===catKey);
-  const wallet = state.wallets[0];
-  if(!wallet){ toast('أضف محفظة أولاً','error'); return; }
-  const desc = document.getElementById('quickAddDesc').value.trim() || (cat?.name||'مصروف');
-  const data = {
-    id: Date.now(), desc, amount, currency: 'EGP',
-    type: 'expense', cat: catKey,
-    wallet: wallet.key, date: todayEgypt(), note: ''
+function openSummaryPicker(){
+  var slot = document.getElementById('summaryCardSlot');
+  if(slot) slot.innerHTML = '';
+  if(document.getElementById('summaryPickerCard')){
+    document.getElementById('summaryPickerCard').remove();
+    return;
+  }
+  var bStyle = function(color){
+    return 'background:'+color+'18;border:1px solid '+color+'55;border-radius:var(--r-md);color:'+color+';padding:7px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:Tajawal,sans-serif;';
   };
-  const ok = applyTransaction(data);
-  if(ok===false) return;
-  state.transactions.unshift(data);
+  var picker = document.createElement('div');
+  picker.id = 'summaryPickerCard';
+  picker.style.cssText = 'background:linear-gradient(135deg,#1a0f35,#16102b);border:1px solid rgba(192,132,252,.35);border-radius:var(--r-xl);padding:16px 18px;margin-bottom:20px;animation:fadeIn .2s ease;';
+  picker.innerHTML =
+    '<div style="font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:12px">📊 اختار فترة الملخص</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px">'+
+      '<button onclick="closeSummaryPicker();_renderSummaryCard(\'day\',\'ملخص اليوم 📋\')" style="'+bStyle('var(--purple)')+'">اليوم</button>'+
+      '<button onclick="closeSummaryPicker();_renderSummaryCard(\'yesterday\',\'ملخص أمس 🌙\')" style="'+bStyle('var(--blue)')+'">أمس</button>'+
+      '<button onclick="closeSummaryPicker();_renderSummaryCard(\'week\',\'ملخص الأسبوع 📅\')" style="'+bStyle('var(--teal)')+'">هذا الأسبوع</button>'+
+      '<button onclick="closeSummaryPicker();_renderSummaryCard(\'month\',\'ملخص الشهر 📆\')" style="'+bStyle('var(--green)')+'">هذا الشهر</button>'+
+    '</div>'+
+    '<div style="border-top:1px solid var(--border);padding-top:12px">'+
+      '<div style="font-size:11.5px;color:var(--text-2);margin-bottom:8px;font-weight:600">أو اختار فترة مخصصة:</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">'+
+        '<div>'+
+          '<div style="font-size:10.5px;color:var(--text-3);margin-bottom:4px;font-weight:600">من</div>'+
+          '<input type="date" id="summaryPickerFrom" style="width:100%;padding:8px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:Tajawal,sans-serif;font-size:13px;outline:none">'+
+        '</div>'+
+        '<div>'+
+          '<div style="font-size:10.5px;color:var(--text-3);margin-bottom:4px;font-weight:600">لحد</div>'+
+          '<input type="date" id="summaryPickerTo" style="width:100%;padding:8px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:Tajawal,sans-serif;font-size:13px;outline:none">'+
+        '</div>'+
+      '</div>'+
+      '<button onclick="_applySummaryPickerDate()" style="width:100%;'+bStyle('var(--amber)')+'text-align:center;justify-content:center;display:flex;">عرض الملخص</button>'+
+    '</div>';
+  if(slot) slot.before(picker);
+  var todayStr = todayEgypt();
+  var fromInp = document.getElementById('summaryPickerFrom');
+  var toInp   = document.getElementById('summaryPickerTo');
+  if(fromInp){ fromInp.value = todayStr; fromInp.max = todayStr; }
+  if(toInp){   toInp.value   = todayStr; toInp.max   = todayStr; }
+}
 
-  // ── نمط الإنفاق الذكي: احسب إجمالي الفئة هذا الشهر ──
-  const mk = getCurrentMonthKey();
-  const catTotal = state.transactions
-    .filter(t=>t.type==='expense'&&t.date&&t.date.startsWith(mk)&&t.cat===catKey)
-    .reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
-  const monthTotal = calcMonthExpenses(mk);
-  const pct = monthTotal>0 ? Math.round(catTotal/monthTotal*100) : 0;
+function closeSummaryPicker(){
+  var p = document.getElementById('summaryPickerCard');
+  if(p) p.remove();
+}
 
-  // تحذير تجاوز الميزانية
-  const budgetRow = state.budget.find(b=>(b.catKey||b.cat)===catKey||(cat&&b.cat===cat.name));
-  const budgetLimit = budgetRow?.total||budgetRow?.limit||0;
-  if(budgetLimit>0 && catTotal>budgetLimit){
-    const over = catTotal - budgetLimit;
-    toast(`⚠️ تجاوزت ميزانية "${cat?.name||catKey}" بـ ${fmt(over)} EGP!`, 'error');
+function _applySummaryPickerDate(){
+  var fromInp = document.getElementById('summaryPickerFrom');
+  var toInp   = document.getElementById('summaryPickerTo');
+  if(!fromInp||!fromInp.value||!toInp||!toInp.value){ toast('اختار الفترة الأول','error'); return; }
+  var fromStr = fromInp.value, toStr = toInp.value;
+  if(fromStr > toStr){ toast('تاريخ البداية قبل النهاية','error'); return; }
+  closeSummaryPicker();
+  var slot = document.getElementById('summaryCardSlot');
+  if(!slot) return;
+  slot.innerHTML = '';
+
+  var txs    = state.transactions.filter(function(t){ return t.type==='expense' && t.date && t.date>=fromStr && t.date<=toStr; });
+  var incTxs = state.transactions.filter(function(t){ return t.type==='income'  && t.date && t.date>=fromStr && t.date<=toStr; });
+  var spent  = txs.reduce(function(s,t){ return s+toEGP(t.amount,t.currency); }, 0);
+  var inc    = incTxs.reduce(function(s,t){ return s+toEGP(t.amount,t.currency); }, 0);
+
+  var fmtDate = function(str){ return new Date(str+'T12:00:00').toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'}); };
+  var labelStr = fromStr===toStr
+    ? '📋 '+fmtDate(fromStr)
+    : '📋 '+fmtDate(fromStr)+' — '+fmtDate(toStr);
+
+  var catMap = {};
+  txs.forEach(function(t){ catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency); });
+  var sortedCats = Object.entries(catMap).sort(function(a,b){ return b[1]-a[1]; });
+
+  var catsHtml = '';
+  if(sortedCats.length){
+    sortedCats.slice(0,5).forEach(function(entry){
+      var k=entry[0], v=entry[1];
+      var c=getCatInfo(k);
+      var pct=spent>0?Math.round(v/spent*100):0;
+      catsHtml+=
+        '<div style="display:flex;align-items:center;gap:8px;padding:5px 0">'+
+          '<span style="width:24px;height:24px;border-radius:6px;background:'+c.color+'22;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+
+            '<i class="ti '+c.icon+'" style="color:'+c.color+';font-size:12px"></i>'+
+          '</span>'+
+          '<span style="flex:1;font-size:12px;color:var(--text-1);font-weight:600">'+c.label+'</span>'+
+          '<div style="width:60px;height:4px;background:var(--bg-3);border-radius:99px;overflow:hidden">'+
+            '<div style="width:'+Math.max(pct,2)+'%;height:100%;background:'+c.color+';border-radius:99px"></div>'+
+          '</div>'+
+          '<span style="font-size:11px;color:var(--text-3);min-width:28px;text-align:left">'+pct+'%</span>'+
+          '<strong style="font-size:12.5px;color:var(--text-1);font-family:monospace;min-width:55px;text-align:left">'+fmt(v)+'</strong>'+
+        '</div>';
+    });
   } else {
-    toast(`💸 صرفت على ${cat?.name||catKey} هذا الشهر ${fmt(catTotal)} EGP — ${pct}% من مصاريفك`);
+    catsHtml = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">لا توجد مصاريف في هذه الفترة</div>';
   }
 
-  saveState(); _syncAfterSave(); closeModal('modalQuickAdd'); refreshAll();
+  var shareText = ['📊 ملخص '+labelStr+' — فلوسي','💸 مصاريف: '+fmt(spent)+' EGP ('+txs.length+' معاملة)'+(inc>0?'\n💰 دخل: '+fmt(inc)+' EGP':'')].join('\n');
+
+  var card = document.createElement('div');
+  card._shareText = shareText;
+  card.style.cssText = 'background:linear-gradient(135deg,#1a0f35,#16102b);border:1px solid rgba(192,132,252,.25);border-radius:var(--r-xl);padding:16px 18px;margin-bottom:20px;animation:fadeIn .3s ease;';
+  card.innerHTML =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">'+
+      '<div style="font-size:14px;font-weight:800;color:var(--text-1)">'+labelStr+'</div>'+
+      '<div style="display:flex;gap:6px;align-items:center">'+
+        '<button onclick="_shareNightSummary()" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:var(--r-sm);color:var(--teal);cursor:pointer;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:Tajawal,sans-serif;display:flex;align-items:center;gap:4px"><i class="ti ti-share" style="font-size:13px"></i> مشاركة</button>'+
+        '<button onclick="openSummaryPicker()" style="background:var(--purple-dim);border:1px solid var(--purple);border-radius:var(--r-sm);color:var(--purple);cursor:pointer;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:Tajawal,sans-serif">تغيير</button>'+
+        '<button onclick="var s=document.getElementById(\'summaryCardSlot\');if(s)s.innerHTML=\'\';" style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-3);cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px">×</button>'+
+      '</div>'+
+    '</div>'+
+    '<div style="display:flex;gap:10px;margin-bottom:12px">'+
+      '<div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px 14px">'+
+        '<div style="font-size:10px;color:var(--text-3);font-weight:600;margin-bottom:4px">💸 مصاريف</div>'+
+        '<div style="font-size:22px;font-weight:800;color:var(--red);font-family:monospace;line-height:1">'+fmt(spent)+'</div>'+
+        '<div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP • '+txs.length+' معاملة</div>'+
+      '</div>'+
+      (inc>0?
+        '<div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px 14px">'+
+          '<div style="font-size:10px;color:var(--text-3);font-weight:600;margin-bottom:4px">💰 دخل</div>'+
+          '<div style="font-size:22px;font-weight:800;color:var(--green);font-family:monospace;line-height:1">'+fmt(inc)+'</div>'+
+          '<div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP • '+incTxs.length+' معاملة</div>'+
+        '</div>' : ''
+      )+
+    '</div>'+
+    (sortedCats.length?'<div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">توزيع الفئات</div>'+catsHtml:'');
+  slot.appendChild(card);
+  setTimeout(function(){ card.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 80);
+}
+
+function _renderSummaryCard(rangeKey, labelOverride){
+  var slot = document.getElementById('summaryCardSlot');
+  if(!slot) return;
+  slot.innerHTML = '';
+
+  // ── جلب المعاملات حسب الفترة ──
+  var txs = state.transactions.filter(function(t){
+    return t.type==='expense' && t.date && _dateInRange(t.date, rangeKey);
+  });
+  var incTxs = state.transactions.filter(function(t){
+    return t.type==='income' && t.date && _dateInRange(t.date, rangeKey);
+  });
+  var spent = txs.reduce(function(s,t){ return s+toEGP(t.amount,t.currency); }, 0);
+  var inc   = incTxs.reduce(function(s,t){ return s+toEGP(t.amount,t.currency); }, 0);
+  var avg   = _calcAccurateAvg(getCurrentMonthKey());
+
+  // ── تاريخ اليوم بالعربي ──
+  var cairoNow = getCairoNow();
+  var todayFormatted = cairoNow.toLocaleDateString('ar-EG', {
+    weekday:'long', year:'numeric', month:'long', day:'numeric'
+  });
+
+  // ── توزيع الفئات ──
+  var catMap = {};
+  txs.forEach(function(t){ catMap[t.cat] = (catMap[t.cat]||0) + toEGP(t.amount,t.currency); });
+  var sortedCats = Object.entries(catMap).sort(function(a,b){ return b[1]-a[1]; });
+
+  var catsHtml = '';
+  if(sortedCats.length){
+    sortedCats.slice(0,5).forEach(function(entry){
+      var k=entry[0], v=entry[1];
+      var c = getCatInfo(k);
+      var pct = spent>0 ? Math.round(v/spent*100) : 0;
+      var barW = Math.max(pct,2);
+      catsHtml +=
+        '<div style="display:flex;align-items:center;gap:8px;padding:5px 0">'+
+          '<span style="width:24px;height:24px;border-radius:6px;background:'+c.color+'22;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+
+            '<i class="ti '+c.icon+'" style="color:'+c.color+';font-size:12px"></i>'+
+          '</span>'+
+          '<span style="flex:1;font-size:12px;color:var(--text-1);font-weight:600">'+c.label+'</span>'+
+          '<div style="width:60px;height:4px;background:var(--bg-3);border-radius:99px;overflow:hidden">'+
+            '<div style="width:'+barW+'%;height:100%;background:'+c.color+';border-radius:99px"></div>'+
+          '</div>'+
+          '<span style="font-size:11px;color:var(--text-3);min-width:28px;text-align:left">'+pct+'%</span>'+
+          '<strong style="font-size:12.5px;color:var(--text-1);font-family:monospace;min-width:55px;text-align:left">'+fmt(v)+'</strong>'+
+        '</div>';
+    });
+  } else {
+    catsHtml = '<div style="font-size:12px;color:var(--text-3);padding:8px 0">لا توجد مصاريف في هذه الفترة</div>';
+  }
+
+  // ── مقارنة بالمتوسط ──
+  var vsAvgHtml = '';
+  if((rangeKey==='day'||rangeKey==='yesterday') && avg>0 && spent>0){
+    var diff = spent - avg;
+    if(Math.abs(diff) > 5){
+      var sign = diff>0 ? '+' : '';
+      var col  = diff>0 ? 'var(--red)' : 'var(--green)';
+      var icon = diff>0 ? 'ti-trending-up' : 'ti-trending-down';
+      vsAvgHtml =
+        '<div style="font-size:11.5px;color:var(--text-2);display:flex;align-items:center;gap:5px">'+
+          '<i class="ti '+icon+'" style="color:'+col+';font-size:13px"></i>'+
+          '<span style="color:'+col+';font-weight:700">'+sign+fmt(Math.round(diff))+' EGP</span>'+
+          ' عن معدلك اليومي ('+fmt(Math.round(avg))+' EGP)'+
+        '</div>';
+    }
+  }
+
+  // ── share text ──
+  var periodNames = {day:'اليوم', yesterday:'أمس', week:'الأسبوع', month:'الشهر', all:'الكل'};
+  var label = labelOverride || periodNames[rangeKey] || rangeKey;
+  var shareLines = ['📊 ملخص '+label+' — فلوسي'];
+  shareLines.push('📅 '+todayFormatted);
+  shareLines.push('💸 مصاريف: '+fmt(spent)+' EGP ('+txs.length+' معاملة)');
+  if(inc>0) shareLines.push('💰 دخل: '+fmt(inc)+' EGP');
+  if(sortedCats.length) shareLines.push('🏆 أكبر فئة: '+getCatInfo(sortedCats[0][0]).label+' ('+fmt(sortedCats[0][1])+' EGP)');
+  var shareText = shareLines.join('\n');
+
+  // ── بناء الكارت ──
+  var card = document.createElement('div');
+  card._shareText = shareText;
+  card.style.cssText = 'background:linear-gradient(135deg,#1a0f35,#16102b);border:1px solid rgba(192,132,252,.25);border-radius:var(--r-xl);padding:16px 18px;margin-bottom:20px;animation:fadeIn .3s ease;';
+
+  // Header
+  var headerHtml =
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">'+
+      '<div>'+
+        '<div style="font-size:14px;font-weight:800;color:var(--text-1)">'+
+          (labelOverride ? labelOverride : '📊 ملخص '+label)+
+        '</div>'+
+        '<div style="font-size:11px;color:var(--text-3);margin-top:2px">'+todayFormatted+'</div>'+
+      '</div>'+
+      '<div style="display:flex;gap:6px;align-items:center">'+
+        '<button onclick="_shareNightSummary()" style="background:var(--teal-dim);border:1px solid var(--teal);border-radius:var(--r-sm);color:var(--teal);cursor:pointer;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:Tajawal,sans-serif;display:flex;align-items:center;gap:4px">'+
+          '<i class="ti ti-share" style="font-size:13px"></i> مشاركة'+
+        '</button>'+
+        '<button onclick="openSummaryPicker()" style="background:var(--purple-dim);border:1px solid var(--purple);border-radius:var(--r-sm);color:var(--purple);cursor:pointer;padding:5px 10px;font-size:11.5px;font-weight:700;font-family:Tajawal,sans-serif">تغيير</button>'+
+        '<button onclick="var s=document.getElementById(\'summaryCardSlot\');if(s)s.innerHTML=\'\';" style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-3);cursor:pointer;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:16px">×</button>'+
+      '</div>'+
+    '</div>';
+
+  // Stats row
+  var statsHtml =
+    '<div style="display:flex;gap:10px;margin-bottom:12px">'+
+      '<div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px 14px">'+
+        '<div style="font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">💸 مصاريف</div>'+
+        '<div style="font-size:22px;font-weight:800;color:var(--red);font-family:monospace;line-height:1">'+fmt(spent)+'</div>'+
+        '<div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP • '+txs.length+' معاملة</div>'+
+      '</div>'+
+      (inc>0 ?
+        '<div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px 14px">'+
+          '<div style="font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">💰 دخل</div>'+
+          '<div style="font-size:22px;font-weight:800;color:var(--green);font-family:monospace;line-height:1">'+fmt(inc)+'</div>'+
+          '<div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP • '+incTxs.length+' معاملة</div>'+
+        '</div>'
+      : (avg>0 ?
+        '<div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px 14px">'+
+          '<div style="font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">📈 معدل يومي</div>'+
+          '<div style="font-size:22px;font-weight:800;color:var(--blue);font-family:monospace;line-height:1">'+fmt(Math.round(avg))+'</div>'+
+          '<div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP</div>'+
+        '</div>' : '')
+      )+
+    '</div>';
+
+  // vs avg
+  var vsHtml = vsAvgHtml ?
+    '<div style="padding:8px 12px;background:var(--bg-2);border-radius:var(--r-md);border:1px solid var(--border);margin-bottom:12px">'+vsAvgHtml+'</div>' : '';
+
+  // Categories
+  var catSection = sortedCats.length ?
+    '<div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">توزيع الفئات</div>'+catsHtml : '';
+
+  card.innerHTML = headerHtml + statsHtml + vsHtml + catSection;
+
+  slot.appendChild(card);
+  setTimeout(function(){ card.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 80);
+}
+
+function _shareNightSummary(){
+  var slot = document.getElementById('summaryCardSlot');
+  var card = slot ? slot.firstChild : null;
+  var text = card && card._shareText ? card._shareText : '';
+  if(!text){ toast('مفيش ملخص مفتوح','info'); return; }
+  if(navigator.share){
+    navigator.share({title:'فلوسي — ملخص مالي', text:text}).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(text)
+      .then(function(){ toast('✅ تم نسخ الملخص'); })
+      .catch(function(){
+        var ta=document.createElement('textarea');
+        ta.value=text; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); ta.remove();
+        toast('✅ تم نسخ الملخص');
+      });
+  }
 }
 
 // ══════════════════════════════════════════════════════════
@@ -5783,12 +6907,91 @@ function _checkAndApplyRecurring(){
 }
 
 // ── REFRESH ALL ──
+// ══════════════════════════════════════════════════════════
+// QUICK ADD STRIP
+// ══════════════════════════════════════════════════════════
+function renderQuickAddStrip(todayTxs){
+  const el = document.getElementById('quickCatBtns');
+  if(!el) return;
+  if(!state.categories.length){
+    el.innerHTML = '<span style="font-size:12px;color:var(--text-3)">أضف فئات من الإعدادات</span>';
+    return;
+  }
+  // أظهر أكثر 5 فئات استخداماً هذا الشهر
+  const mk = getCurrentMonthKey();
+  const usageCount = {};
+  getMonthTxs(mk).filter(t => t.type === 'expense').forEach(t => {
+    usageCount[t.cat] = (usageCount[t.cat] || 0) + 1;
+  });
+  const sorted = [...state.categories].sort((a, b) => (usageCount[b.key] || 0) - (usageCount[a.key] || 0));
+  const top = sorted.slice(0, 5);
+  el.innerHTML = top.map(cat => {
+    const todayAmt = (todayTxs || []).filter(t => t.cat === cat.key).reduce((s, t) => s + toEGP(t.amount, t.currency), 0);
+    return `<button class="quick-cat-btn" onclick="openQuickAdd('${cat.key}')" style="border-color:${cat.color}33;color:${cat.color}">
+      <i class="ti ${cat.icon || 'ti-circle'}" style="font-size:13px"></i>
+      ${cat.name}
+      ${todayAmt > 0 ? `<span style="font-size:10px;opacity:.7;margin-right:2px">${fmt(todayAmt)}</span>` : ''}
+    </button>`;
+  }).join('');
+}
+
+function openQuickAdd(catKey){
+  const cat = state.categories.find(c => c.key === catKey);
+  if(!cat) return;
+  document.getElementById('quickAddCatKey').value = catKey;
+  document.getElementById('quickAddCatName').textContent = cat.name;
+  const iconEl = document.getElementById('quickAddCatIcon');
+  iconEl.innerHTML = `<i class="ti ${cat.icon || 'ti-circle'}" style="color:${cat.color};font-size:18px"></i>`;
+  iconEl.style.background = cat.color + '22';
+  // اسم المحفظة الافتراضية
+  const defWallet = state.wallets[0];
+  document.getElementById('quickAddWalletName').textContent = defWallet ? defWallet.name : 'المحفظة الافتراضية';
+  document.getElementById('quickAddAmount').value = '';
+  document.getElementById('quickAddDesc').value = '';
+  openModal('modalQuickAdd');
+  setTimeout(() => document.getElementById('quickAddAmount').focus(), 150);
+}
+
+function saveQuickAdd(){
+  const amount = parseFloat(document.getElementById('quickAddAmount').value);
+  if(!amount || amount <= 0){ toast('أدخل مبلغ صحيح', 'error'); return; }
+  const catKey = document.getElementById('quickAddCatKey').value;
+  const cat = state.categories.find(c => c.key === catKey);
+  const desc = document.getElementById('quickAddDesc').value.trim() || (cat ? cat.name : 'مصروف');
+  const wallet = state.wallets[0];
+  if(!wallet){ toast('أضف محفظة أولاً', 'error'); return; }
+  const tx = {
+    id: Date.now(),
+    desc,
+    amount,
+    currency: 'EGP',
+    type: 'expense',
+    cat: catKey,
+    wallet: wallet.key,
+    date: todayEgypt(),
+    note: ''
+  };
+  const ok = applyTransaction(tx);
+  if(ok === false) return;
+  state.transactions.unshift(tx);
+  saveState();
+  _syncAfterSave();
+  closeModal('modalQuickAdd');
+  refreshAll();
+  const ci = getCatInfo(catKey);
+  toast(`💸 ${desc} — ${fmt(amount)} EGP`);
+}
+
 function refreshAll(){
   renderRecentTx();renderExpenses();renderCatChart();
   initMainChart();updateDashboard();populateMonthFilter();
   updateNetWorthUI();renderWeeklyBudgetUI();
   populateFilterCat();populateTxCatSelect();
   updateTodayWidget();
+  // تحديث التحليلات لو الصفحة مفتوحة
+  if(document.getElementById('page-analytics')?.classList.contains('active')){
+    renderAnalyticsKPIs();renderIncomeSources();renderBudgetEfficiency();renderCashflowChart();
+  }
 }
 
 function populateMonthFilter(){
@@ -5835,11 +7038,15 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 // ── كشف الجهاز الجديد ──
 function _checkNewDevicePrompt(){
-  const hasLocalData = state.transactions.length>0 || state.wallets.length>0 || state.goals.length>0;
   const sheetsUrl = SHEETS_HARDCODED_URL || state.sheets?.url || '';
-  if(!hasLocalData && sheetsUrl){
-    // عرض بانر تلقائي
+  if(!sheetsUrl) return;
+  const hasLocalData = state.transactions.length>0 || state.wallets.length>0 || state.goals.length>0;
+  if(!hasLocalData){
+    // جهاز جديد — اعرض بانر التأكيد
     _showNewDeviceBanner(sheetsUrl);
+  } else {
+    // عنده بيانات — حمّل في الخلفية بصمت ومزامنة تلقائية
+    loadFromSheets(true);
   }
 }
 
@@ -5906,6 +7113,11 @@ async function _autoLoadFromSheets(){
     if(app)app.style.marginTop='';
   }
 }
+
+// ══════════════════════════════════════════════════════════
+//  AI CHAT — مستشار فلوسي
+// ══════════════════════════════════════════════════════════
+
 </script>
 </body>
 </html>
