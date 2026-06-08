@@ -1702,16 +1702,23 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           </div>
         </div>
 
+        <!-- كارت الأسبوعي — مستقل فوق الصحة المالية -->
+        <div class="card mb20">
+          <div class="card-header">
+            <div class="card-title">مصاريف الأسابيع</div>
+          </div>
+          <div class="chart-wrap" style="height:220px"><canvas id="chartWeekly"></canvas></div>
+          <div style="display:flex;gap:18px;margin-top:12px;font-size:11.5px">
+            <span style="display:flex;align-items:center;gap:5px;color:var(--text-2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--red);display:inline-block"></span>مصاريف الأسبوع</span>
+          </div>
+        </div>
+
         <div class="g21 mb20">
           <div class="card">
             <div class="card-header">
               <div><div class="card-title">المصاريف والدخل — آخر 6 شهور</div></div>
-              <div class="tabs">
-                <button class="tab-btn active" onclick="switchSpendTab(this,'monthly')">شهري</button>
-                <button class="tab-btn" onclick="switchSpendTab(this,'weekly')">أسبوعي</button>
-              </div>
             </div>
-            <div class="chart-wrap" style="height:230px"><canvas id="mainChart"></canvas></div>
+            <div class="chart-wrap" style="height:230px"><canvas id="chartMonthly"></canvas></div>
             <div style="display:flex;gap:18px;margin-top:12px;font-size:11.5px">
               <span style="display:flex;align-items:center;gap:5px;color:var(--text-2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--green);display:inline-block"></span>دخل</span>
               <span style="display:flex;align-items:center;gap:5px;color:var(--text-2)"><span style="width:10px;height:10px;border-radius:2px;background:var(--red);display:inline-block"></span>مصاريف</span>
@@ -1833,7 +1840,10 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
               <div style="width:30px;height:30px;border-radius:8px;background:var(--amber-dim);display:flex;align-items:center;justify-content:center"><i class="ti ti-calendar-week" style="color:var(--amber);font-size:15px"></i></div>
               <div class="card-title">ميزانية الأسبوع الحالي</div>
             </div>
-            <button class="btn btn-sm" onclick="openWeeklyBudgetModal()"><i class="ti ti-pencil"></i> تحديد</button>
+            <div style="display:flex;gap:6px">
+              <button class="btn btn-sm" onclick="openWeeklyReport()" style="background:var(--teal-dim);border-color:var(--teal);color:var(--teal)"><i class="ti ti-report-analytics"></i> ريبورت</button>
+              <button class="btn btn-sm" onclick="openWeeklyBudgetModal()"><i class="ti ti-pencil"></i> تحديد</button>
+            </div>
           </div>
           <div id="weekBudgetDetails" style="padding:4px 0 8px">
             <div style="font-size:12px;color:var(--text-3);text-align:center;padding:12px">اضغط "تحديد" لتحديد ميزانيتك الأسبوعية</div>
@@ -4782,8 +4792,13 @@ function getCurrentWeekBudget(){
 }
 
 function renderWeeklyBudgetUI(){
+  // طبّق الترحيل التلقائي أولاً
+  applyCarryover();
+
   const curWeek=getCurrentWeekBudget();
-  const limit=curWeek?.limit||0;
+  const limit=(curWeek?.limit||0)+(curWeek?.carryover||0); // الفعلي مع الوفر
+  const baseLim=curWeek?.limit||0;
+  const carry=curWeek?.carryover||0;
   const ws=curWeek?.start||'';
   const we=curWeek?.end||'';
   const spent=limit>0?getSpentBetween(ws,we):0;
@@ -4793,18 +4808,36 @@ function renderWeeklyBudgetUI(){
   const leftEl=document.getElementById('weekBudgetLeft');
   const noteEl=document.getElementById('weekBudgetNote');
   if(leftEl){
-    leftEl.textContent=limit>0?fmt(Math.max(left,0)):'—';
+    leftEl.textContent=baseLim>0?fmt(Math.max(left,0)):'—';
     leftEl.style.color=left<0?'var(--red)':left<limit*0.2?'var(--amber)':'var(--green)';
   }
   if(noteEl){
-    if(!limit){noteEl.innerHTML='<span class="neutral">لم يُحدد بعد</span>';return;}
-    noteEl.innerHTML=left<0
+    if(!baseLim){noteEl.innerHTML='<span class="neutral">لم يُحدد بعد</span>';return;}
+    let noteHtml = left<0
       ?`<span class="down">تجاوزت بـ ${fmt(Math.abs(left))}</span>`
       :`<span class="neutral">صرفت ${fmt(spent)} من ${fmt(limit)}</span>`;
+    if(carry>0) noteHtml += ` <span style="color:var(--teal);font-size:10px">+${fmt(carry)} وفر مرحّل</span>`;
+    noteEl.innerHTML = noteHtml;
+  }
+
+  // تحذير الحد الأقصى لو موجود
+  if(curWeek?._overMax && curWeek?._overMaxAmt > 0){
+    const existing = document.getElementById('weekOverMaxAlert');
+    if(!existing){
+      const alert = document.createElement('div');
+      alert.id='weekOverMaxAlert';
+      alert.style.cssText='margin-top:10px;padding:9px 13px;background:var(--amber-dim);border:1px solid var(--amber);border-radius:var(--r-md);font-size:12px;color:var(--amber);display:flex;align-items:center;gap:8px';
+      alert.innerHTML=`<i class="ti ti-alert-triangle" style="font-size:16px;flex-shrink:0"></i> الوفر الفعلي تجاوز المتوقع بـ <strong>${fmt(curWeek._overMaxAmt)} EGP</strong> — اضغط ⚖ وفر لتعديله يدوياً`;
+      const detEl=document.getElementById('weekBudgetDetails');
+      if(detEl) detEl.parentNode.insertBefore(alert, detEl.nextSibling);
+    }
+  } else {
+    const existing = document.getElementById('weekOverMaxAlert');
+    if(existing) existing.remove();
   }
 
   const detEl=document.getElementById('weekBudgetDetails');
-  if(detEl&&limit>0){
+  if(detEl&&baseLim>0){
     const barColor=pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--green)';
     // show all weeks for current month
     const now=new Date();
@@ -4815,17 +4848,23 @@ function renderWeeklyBudgetUI(){
       allWeeksHtml=`<div style="margin-top:12px;border-top:1px solid var(--border);padding-top:10px">
         <div style="font-size:11px;color:var(--text-3);margin-bottom:8px;font-weight:600">جميع أسابيع الشهر</div>
         ${monthWeeks.map((w,i)=>{
+          const wCarry=w.carryover||0;
+          const wEffLimit=(w.limit||0)+wCarry;
           const sp=getSpentBetween(w.start,w.end);
-          const lft=w.limit-sp;
-          const p=Math.min(Math.round(sp/w.limit*100),100);
+          const lft=wEffLimit-sp;
+          const p=wEffLimit>0?Math.min(Math.round(sp/wEffLimit*100),100):0;
           const bc=p>=90?'var(--red)':p>=70?'var(--amber)':'var(--green)';
           const isActive=isoDate(new Date())>=w.start&&isoDate(new Date())<=w.end;
+          const overMaxWarn=w._overMax?`<span style="font-size:10px;color:var(--amber);font-weight:700">⚠ تجاوز الحد الأقصى</span>`:'';
           return`<div style="margin-bottom:8px;${isActive?'background:var(--bg-2);border-radius:var(--r-md);padding:6px 8px;border:1px solid var(--border-med)':'padding:4px 0'}">
-            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2);margin-bottom:4px">
+            <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2);margin-bottom:4px;flex-wrap:wrap">
               <span style="flex:1;font-weight:${isActive?700:500};color:${isActive?'var(--amber)':'var(--text-2)'}">
                 ${isActive?'● ':''}الأسبوع ${i+1} (${fmtDateShort(w.start)} ← ${fmtDateShort(w.end)})
+                ${wCarry>0?`<span style="color:var(--teal);font-weight:700;font-size:10px">+${fmt(wCarry)} وفر</span>`:''}
               </span>
+              ${overMaxWarn}
               <span style="font-family:'Space Grotesk',monospace;color:${lft<0?'var(--red)':'var(--text-1)'};font-weight:700">${fmt(Math.max(lft,0))} متبقي</span>
+              <button onclick="openCarryoverModal('${w.start}','${w.end}')" title="إعدادات الوفر" style="background:var(--teal-dim);border:1px solid var(--teal);color:var(--teal);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700;white-space:nowrap">⚖ وفر</button>
               <button onclick="openEditSingleWeek('${w.start}','${w.end}')" title="تعديل" style="background:var(--blue-dim);border:1px solid var(--blue);color:var(--blue);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700;white-space:nowrap">✏️ تعديل</button>
               <button onclick="deleteWeekSlotByDates('${w.start}','${w.end}')" title="حذف" style="background:var(--red-dim);border:1px solid var(--red);color:var(--red);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;font-family:Tajawal,sans-serif;font-weight:700;white-space:nowrap">🗑 حذف</button>
             </div>
@@ -4839,7 +4878,7 @@ function renderWeeklyBudgetUI(){
     detEl.innerHTML=`
       <div style="padding:0 0 10px">
         <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px">
-          <span>الأسبوع الحالي: ${fmtDateShort(ws)} ← ${fmtDateShort(we)}</span>
+          <span>الأسبوع الحالي: ${fmtDateShort(ws)} ← ${fmtDateShort(we)}${carry>0?` <span style="color:var(--teal);font-size:10px">(+${fmt(carry)} وفر)</span>`:''}</span>
           <span style="font-weight:700;color:${left<0?'var(--red)':'var(--teal)'}">${pct}% منصرف</span>
         </div>
         <div class="progress-track" style="height:7px">
@@ -4857,17 +4896,141 @@ function renderWeeklyBudgetUI(){
 }
 
 // ══════════════════════════════════════════════════════════
+// WEEKLY CARRYOVER — ترحيل الوفر للأسبوع اللي بعده
+// ══════════════════════════════════════════════════════════
+
+// state.weeklyBudgets[i].carryover = مبلغ الوفر المرحّل (يُضاف للـ limit عند العرض فقط)
+// state.weeklyBudgets[i].maxLimit  = الحد الأقصى للأسبوع (لو الوفر زاد عنه يظهر تحذير)
+
+function applyCarryover(){
+  if(!state.weeklyBudgets||state.weeklyBudgets.length<2) return;
+  const sorted = [...state.weeklyBudgets].sort((a,b)=>a.start.localeCompare(b.start));
+  const today = todayEgypt();
+  let changed = false;
+
+  for(let i=0;i<sorted.length-1;i++){
+    const curW = sorted[i];
+    const nextW = sorted[i+1];
+    // الأسبوع الحالي لازم يكون خلص (end < today)
+    if(curW.end >= today) continue;
+    const spent = getSpentBetween(curW.start, curW.end);
+    const effectiveLimit = (curW.limit||0) + (curW.carryover||0);
+    const surplus = effectiveLimit - spent;
+    if(surplus <= 0) continue; // مفيش وفر
+
+    // تحقق لو الوفر لسه متش ترحيل (تجنب تكرار)
+    const alreadyApplied = nextW._carryFrom === curW.end;
+    if(alreadyApplied) continue;
+
+    // ارحّل الوفر للأسبوع اللي بعده
+    const prevCarry = nextW.carryover || 0;
+    nextW.carryover = Math.round(surplus);
+    nextW._carryFrom = curW.end;
+
+    // فحص الوفر المتوقع
+    const expectedSurplus = nextW.maxLimit || 0;
+    if(expectedSurplus > 0 && nextW.carryover > expectedSurplus){
+      nextW._overMax = true;
+      nextW._overMaxAmt = nextW.carryover - expectedSurplus;
+    } else {
+      nextW._overMax = false;
+      nextW._overMaxAmt = 0;
+    }
+    // حدّث الـ state الأصلي
+    const origIdx = state.weeklyBudgets.findIndex(w=>w.start===nextW.start&&w.end===nextW.end);
+    if(origIdx>=0){
+      state.weeklyBudgets[origIdx].carryover = nextW.carryover;
+      state.weeklyBudgets[origIdx]._carryFrom = nextW._carryFrom;
+      state.weeklyBudgets[origIdx]._overMax = nextW._overMax;
+      state.weeklyBudgets[origIdx]._overMaxAmt = nextW._overMaxAmt;
+    }
+    changed = true;
+  }
+  if(changed) saveState();
+}
+
+function manualAdjustCarryover(ws, we, delta){
+  // يسمح للمستخدم بخصم يدوي من أسبوع معين
+  const idx = state.weeklyBudgets.findIndex(w=>w.start===ws&&w.end===we);
+  if(idx<0) return;
+  const w = state.weeklyBudgets[idx];
+  w.carryover = Math.max(0, (w.carryover||0) + delta);
+  if(w.maxLimit>0){
+    w._overMax = w.carryover > w.maxLimit;
+    w._overMaxAmt = w._overMax ? w.carryover - w.maxLimit : 0;
+  }
+  saveState();
+  renderWeeklyBudgetUI();
+  renderBudget();
+  toast(`✅ تم التعديل — الوفر الجديد: ${fmt(w.carryover)} EGP`);
+}
+
+function openCarryoverModal(ws, we){
+  const w = (state.weeklyBudgets||[]).find(x=>x.start===ws&&x.end===we);
+  if(!w) return;
+  const spent = getSpentBetween(ws,we);
+  const effectiveLimit = (w.limit||0)+(w.carryover||0);
+  document.getElementById('coWeekLabel').textContent = `${fmtDateShort(ws)} ← ${fmtDateShort(we)}`;
+  document.getElementById('coLimit').textContent = fmt(w.limit||0);
+  document.getElementById('coCarryIn').textContent = fmt(w.carryover||0);
+  document.getElementById('coEffective').textContent = fmt(effectiveLimit);
+  document.getElementById('coSpent').textContent = fmt(spent);
+  document.getElementById('coMaxLimit').value = w.maxLimit||'';
+  document.getElementById('coAdjust').value = '';
+  const surplus = effectiveLimit - spent;
+  const surplusEl = document.getElementById('coSurplus');
+  surplusEl.textContent = fmt(Math.max(surplus,0));
+  surplusEl.style.color = surplus >= 0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('coWs').value = ws;
+  document.getElementById('coWe').value = we;
+  // تحذير الحد الأقصى
+  const warnEl = document.getElementById('coOverMaxWarn');
+  if(w._overMax && w._overMaxAmt > 0){
+    warnEl.style.display='block';
+    document.getElementById('coOverMaxAmt').textContent = fmt(w._overMaxAmt);
+  } else {
+    warnEl.style.display='none';
+  }
+  openModal('modalCarryover');
+}
+
+function saveCarryoverSettings(){
+  const ws = document.getElementById('coWs').value;
+  const we = document.getElementById('coWe').value;
+  const idx = state.weeklyBudgets.findIndex(w=>w.start===ws&&w.end===we);
+  if(idx<0) return;
+  const w = state.weeklyBudgets[idx];
+  // حد أقصى
+  const maxLimit = parseFloat(document.getElementById('coMaxLimit').value)||0;
+  w.maxLimit = maxLimit;
+  // تعديل يدوي للوفر
+  const adj = parseFloat(document.getElementById('coAdjust').value)||0;
+  if(adj !== 0){
+    w.carryover = Math.max(0,(w.carryover||0)+adj);
+    if(maxLimit>0){
+      w._overMax = w.carryover > maxLimit;
+      w._overMaxAmt = w._overMax ? w.carryover - maxLimit : 0;
+    }
+  }
+  saveState();
+  closeModal('modalCarryover');
+  renderWeeklyBudgetUI();
+  renderBudget();
+  toast('✅ تم حفظ الإعدادات');
+}
+
+// ══════════════════════════════════════════════════════════
 // NET WORTH
 // ══════════════════════════════════════════════════════════
 function updateNetWorthUI(){
   const totalWallets=getTotalAssets();
   const totalInv=state.investments.reduce((s,inv)=>s+toEGP(inv.value,inv.currency),0);
   const oweEGP=state.debts.owe.reduce((s,d)=>s+toEGP(d.amount,d.currency),0);
-  const netWorth=totalWallets+totalInv-oweEGP;
+  const netWorth=totalWallets-oweEGP;
   const nwEl=document.getElementById('netWorthReal');
   const nwNote=document.getElementById('netWorthNote');
   if(nwEl){nwEl.textContent=fmt(netWorth);nwEl.style.color=netWorth>=0?'var(--teal)':'var(--red)';}
-  if(nwNote)nwNote.textContent=netWorth>=0?`أصول ${fmt(totalWallets+totalInv)} − ديون ${fmt(oweEGP)}`:'⚠️ الديون أكبر من أصولك!';
+  if(nwNote)nwNote.textContent=netWorth>=0?`أصول ${fmt(totalWallets)} − ديون ${fmt(oweEGP)}`:'⚠️ الديون أكبر من أصولك!';
 }
 
 // ── DASHBOARD ──
@@ -4992,13 +5155,24 @@ function updateNotif(){
 
 // ── CHARTS ──
 function initMainChart(){
-  const data=getLastNMonthsData(6);
-  mkChart('mainChart',{
+  _buildMonthlyChart();
+  renderWeeklySpendChart();
+}
+
+
+
+function _buildMonthlyChart(){
+  const ex = Chart.getChart('chartMonthly');
+  if(ex) ex.destroy();
+  const data = getLastNMonthsData(6);
+  const canvas = document.getElementById('chartMonthly');
+  if(!canvas) return;
+  new Chart(canvas, {
     type:'bar',
     data:{
       labels:data.map(d=>d.label),
       datasets:[
-        {label:'دخل',data:data.map(d=>d.inc),backgroundColor:'rgba(34,197,94,.75)',borderRadius:5,borderRadiusTopLeft:5,borderRadiusTopRight:5},
+        {label:'دخل',data:data.map(d=>d.inc),backgroundColor:'rgba(34,197,94,.75)',borderRadius:5},
         {label:'مصاريف',data:data.map(d=>d.exp),backgroundColor:'rgba(255,77,109,.75)',borderRadius:5},
         {label:'صافي',type:'line',data:data.map(d=>d.net),borderColor:'#4f9cf9',backgroundColor:'rgba(79,156,249,.08)',borderWidth:2.5,tension:.4,fill:true,pointBackgroundColor:'#4f9cf9',pointRadius:4,pointHoverRadius:6},
       ]
@@ -5007,6 +5181,89 @@ function initMainChart(){
   });
 }
 
+function renderWeeklySpendChart(){
+  const ex = Chart.getChart('chartWeekly');
+  if(ex) ex.destroy();
+  const canvas = document.getElementById('chartWeekly');
+  if(!canvas) return;
+
+  // استخدم أسابيع الميزانية من state.weeklyBudgets مرتبة
+  let weeks = [];
+  const budgetWeeks = (state.weeklyBudgets||[]).slice().sort((a,b)=>a.start.localeCompare(b.start));
+
+  if(budgetWeeks.length > 0){
+    // خد آخر 12 أسبوع من الميزانية (أو كلها لو أقل)
+    const sliced = budgetWeeks.slice(-12);
+    sliced.forEach(w => {
+      const spent = getSpentBetween(w.start, w.end);
+      const d = new Date(w.start+'T12:00:00');
+      const label = `${d.getDate()}/${d.getMonth()+1}`;
+      weeks.push({label, spent:Math.round(spent), ws:w.start, we:w.end, wb:w});
+    });
+  } else {
+    // fallback: لو مفيش ميزانية، قسم آخر 8 أسابيع بشكل ثابت
+    const today = todayEgypt();
+    for(let i=7; i>=0; i--){
+      const endD = new Date(today+'T12:00:00');
+      endD.setDate(endD.getDate() - i*7);
+      const startD = new Date(endD);
+      startD.setDate(startD.getDate() - 6);
+      const ws = isoDate(startD);
+      const we = isoDate(endD);
+      const spent = getSpentBetween(ws, we);
+      const d = new Date(ws+'T12:00:00');
+      const label = `${d.getDate()}/${d.getMonth()+1}`;
+      weeks.push({label, spent:Math.round(spent), ws, we, wb:null});
+    }
+  }
+
+  const colors = weeks.map(w=>{
+    const wb = w.wb;
+    if(!wb||!wb.limit) return 'rgba(255,77,109,.75)';
+    const effLimit = (wb.limit||0)+(wb.carryover||0);
+    const pct = effLimit > 0 ? w.spent/effLimit : 0;
+    return pct>=1?'rgba(255,77,109,.9)':pct>=0.8?'rgba(255,179,64,.85)':'rgba(34,197,94,.8)';
+  });
+
+  new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: weeks.map(w=>w.label),
+      datasets: [{
+        label: 'مصاريف',
+        data: weeks.map(w=>w.spent),
+        backgroundColor: colors,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {display: false},
+        tooltip: {
+          backgroundColor:'#111e35', borderColor:'#253a62', borderWidth:1,
+          titleColor:'#e8f0ff', bodyColor:'#7a96c4',
+          titleFont:{family:"'Tajawal',sans-serif", size:12, weight:'700'},
+          bodyFont:{family:"'Space Grotesk',monospace", size:12},
+          padding:10, cornerRadius:8,
+          callbacks: {
+            title: items => {
+              const w = weeks[items[0].dataIndex];
+              return `${w.ws} ← ${w.we}`;
+            },
+            label: ctx => ` مصاريف: ${fmt(ctx.parsed.y)} EGP`
+          }
+        }
+      },
+      scales: {
+        x: {grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#3a5080', font:{family:"'Tajawal',sans-serif", size:11}}},
+        y: {grid:{color:'rgba(255,255,255,.04)'}, ticks:{color:'#3a5080', font:{family:"'Space Grotesk',monospace", size:11}}}
+      },
+      interaction: {intersect:false, mode:'index'}
+    }
+  });
+}
 function renderCatChart(){
   const mk=getCurrentMonthKey();
   const cats={};
@@ -5966,41 +6223,7 @@ function calcSim(){
 }
 
 // ── TAB SWITCH ──
-function switchSpendTab(btn,mode){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-  const ch=Chart.getChart("mainChart")||state.charts.main;if(!ch)return;
-  const data=getLastNMonthsData(6);
-  if(mode==='weekly'){
-    const mk=getCurrentMonthKey();
-    const allTxs=getMonthTxs(mk);
-    const expTxs=allTxs.filter(t=>t.type==='expense');
-    const incTxs=allTxs.filter(t=>t.type==='income');
-    const now=new Date();
-    const todayDay=now.getDate();
-    // نحدد الأسابيع اللي مرت فعلاً — كل أسبوع 7 أيام من أول الشهر
-    const numWeeks=Math.ceil(todayDay/7); // عدد الأسابيع اللي عدت أو بدأت
-    const weekExp=Array(numWeeks).fill(0);
-    const weekInc=Array(numWeeks).fill(0);
-    expTxs.forEach(t=>{
-      const day=new Date(t.date+'T00:00:00').getDate();
-      const wk=Math.min(Math.floor((day-1)/7),numWeeks-1);
-      weekExp[wk]+=toEGP(t.amount,t.currency);
-    });
-    incTxs.forEach(t=>{
-      const day=new Date(t.date+'T00:00:00').getDate();
-      const wk=Math.min(Math.floor((day-1)/7),numWeeks-1);
-      weekInc[wk]+=toEGP(t.amount,t.currency);
-    });
-    const labels=Array.from({length:numWeeks},(_,i)=>'الأسبوع '+(i+1));
-    ch.data.labels=labels;
-    ch.data.datasets[0].data=weekInc.map(Math.round);
-    ch.data.datasets[1].data=weekExp.map(Math.round);
-    ch.data.datasets[2].data=weekInc.map((inc,i)=>Math.round(inc-weekExp[i]));
-  }else{
-    ch.data.labels=data.map(d=>d.label);ch.data.datasets[0].data=data.map(d=>d.inc);ch.data.datasets[1].data=data.map(d=>d.exp);ch.data.datasets[2].data=data.map(d=>d.net);
-  }
-  ch.update();
-}
+
 
 // ── SEARCH ──
 function globalSearchFn(){
@@ -7041,7 +7264,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   updateTodayWidget(); // ويدجت اليوم
 
   // Save chart ref for tab switching
-  const mainChartInst=Chart.getChart('mainChart');if(mainChartInst)state.charts.main=mainChartInst;
+  const mainChartInst=Chart.getChart('chartMonthly');if(mainChartInst)state.charts.main=mainChartInst;
 
   const now=new Date().toLocaleDateString('ar-EG',{year:'numeric',month:'long'});
   document.getElementById('pageSubtitle').textContent=now+' — نظرة شاملة على أموالك';
@@ -7144,9 +7367,273 @@ async function _autoLoadFromSheets(){
 }
 
 // ══════════════════════════════════════════════════════════
+//  WEEKLY REPORT — ريبورت الأسابيع
+// ══════════════════════════════════════════════════════════
+
+function openWeeklyReport(){
+  // عرض أسابيع الشهر الحالي + الشهر اللي فات
+  const now = getCairoNow();
+  // شيل اختيار الشهر لأكتر من شهر
+  const mo = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  document.getElementById('weeklyReportMonthPicker').value = mo;
+  renderWeeklyReport();
+  openModal('modalWeeklyReport');
+}
+
+function renderWeeklyReport(){
+  const mo = document.getElementById('weeklyReportMonthPicker').value;
+  if(!mo) return;
+  const [yr,mNum] = mo.split('-').map(Number);
+  const today = todayEgypt();
+
+  // جيب أسابيع الشهر ده
+  const monthWeeks = (state.weeklyBudgets||[]).filter(w=>
+    w.start.slice(0,7)===mo || w.end.slice(0,7)===mo
+  ).sort((a,b)=>a.start.localeCompare(b.start));
+
+  // لو مفيش أسابيع محددة — عمل تقسيم تلقائي
+  let weeks = monthWeeks;
+  if(!weeks.length){
+    // تقسيم تلقائي 7×7
+    weeks = [];
+    const firstDay = new Date(yr, mNum-1, 1);
+    const lastDay = new Date(yr, mNum, 0);
+    let cursor = new Date(firstDay);
+    let wn = 1;
+    while(cursor <= lastDay){
+      const ws = isoDate(cursor);
+      const endC = new Date(cursor);
+      endC.setDate(endC.getDate()+6);
+      if(endC > lastDay) endC.setTime(lastDay.getTime());
+      const we = isoDate(endC);
+      weeks.push({start:ws, end:we, limit:0, _auto:true, _num:wn});
+      cursor.setDate(cursor.getDate()+7);
+      wn++;
+    }
+  }
+
+  // احسب إجمالي المصاريف بالفئة لكل أسبوع
+  const monthTxs = state.transactions.filter(t=>t.date&&t.date.slice(0,7)===mo);
+
+  const container = document.getElementById('weeklyReportContent');
+  let html = '';
+
+  let totalBudget = weeks.reduce((s,w)=>s+(w.limit||0),0);
+  let totalSpent = 0;
+  weeks.forEach(w=>{ totalSpent += getSpentBetween(w.start, w.end); });
+
+  // هيدر الملخص
+  html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">
+    <div style="flex:1;min-width:110px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;text-align:center">
+      <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">ميزانية الشهر</div>
+      <div style="font-size:20px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--blue)">${totalBudget>0?fmt(totalBudget)+' <span style="font-size:11px;color:var(--text-3)">EGP</span>':'<span style="color:var(--text-3)">غير محدد</span>'}</div>
+    </div>
+    <div style="flex:1;min-width:110px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;text-align:center">
+      <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">إجمالي المنصرف</div>
+      <div style="font-size:20px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--red)">${fmt(totalSpent)} <span style="font-size:11px;color:var(--text-3)">EGP</span></div>
+    </div>
+    ${totalBudget>0?`<div style="flex:1;min-width:110px;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;text-align:center">
+      <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">المتبقي</div>
+      <div style="font-size:20px;font-weight:800;font-family:'Space Grotesk',monospace;color:${totalBudget-totalSpent>=0?'var(--green)':'var(--red)'}">${fmt(Math.abs(totalBudget-totalSpent))} <span style="font-size:11px;color:var(--text-3)">EGP</span></div>
+      <div style="font-size:10px;color:${totalBudget-totalSpent>=0?'var(--green)':'var(--red)'};margin-top:3px">${totalBudget-totalSpent>=0?'✓ وفرت':'⚠ تجاوزت'}</div>
+    </div>`:''}
+  </div>`;
+
+  // كارت لكل أسبوع
+  weeks.forEach((w, i)=>{
+    const spent = getSpentBetween(w.start, w.end);
+    const limit = w.limit || 0;
+    const carry = w.carryover || 0;
+    const effectiveLimit = limit + carry;
+    const left = effectiveLimit - spent;
+    const pct = effectiveLimit > 0 ? Math.min(Math.round(spent/effectiveLimit*100), 100) : 0;
+    const barColor = pct>=90?'var(--red)':pct>=70?'var(--amber)':'var(--green)';
+    const weekNum = w._num || (i+1);
+
+    // حالة الأسبوع
+    const isFuture = w.start > today;
+    const isCurrent = today >= w.start && today <= w.end;
+    const isPast = w.end < today;
+
+    // احسب المصاريف بالفئة في الأسبوع ده
+    const weekTxs = state.transactions.filter(t=>t.type==='expense'&&t.date>=w.start&&t.date<=w.end);
+    const catSpend = {};
+    weekTxs.forEach(t=>{
+      const ci = getCatInfo(t.cat);
+      const key = t.cat;
+      if(!catSpend[key]) catSpend[key]={label:ci.label,icon:ci.icon,color:ci.color,amt:0};
+      catSpend[key].amt += toEGP(t.amount,t.currency);
+    });
+    const topCats = Object.values(catSpend).sort((a,b)=>b.amt-a.amt).slice(0,5);
+
+    // تحديد لون الحدود
+    const borderColor = isCurrent ? 'var(--amber)' : isPast && limit>0 && spent>limit ? 'var(--red)' : isPast && limit>0 ? 'var(--green)30' : 'var(--border)';
+
+    html += `<div style="background:var(--bg-1);border:1px solid ${borderColor};border-radius:var(--r-xl);padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden">
+      ${isCurrent?`<div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--amber),var(--orange))"></div>`:''}
+      <!-- هيدر الأسبوع -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="font-size:14px;font-weight:800;color:${isCurrent?'var(--amber)':isFuture?'var(--text-3)':'var(--text-1)'}">
+            ${isCurrent?'● ':''}الأسبوع ${weekNum}
+          </div>
+          <div style="font-size:11.5px;color:var(--text-3)">${fmtDateShort(w.start)} ← ${fmtDateShort(w.end)}</div>
+          ${isCurrent?'<span style="background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,179,64,.3);border-radius:99px;font-size:10px;font-weight:700;padding:2px 8px">الأسبوع الحالي</span>':''}
+          ${isFuture?'<span style="background:var(--blue-dim);color:var(--blue);border:1px solid rgba(106,180,255,.3);border-radius:99px;font-size:10px;font-weight:700;padding:2px 8px">لسه مجاش</span>':''}
+          ${isPast?'<span style="background:var(--bg-3);color:var(--text-3);border:1px solid var(--border);border-radius:99px;font-size:10px;font-weight:700;padding:2px 8px">انتهى</span>':''}
+        </div>
+        ${w._auto?'<span style="font-size:10px;color:var(--text-3)">تقسيم تلقائي</span>':''}
+      </div>
+
+      ${isFuture?`
+      <!-- أسبوع لسه مجاش -->
+      <div style="text-align:center;padding:18px 0;color:var(--text-3)">
+        <div style="font-size:24px;margin-bottom:8px">🗓️</div>
+        <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:4px">الأسبوع ده لسه مجاش</div>
+        <div style="font-size:11.5px">بيبدأ في ${fmtDateShort(w.start)}</div>
+        ${limit>0?`<div style="margin-top:10px;font-size:12.5px;color:var(--text-2)">الميزانية المحددة: <strong style="color:var(--amber);font-family:'Space Grotesk',monospace">${fmt(limit)} EGP</strong></div>`:'<div style="margin-top:10px;font-size:12px;color:var(--text-3)">لم يُحدد ميزانية بعد</div>'}
+      </div>`:`
+
+      <!-- أسبوع حالي أو منتهي -->
+      <div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:80px;background:var(--bg-2);border-radius:var(--r-md);padding:9px 11px;text-align:center">
+          <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">الميزانية</div>
+          <div style="font-size:16px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--blue)">${effectiveLimit>0?fmt(effectiveLimit):'—'}</div>
+          ${carry>0?`<div style="font-size:9px;color:var(--teal);margin-top:2px">+${fmt(carry)} وفر</div>`:''}
+        </div>
+        <div style="flex:1;min-width:80px;background:var(--bg-2);border-radius:var(--r-md);padding:9px 11px;text-align:center">
+          <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">المنصرف</div>
+          <div style="font-size:16px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--red)">${fmt(spent)}</div>
+        </div>
+        ${effectiveLimit>0?`<div style="flex:1;min-width:80px;background:var(--bg-2);border-radius:var(--r-md);padding:9px 11px;text-align:center">
+          <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">المتبقي</div>
+          <div style="font-size:16px;font-weight:800;font-family:'Space Grotesk',monospace;color:${left<0?'var(--red)':left<effectiveLimit*0.2?'var(--amber)':'var(--green)'}">${fmt(Math.max(left,0))}</div>
+          ${left<0?`<div style="font-size:10px;color:var(--red);font-weight:700">⚠ تجاوز ${fmt(Math.abs(left))}</div>`:''}
+        </div>`:''}
+      </div>
+
+      ${effectiveLimit>0?`<div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:4px">
+          <span>${pct}% من الميزانية</span>
+          <span style="color:${barColor};font-weight:700">${pct>=90?'🔴 تجاوز':pct>=70?'🟡 قريب':'🟢 تمام'}</span>
+        </div>
+        <div class="progress-track" style="height:8px">
+          <div class="progress-fill" style="width:${pct}%;background:linear-gradient(90deg,${barColor},${barColor}99)"></div>
+        </div>
+      </div>`:''}
+
+      <!-- تفاصيل الفئات -->
+      ${topCats.length?`
+      <div style="border-top:1px solid var(--border);padding-top:10px">
+        <div style="font-size:10.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">توزيع المصاريف</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          ${topCats.map(c=>{
+            const catPct = spent>0?Math.round(c.amt/spent*100):0;
+            return`<div style="display:flex;align-items:center;gap:8px">
+              <i class="ti ${c.icon||'ti-circle'}" style="color:${c.color};font-size:13px;flex-shrink:0"></i>
+              <div style="flex:1">
+                <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:3px">
+                  <span style="color:var(--text-2);font-weight:600">${c.label}</span>
+                  <span style="color:var(--text-1);font-weight:700;font-family:'Space Grotesk',monospace">${fmt(c.amt)} EGP</span>
+                </div>
+                <div style="height:4px;background:var(--bg-3);border-radius:99px;overflow:hidden">
+                  <div style="height:100%;width:${catPct}%;background:${c.color};border-radius:99px;transition:width .4s"></div>
+                </div>
+              </div>
+              <span style="font-size:10px;color:var(--text-3);min-width:28px;text-align:left">${catPct}%</span>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`:`<div style="text-align:center;padding:10px 0;font-size:12px;color:var(--text-3)">مفيش مصاريف في الأسبوع ده</div>`}
+      `}
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════
 //  AI CHAT — مستشار فلوسي
 // ══════════════════════════════════════════════════════════
 
 </script>
+<!-- ═══ مودال إعدادات الوفر ═══ -->
+<div class="modal-overlay" id="modalCarryover">
+  <div class="modal" style="width:460px">
+    <div class="modal-title"><i class="ti ti-arrows-transfer-up" style="color:var(--teal)"></i> إعدادات الوفر المرحّل — <span id="coWeekLabel" style="color:var(--amber)"></span></div>
+    <input type="hidden" id="coWs">
+    <input type="hidden" id="coWe">
+
+    <!-- ملخص الأسبوع -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;margin-bottom:4px">الميزانية الأصلية</div>
+        <div style="font-size:15px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--blue)" id="coLimit">—</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--teal)30;border-radius:var(--r-md);padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;margin-bottom:4px">وفر مرحّل</div>
+        <div style="font-size:15px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--teal)" id="coCarryIn">—</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--purple)30;border-radius:var(--r-md);padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;margin-bottom:4px">الفعلي</div>
+        <div style="font-size:15px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--purple)" id="coEffective">—</div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:16px">
+      <div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;margin-bottom:4px">المنصرف</div>
+        <div style="font-size:15px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--red)" id="coSpent">—</div>
+      </div>
+      <div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px;text-align:center">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;margin-bottom:4px">الوفر المتاح</div>
+        <div style="font-size:15px;font-weight:800;font-family:'Space Grotesk',monospace" id="coSurplus">—</div>
+      </div>
+    </div>
+
+    <!-- تحذير الوفر المتوقع -->
+    <div id="coOverMaxWarn" style="display:none;background:var(--amber-dim);border:1px solid var(--amber);border-radius:var(--r-md);padding:11px 14px;margin-bottom:14px;font-size:12.5px;color:var(--amber)">
+      ⚠️ الوفر الفعلي تجاوز المتوقع بـ <strong id="coOverMaxAmt">—</strong> EGP — يمكنك تعديله يدوياً أو مراجعة مصاريفك
+    </div>
+
+    <!-- الوفر المتوقع -->
+    <div class="form-group">
+      <label class="form-label">الوفر المتوقع (EGP) <span style="color:var(--text-3);font-weight:400">— لو الوفر الفعلي عداه يظهر تحذير</span></label>
+      <input type="number" id="coMaxLimit" placeholder="مثال: 300 — كم تتوقع توفّر من هذا الأسبوع؟" min="0" step="50">
+    </div>
+
+    <!-- تعديل يدوي -->
+    <div class="form-group">
+      <label class="form-label">تعديل يدوي للوفر (موجب = إضافة، سالب = خصم)</label>
+      <input type="number" id="coAdjust" placeholder="مثال: -500 لتقليل الوفر بـ 500 EGP" step="50">
+    </div>
+
+    <div style="font-size:11.5px;color:var(--text-3);background:var(--bg-2);border-radius:var(--r-md);padding:10px 13px;margin-bottom:4px;line-height:1.7">
+      💡 الوفر يُضاف تلقائياً للأسبوع اللي بعده. لو الوفر الفعلي عدى المتوقع سيظهر تحذير — استخدم التعديل اليدوي لو عايز تخصم منه بقيمة سالبة.
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modalCarryover')">إلغاء</button>
+      <button class="btn btn-primary" onclick="saveCarryoverSettings()"><i class="ti ti-check"></i> حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ مودال ريبورت الأسابيع ═══ -->
+<div class="modal-overlay" id="modalWeeklyReport">
+  <div class="modal" style="width:580px;max-height:88vh;overflow-y:auto">
+    <div class="modal-title"><i class="ti ti-report-analytics" style="color:var(--teal)"></i> ريبورت الأسابيع</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <label style="font-size:12px;font-weight:700;color:var(--text-2)">الشهر:</label>
+      <input type="month" id="weeklyReportMonthPicker" onchange="renderWeeklyReport()"
+        style="padding:7px 11px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;font-family:'Tajawal',sans-serif;font-size:13px">
+    </div>
+    <div id="weeklyReportContent"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modalWeeklyReport')">إغلاق</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
