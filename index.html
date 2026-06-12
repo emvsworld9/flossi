@@ -1196,6 +1196,63 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 </div>
 
 <!-- ══ QUICK ADD MINI MODAL ══ -->
+<div class="modal-overlay" id="modalShopItem">
+<div class="modal" style="width:380px">
+  <div class="modal-title"><i class="ti ti-shopping-cart" style="color:var(--amber)"></i> <span id="modalShopItemTitle">إضافة للسلة</span></div>
+  <input type="hidden" id="shopEditId">
+  <div class="form-group">
+    <label>اسم الحاجة</label>
+    <input type="text" id="shopName" class="form-control" placeholder="مثال: حذاء رياضة">
+  </div>
+  <div class="form-group">
+    <label>التاريخ المتوقع للشراء</label>
+    <input type="date" id="shopDate" class="form-control">
+  </div>
+  <div class="form-group">
+    <label>السعر التقريبي (اختياري)</label>
+    <input type="number" id="shopPrice" class="form-control" placeholder="0">
+  </div>
+  <div class="form-group">
+    <label>ملاحظة (اختياري)</label>
+    <input type="text" id="shopNote" class="form-control" placeholder="">
+  </div>
+  <div class="modal-footer">
+    <button class="btn" onclick="closeModal('modalShopItem')">إلغاء</button>
+    <button class="btn btn-primary" onclick="saveShopItem()"><i class="ti ti-check"></i> حفظ</button>
+  </div>
+</div>
+</div>
+
+<div class="modal-overlay" id="modalShopBuy">
+<div class="modal" style="width:380px">
+  <div class="modal-title"><i class="ti ti-check" style="color:var(--green)"></i> اشتريت: <span id="modalShopBuyName"></span></div>
+  <input type="hidden" id="shopBuyId">
+  <div class="form-group">
+    <label>السعر</label>
+    <input type="number" id="shopBuyAmount" class="form-control" placeholder="0">
+  </div>
+  <div class="form-group">
+    <label>العملة</label>
+    <select id="shopBuyCurrency" class="form-control">
+      <option value="EGP">EGP</option>
+      <option value="USD">USD</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>المحفظة</label>
+    <select id="shopBuyWallet" class="form-control"></select>
+  </div>
+  <div class="form-group">
+    <label>الفئة</label>
+    <select id="shopBuyCat" class="form-control"></select>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" onclick="closeModal('modalShopBuy')">إلغاء</button>
+    <button class="btn btn-primary" onclick="confirmShopBuy()"><i class="ti ti-check"></i> تم الشراء</button>
+  </div>
+</div>
+</div>
+
 <div class="modal-overlay" id="modalQuickAdd">
 <div class="modal" style="width:340px;padding:20px 22px">
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
@@ -1638,7 +1695,15 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           </button>
         </div>
 
-        <!-- ══ QUICK ADD STRIP ══ -->
+        <!-- ══ SHOPPING LIST CARD ══ -->
+        <div class="card mb20" id="shoppingListCard">
+          <div class="card-header">
+            <div class="card-title"><i class="ti ti-shopping-cart" style="color:var(--amber)"></i> سلة المشتريات</div>
+            <span class="card-link" onclick="openAddShopItem()">+ إضافة</span>
+          </div>
+          <div id="shoppingListBody"></div>
+        </div>
+
         <div class="quick-add-strip" id="quickAddStrip">
           <span style="font-size:11.5px;color:var(--text-3);font-weight:600;flex-shrink:0">سجّل سريع:</span>
           <div id="quickCatBtns" style="display:flex;gap:6px;flex-wrap:wrap;flex:1"></div>
@@ -1987,27 +2052,200 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           </div>
         </div>
 
-        <!-- ── محاكي الفائدة ── -->
-        <div class="card mb20">
-          <div class="card-header"><div class="card-title">محاكي الفائدة المركبة 🧮</div></div>
-          <div style="display:flex;flex-direction:column;gap:14px">
+        <!-- ── محاكي الفائدة المتقدم ── -->
+        <div class="card mb20" id="simCard">
+          <div class="card-header">
             <div>
-              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px"><span>المبلغ الأولي</span><strong id="lbl-p" style="color:var(--text-1);font-family:'Space Grotesk',monospace">10,000 EGP</strong></div>
-              <input type="range" id="sim-p" min="1000" max="500000" step="1000" value="10000" oninput="calcSim()" style="width:100%;accent-color:var(--blue)">
+              <div class="card-title">محاكي الفائدة المركبة المتقدم 🧮</div>
+              <div class="card-subtitle">احسب الفائدة الثانوية والمتراكمة اليومية بدقة</div>
             </div>
-            <div>
-              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px"><span>نسبة الفائدة السنوية</span><strong id="lbl-r" style="color:var(--text-1)">15%</strong></div>
-              <input type="range" id="sim-r" min="1" max="60" value="15" oninput="calcSim()" style="width:100%;accent-color:var(--teal)">
+            <div class="tabs" style="font-size:11.5px">
+              <div class="tab-btn active" id="simTab-basic" onclick="switchSimTab('basic')">أساسي</div>
+              <div class="tab-btn" id="simTab-advanced" onclick="switchSimTab('advanced')">متقدم</div>
+              <div class="tab-btn" id="simTab-daily" onclick="switchSimTab('daily')">يومي</div>
             </div>
-            <div>
-              <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px"><span>المدة</span><strong id="lbl-y" style="color:var(--text-1)">5 سنوات</strong></div>
-              <input type="range" id="sim-y" min="1" max="30" value="5" oninput="calcSim()" style="width:100%;accent-color:var(--purple)">
+          </div>
+
+          <!-- ═══ TAB: أساسي ═══ -->
+          <div id="simPane-basic">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px"><span>المبلغ الأولي</span><strong id="lbl-p" style="color:var(--text-1);font-family:'Space Grotesk',monospace">10,000 EGP</strong></div>
+                <input type="range" id="sim-p" min="1000" max="1000000" step="1000" value="10000" oninput="calcSim()" style="width:100%;accent-color:var(--blue)">
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px"><span>نسبة الفائدة السنوية</span><strong id="lbl-r" style="color:var(--text-1)">15%</strong></div>
+                <input type="range" id="sim-r" min="1" max="60" value="15" oninput="calcSim()" style="width:100%;accent-color:var(--teal)">
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-2);margin-bottom:6px"><span>المدة</span><strong id="lbl-y" style="color:var(--text-1)">5 سنوات</strong></div>
+                <input type="range" id="sim-y" min="1" max="30" value="5" oninput="calcSim()" style="width:100%;accent-color:var(--purple)">
+              </div>
+              <div>
+                <div style="font-size:12px;color:var(--text-2);margin-bottom:6px">تكرار الفائدة الثانوية</div>
+                <select id="sim-freq" onchange="calcSim()" style="width:100%;padding:8px 10px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
+                  <option value="365">يومي (365×)</option>
+                  <option value="12">شهري (12×)</option>
+                  <option value="4">ربع سنوي (4×)</option>
+                  <option value="2">نصف سنوي (2×)</option>
+                  <option value="1" selected>سنوي (1×)</option>
+                </select>
+              </div>
             </div>
-            <div style="background:linear-gradient(135deg,var(--bg-2),var(--bg-3));border:1px solid var(--border-med);border-radius:var(--r-xl);padding:18px;text-align:center">
-              <div style="font-size:11px;color:var(--text-3);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.08em">القيمة النهائية</div>
-              <div id="sim-result" style="font-size:32px;font-weight:800;color:var(--green);font-family:'Space Grotesk',monospace">—</div>
-              <div id="sim-profit" style="font-size:13px;color:var(--teal);margin-top:6px;font-weight:600">—</div>
-              <div id="sim-multiplier" style="font-size:12px;color:var(--blue);margin-top:3px">—</div>
+            <!-- نتيجة أساسية -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+              <div style="background:linear-gradient(135deg,rgba(34,232,122,.1),rgba(0,245,196,.06));border:1px solid rgba(34,232,122,.25);border-radius:var(--r-xl);padding:14px;text-align:center">
+                <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">القيمة النهائية</div>
+                <div id="sim-result" style="font-size:22px;font-weight:800;color:var(--green);font-family:'Space Grotesk',monospace">—</div>
+                <div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP</div>
+              </div>
+              <div style="background:linear-gradient(135deg,rgba(0,245,196,.08),rgba(106,180,255,.06));border:1px solid rgba(0,245,196,.2);border-radius:var(--r-xl);padding:14px;text-align:center">
+                <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">صافي الربح</div>
+                <div id="sim-profit" style="font-size:22px;font-weight:800;color:var(--teal);font-family:'Space Grotesk',monospace">—</div>
+                <div id="sim-profit-pct" style="font-size:10px;color:var(--text-3);margin-top:2px">—</div>
+              </div>
+              <div style="background:linear-gradient(135deg,rgba(106,180,255,.08),rgba(192,132,252,.06));border:1px solid rgba(106,180,255,.2);border-radius:var(--r-xl);padding:14px;text-align:center">
+                <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">المضاعف</div>
+                <div id="sim-multiplier" style="font-size:22px;font-weight:800;color:var(--blue);font-family:'Space Grotesk',monospace">—</div>
+                <div id="sim-freq-label" style="font-size:10px;color:var(--text-3);margin-top:2px">—</div>
+              </div>
+            </div>
+            <!-- مقارنة بسيطة vs مركبة -->
+            <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+              <div style="font-size:12px;color:var(--text-2)">⚖️ فائدة بسيطة (للمقارنة): <strong id="sim-simple" style="color:var(--amber);font-family:'Space Grotesk',monospace">—</strong> EGP</div>
+              <div style="font-size:12px;color:var(--text-2)">🚀 ميزة التركيب: <strong id="sim-compound-bonus" style="color:var(--green);font-family:'Space Grotesk',monospace">+—</strong> EGP</div>
+            </div>
+          </div>
+
+          <!-- ═══ TAB: متقدم ═══ -->
+          <div id="simPane-advanced" style="display:none">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">المبلغ الأولي (EGP)</label>
+                <input type="number" id="adv-p" value="10000" min="0" step="100" oninput="calcAdvanced()" placeholder="10000">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">نسبة الفائدة السنوية %</label>
+                <input type="number" id="adv-r" value="20" min="0" step="0.1" oninput="calcAdvanced()" placeholder="20">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">المدة (سنوات)</label>
+                <input type="number" id="adv-y" value="3" min="1" max="50" step="1" oninput="calcAdvanced()" placeholder="3">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">إضافة شهرية (EGP)</label>
+                <input type="number" id="adv-monthly" value="0" min="0" step="100" oninput="calcAdvanced()" placeholder="صفر لو مفيش">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">تكرار الفائدة الثانوية</label>
+                <select id="adv-freq" onchange="calcAdvanced()" style="width:100%;padding:9px 11px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
+                  <option value="365">يومي</option>
+                  <option value="12" selected>شهري</option>
+                  <option value="4">ربع سنوي</option>
+                  <option value="2">نصف سنوي</option>
+                  <option value="1">سنوي</option>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">نوع الحساب</label>
+                <select id="adv-type" onchange="calcAdvanced()" style="width:100%;padding:9px 11px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
+                  <option value="compound">فائدة مركبة</option>
+                  <option value="simple">فائدة بسيطة</option>
+                </select>
+              </div>
+            </div>
+            <!-- ملخص متقدم -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px" id="advSummary">
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px;text-align:center">
+                <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:4px">إجمالي الاستثمار</div>
+                <div id="adv-totalIn" style="font-size:14px;font-weight:800;color:var(--blue);font-family:'Space Grotesk',monospace">—</div>
+              </div>
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px;text-align:center">
+                <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:4px">القيمة النهائية</div>
+                <div id="adv-result" style="font-size:14px;font-weight:800;color:var(--green);font-family:'Space Grotesk',monospace">—</div>
+              </div>
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px;text-align:center">
+                <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:4px">إجمالي الفائدة</div>
+                <div id="adv-interest" style="font-size:14px;font-weight:800;color:var(--teal);font-family:'Space Grotesk',monospace">—</div>
+              </div>
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:10px;text-align:center">
+                <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:4px">العائد %</div>
+                <div id="adv-roi" style="font-size:14px;font-weight:800;color:var(--purple);font-family:'Space Grotesk',monospace">—</div>
+              </div>
+            </div>
+            <!-- جدول سنوي -->
+            <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">جدول النمو السنوي</div>
+            <div style="overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--border)">
+              <table style="width:100%;border-collapse:collapse;font-size:12px" id="advTable">
+                <thead>
+                  <tr style="background:var(--bg-2);border-bottom:1px solid var(--border)">
+                    <th style="padding:8px 10px;text-align:right;color:var(--text-3);font-weight:600">السنة</th>
+                    <th style="padding:8px 10px;text-align:right;color:var(--text-3);font-weight:600">رأس المال</th>
+                    <th style="padding:8px 10px;text-align:right;color:var(--text-3);font-weight:600">فائدة السنة</th>
+                    <th style="padding:8px 10px;text-align:right;color:var(--text-3);font-weight:600">إجمالي</th>
+                  </tr>
+                </thead>
+                <tbody id="advTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ═══ TAB: يومي ═══ -->
+          <div id="simPane-daily" style="display:none">
+            <div style="background:linear-gradient(135deg,rgba(255,179,64,.08),rgba(255,115,178,.06));border:1px solid rgba(255,179,64,.25);border-radius:var(--r-lg);padding:12px 14px;margin-bottom:14px;font-size:12px;color:var(--amber)">
+              📅 أدخل تفاصيل الاستثمار وسيتم حساب الفائدة المتراكمة تلقائياً حتى اليوم بالضبط
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">المبلغ الأصلي (EGP)</label>
+                <input type="number" id="day-p" value="50000" min="0" step="100" oninput="calcDaily()" placeholder="50000">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">نسبة الفائدة السنوية %</label>
+                <input type="number" id="day-r" value="23.5" min="0" step="0.1" oninput="calcDaily()" placeholder="23.5">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">تاريخ البداية</label>
+                <input type="date" id="day-start" oninput="calcDaily()" style="width:100%;padding:9px 11px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;font-family:'Tajawal',sans-serif;font-size:13px">
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label class="form-label">تكرار الفائدة</label>
+                <select id="day-freq" onchange="calcDaily()" style="width:100%;padding:9px 11px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:'Tajawal',sans-serif;font-size:13px;outline:none">
+                  <option value="365" selected>يومي</option>
+                  <option value="12">شهري</option>
+                  <option value="4">ربع سنوي</option>
+                  <option value="1">سنوي</option>
+                </select>
+              </div>
+            </div>
+            <!-- نتيجة يومية -->
+            <div id="dailyResult" style="display:none">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+                <div style="background:linear-gradient(135deg,rgba(34,232,122,.1),rgba(0,245,196,.06));border:1px solid rgba(34,232,122,.25);border-radius:var(--r-xl);padding:14px;text-align:center">
+                  <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:5px">القيمة الحالية اليوم</div>
+                  <div id="day-result" style="font-size:20px;font-weight:800;color:var(--green);font-family:'Space Grotesk',monospace">—</div>
+                  <div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP</div>
+                </div>
+                <div style="background:linear-gradient(135deg,rgba(0,245,196,.08),rgba(106,180,255,.06));border:1px solid rgba(0,245,196,.2);border-radius:var(--r-xl);padding:14px;text-align:center">
+                  <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:5px">الفائدة المتراكمة</div>
+                  <div id="day-earned" style="font-size:20px;font-weight:800;color:var(--teal);font-family:'Space Grotesk',monospace">—</div>
+                  <div style="font-size:10px;color:var(--text-3);margin-top:2px">EGP</div>
+                </div>
+                <div style="background:linear-gradient(135deg,rgba(255,179,64,.08),rgba(255,133,66,.06));border:1px solid rgba(255,179,64,.2);border-radius:var(--r-xl);padding:14px;text-align:center">
+                  <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:5px">عدد الأيام</div>
+                  <div id="day-days" style="font-size:20px;font-weight:800;color:var(--amber);font-family:'Space Grotesk',monospace">—</div>
+                  <div style="font-size:10px;color:var(--text-3);margin-top:2px">يوم</div>
+                </div>
+              </div>
+              <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <div style="font-size:12px;color:var(--text-2)">📆 مر على الاستثمار: <strong id="day-duration" style="color:var(--text-1)">—</strong></div>
+                <div style="font-size:12px;color:var(--text-2)">💰 فائدة اليوم: <strong id="day-today-interest" style="color:var(--teal);font-family:'Space Grotesk',monospace">+—</strong> EGP</div>
+                <div style="font-size:12px;color:var(--text-2)">📈 العائد حتى الآن: <strong id="day-roi-now" style="color:var(--green)">—</strong></div>
+              </div>
+            </div>
+            <div id="dailyNoDate" style="text-align:center;padding:20px;color:var(--text-3)">
+              <i class="ti ti-calendar" style="font-size:28px;display:block;margin-bottom:8px;color:var(--amber)"></i>
+              <div style="font-size:13px">اختر تاريخ بداية الاستثمار</div>
             </div>
           </div>
         </div>
@@ -2399,13 +2637,14 @@ const DEFAULT_STATE={
   rates:{USD:49.15},
   sheets:{url:''},
   recurring:[],           // المصاريف المتكررة
+  shoppingList:[],        // قايمة المشتريات (سلة)
   charts:{}
 };
 
 function loadState(){
   try{
     const saved=localStorage.getItem('floosi_v3');
-    if(saved){const p=JSON.parse(saved);return{...DEFAULT_STATE,...p,charts:{},profile:{...DEFAULT_STATE.profile,...(p.profile||{})},sheets:{...DEFAULT_STATE.sheets,...(p.sheets||{})},weeklyBudget:{...DEFAULT_STATE.weeklyBudget,...(p.weeklyBudget||{})},dailyBudget:{...DEFAULT_STATE.dailyBudget,...(p.dailyBudget||{})},categories:[...(p.categories||[])],weeklyBudgets:[...(p.weeklyBudgets||[])],transactions:[...(p.transactions||[])],wallets:[...(p.wallets||[])],goals:[...(p.goals||[])],investments:[...(p.investments||[])],budget:[...(p.budget||[])],recurring:[...(p.recurring||[])]};}
+    if(saved){const p=JSON.parse(saved);return{...DEFAULT_STATE,...p,charts:{},profile:{...DEFAULT_STATE.profile,...(p.profile||{})},sheets:{...DEFAULT_STATE.sheets,...(p.sheets||{})},weeklyBudget:{...DEFAULT_STATE.weeklyBudget,...(p.weeklyBudget||{})},dailyBudget:{...DEFAULT_STATE.dailyBudget,...(p.dailyBudget||{})},categories:[...(p.categories||[])],weeklyBudgets:[...(p.weeklyBudgets||[])],transactions:[...(p.transactions||[])],wallets:[...(p.wallets||[])],goals:[...(p.goals||[])],investments:[...(p.investments||[])],budget:[...(p.budget||[])],recurring:[...(p.recurring||[])],shoppingList:[...(p.shoppingList||[])]};}
   }catch(e){}
   return{...DEFAULT_STATE,charts:{}};
 }
@@ -2477,6 +2716,7 @@ async function syncWithSheets(){
     profile: state.profile||{},
     rates: state.rates,
     categories: state.categories,
+    shoppingList: state.shoppingList||[],
     exportedAt: new Date().toISOString()
   };
 
@@ -2882,6 +3122,7 @@ function _applyLoadedData(data){
   if(data.rates)        state.rates = {...state.rates, ...data.rates};
   if(data.profile)      state.profile = {...state.profile, ...data.profile};
   if(data.recurring)    state.recurring = data.recurring;
+  if(data.shoppingList) state.shoppingList = data.shoppingList;
 
   // الديون — flat أو {owe, lent}
   if(data.debts){
@@ -4578,6 +4819,121 @@ function isoDate(d){
 }
 function todayEgypt(){return isoDate(new Date());}
 
+// ══════════════════════════════════════════════════════════
+//  سلة المشتريات (Shopping List)
+// ══════════════════════════════════════════════════════════
+function openAddShopItem(){
+  document.getElementById('shopEditId').value='';
+  document.getElementById('modalShopItemTitle').textContent='إضافة للسلة';
+  document.getElementById('shopName').value='';
+  document.getElementById('shopDate').value=todayEgypt();
+  document.getElementById('shopPrice').value='';
+  document.getElementById('shopNote').value='';
+  openModal('modalShopItem');
+}
+function openEditShopItem(id){
+  const it=state.shoppingList.find(x=>x.id===id);if(!it)return;
+  document.getElementById('shopEditId').value=id;
+  document.getElementById('modalShopItemTitle').textContent='تعديل الحاجة';
+  document.getElementById('shopName').value=it.name;
+  document.getElementById('shopDate').value=it.date||todayEgypt();
+  document.getElementById('shopPrice').value=it.price||'';
+  document.getElementById('shopNote').value=it.note||'';
+  openModal('modalShopItem');
+}
+function saveShopItem(){
+  const name=document.getElementById('shopName').value.trim();
+  if(!name){toast('اكتب اسم الحاجة','error');return;}
+  const date=document.getElementById('shopDate').value||todayEgypt();
+  const price=parseFloat(document.getElementById('shopPrice').value)||0;
+  const note=document.getElementById('shopNote').value.trim();
+  const editId=document.getElementById('shopEditId').value;
+  if(editId){
+    const idx=state.shoppingList.findIndex(x=>x.id===+editId);
+    if(idx>=0)state.shoppingList[idx]={...state.shoppingList[idx],name,date,price,note};
+    toast('✏️ تم التعديل');
+  }else{
+    state.shoppingList.push({id:Date.now(),name,date,price,note,bought:false});
+    toast('🛒 تمت الإضافة للسلة');
+  }
+  saveState();_syncAfterSave();closeModal('modalShopItem');refreshAll();
+}
+function deleteShopItem(id){
+  confirmDelete('هتحذف الحاجة دي من السلة؟',()=>{
+    state.shoppingList=state.shoppingList.filter(x=>x.id!==id);
+    saveState();_syncAfterSave();refreshAll();toast('🗑️ تم الحذف','info');
+  });
+}
+function openShopBuy(id){
+  const it=state.shoppingList.find(x=>x.id===id);if(!it)return;
+  document.getElementById('shopBuyId').value=id;
+  document.getElementById('modalShopBuyName').textContent=it.name;
+  document.getElementById('shopBuyAmount').value=it.price||'';
+  document.getElementById('shopBuyCurrency').value='EGP';
+  // populate wallets
+  const walSel=document.getElementById('shopBuyWallet');
+  walSel.innerHTML=state.wallets.map(w=>`<option value="${w.key}">${w.icon||'🏦'} ${w.name} (${fmt(w.balance)} ${w.currency})</option>`).join('');
+  // populate categories
+  const catSel=document.getElementById('shopBuyCat');
+  catSel.innerHTML=state.categories.map(c=>`<option value="${c.key}">${c.name}</option>`).join('');
+  // try guess a "shopping"-like category as default if exists
+  const guess=state.categories.find(c=>/شوبينج|تسوق|shopping|مشتريات/i.test(c.name)||/shop/i.test(c.key));
+  if(guess)catSel.value=guess.key;
+  openModal('modalShopBuy');
+}
+function confirmShopBuy(){
+  const id=+document.getElementById('shopBuyId').value;
+  const it=state.shoppingList.find(x=>x.id===id);if(!it)return;
+  const amount=parseFloat(document.getElementById('shopBuyAmount').value);
+  if(!amount||amount<=0){toast('اكتب السعر الصح','error');return;}
+  const currency=document.getElementById('shopBuyCurrency').value;
+  const walletKey=document.getElementById('shopBuyWallet').value;
+  const catKey=document.getElementById('shopBuyCat').value;
+  if(!walletKey){toast('لازم تختار محفظة','error');return;}
+  if(!catKey){toast('لازم تختار فئة','error');return;}
+  const data={id:Date.now(),desc:it.name,amount,currency,type:'expense',cat:catKey,wallet:walletKey,toWallet:'',date:todayEgypt(),note:it.note||''};
+  const _ok=applyTransaction(data);
+  if(_ok===false)return;
+  state.transactions.unshift(data);
+  state.shoppingList=state.shoppingList.filter(x=>x.id!==id);
+  saveState();_syncAfterSave();closeModal('modalShopBuy');refreshAll();
+  toast(`✅ تم شراء "${it.name}" وتسجيل المعاملة`);
+}
+function renderShoppingList(){
+  const body=document.getElementById('shoppingListBody');
+  if(!body)return;
+  const list=[...state.shoppingList].sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  if(!list.length){
+    body.innerHTML=`<div style="text-align:center;padding:20px;color:var(--text-3);font-size:12.5px">السلة فاضية — اضغط "+ إضافة" لإضافة حاجة عايز تشتريها 🛒</div>`;
+    return;
+  }
+  const today=todayEgypt();
+  body.innerHTML=list.map(it=>{
+    const isDue=it.date&&it.date<=today;
+    const dateLabel=it.date?new Date(it.date).toLocaleDateString('ar-EG',{day:'numeric',month:'short'}):'—';
+    return `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:13.5px;color:var(--text-1)">${it.name}</div>
+        <div style="font-size:11px;color:${isDue?'var(--red)':'var(--text-3)'}">
+          ${isDue?'⏰ ':'📅 '}${dateLabel}${it.price?` • ${fmt(it.price)} EGP تقريباً`:''}${it.note?` • ${it.note}`:''}
+        </div>
+      </div>
+      <button class="btn btn-sm" onclick="openEditShopItem(${it.id})" title="تعديل"><i class="ti ti-pencil"></i></button>
+      <button class="btn btn-sm" style="color:var(--red)" onclick="deleteShopItem(${it.id})" title="حذف"><i class="ti ti-trash"></i></button>
+      <button class="btn btn-sm btn-primary" onclick="openShopBuy(${it.id})">اشتريتها</button>
+    </div>`;
+  }).join('');
+}
+function checkDueShoppingItems(){
+  const today=todayEgypt();
+  const due=state.shoppingList.filter(it=>it.date&&it.date<=today);
+  if(due.length){
+    const names=due.map(it=>it.name).join('، ');
+    setTimeout(()=>toast(`🛒 عندك ${due.length} حاجة المفروض تشتريها النهارده: ${names}`,'error'),400);
+  }
+}
+
 function openWeeklyBudgetModal(){
   // default to current month
   const now=new Date();
@@ -6211,16 +6567,147 @@ function renderAnalytics(){
 }
 
 // ── SIMULATOR ──
-function calcSim(){
-  const p=+document.getElementById('sim-p').value;const r=+document.getElementById('sim-r').value/100;const y=+document.getElementById('sim-y').value;
-  const result=Math.round(p*Math.pow(1+r,y));const profit=result-p;const multiplier=(result/p).toFixed(2);
-  document.getElementById('lbl-p').textContent=fmt(p)+' EGP';
-  document.getElementById('lbl-r').textContent=Math.round(r*100)+'%';
-  document.getElementById('lbl-y').textContent=y+' سنة';
-  document.getElementById('sim-result').textContent=fmt(result)+' EGP';
-  document.getElementById('sim-profit').textContent='ربح: '+fmt(profit)+' EGP (+'+Math.round(profit/p*100)+'%)';
-  document.getElementById('sim-multiplier').textContent='×'+multiplier+' من المبلغ الأصلي';
+// ══════════════════════════════════════════════════════════
+// ADVANCED COMPOUND INTEREST SIMULATOR
+// ══════════════════════════════════════════════════════════
+
+function switchSimTab(tab){
+  ['basic','advanced','daily'].forEach(t=>{
+    document.getElementById('simPane-'+t).style.display = t===tab?'':'none';
+    document.getElementById('simTab-'+t).classList.toggle('active', t===tab);
+  });
+  if(tab==='basic') calcSim();
+  if(tab==='advanced') calcAdvanced();
+  if(tab==='daily') calcDaily();
 }
+
+function calcSim(){
+  const p=+document.getElementById('sim-p').value;
+  const r=+document.getElementById('sim-r').value/100;
+  const y=+document.getElementById('sim-y').value;
+  const n=+document.getElementById('sim-freq').value;
+  // compound: A = P*(1 + r/n)^(n*y)
+  const result = Math.round(p * Math.pow(1 + r/n, n*y));
+  const profit = result - p;
+  const simple = Math.round(p * (1 + r*y));
+  const bonus = result - simple;
+  const multiplier = (result/p).toFixed(2);
+  const freqLabels={365:'يومي',12:'شهري',4:'ربع سنوي',2:'نصف سنوي',1:'سنوي'};
+  document.getElementById('lbl-p').textContent=fmt(p)+' EGP';
+  document.getElementById('lbl-r').textContent=r*100+'%';
+  document.getElementById('lbl-y').textContent=y+(y===1?' سنة':' سنوات');
+  document.getElementById('sim-result').textContent=fmt(result);
+  document.getElementById('sim-profit').textContent=fmt(profit);
+  document.getElementById('sim-profit-pct').textContent='+'+Math.round(profit/p*100)+'%';
+  document.getElementById('sim-multiplier').textContent='×'+multiplier;
+  document.getElementById('sim-freq-label').textContent='تكرار '+freqLabels[n];
+  document.getElementById('sim-simple').textContent=fmt(simple);
+  document.getElementById('sim-compound-bonus').textContent=fmt(bonus);
+}
+
+function calcAdvanced(){
+  const p=+document.getElementById('adv-p').value||0;
+  const r=+document.getElementById('adv-r').value/100||0;
+  const y=+document.getElementById('adv-y').value||1;
+  const monthly=+document.getElementById('adv-monthly').value||0;
+  const n=+document.getElementById('adv-freq').value;
+  const isCompound=document.getElementById('adv-type').value==='compound';
+  const totalIn = p + monthly*12*y;
+  let balance=p;
+  const rows=[];
+  for(let yr=1;yr<=y;yr++){
+    const startBal=balance;
+    if(isCompound){
+      // each period: apply interest then add monthly contributions
+      const periods=n;
+      const rPer=r/n;
+      for(let i=0;i<periods;i++){
+        balance=balance*(1+rPer)+(monthly*12/periods);
+      }
+    } else {
+      // simple: just interest on original principal
+      balance=p*(1+r*yr)+(monthly*12*yr);
+    }
+    const yearInterest=balance-(startBal+monthly*12);
+    rows.push({yr,startBal,yearInterest,balance});
+  }
+  const totalInterest=balance-totalIn;
+  const roi=totalIn>0?((balance/totalIn-1)*100).toFixed(1):0;
+  const g=id=>document.getElementById(id);
+  if(g('adv-totalIn')) g('adv-totalIn').textContent=fmt(Math.round(totalIn));
+  if(g('adv-result')) g('adv-result').textContent=fmt(Math.round(balance));
+  if(g('adv-interest')) g('adv-interest').textContent=fmt(Math.round(totalInterest));
+  if(g('adv-roi')) g('adv-roi').textContent=roi+'%';
+  const tbody=document.getElementById('advTableBody');
+  if(tbody){
+    tbody.innerHTML=rows.map((row,i)=>{
+      const pct=Math.min(100,Math.round(row.balance/rows[rows.length-1].balance*100));
+      return`<tr style="border-bottom:1px solid var(--border);${i%2===0?'background:rgba(255,255,255,.02)':''}">
+        <td style="padding:7px 10px;font-weight:700;color:var(--text-2)">سنة ${row.yr}</td>
+        <td style="padding:7px 10px;font-family:'Space Grotesk',monospace;color:var(--blue)">${fmt(Math.round(row.startBal))}</td>
+        <td style="padding:7px 10px;font-family:'Space Grotesk',monospace;color:var(--teal)">+${fmt(Math.round(row.yearInterest))}</td>
+        <td style="padding:7px 10px">
+          <div style="font-family:'Space Grotesk',monospace;font-weight:700;color:var(--green)">${fmt(Math.round(row.balance))}</div>
+          <div style="height:3px;background:var(--bg-3);border-radius:99px;margin-top:3px"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:99px"></div></div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+}
+
+function calcDaily(){
+  const p=+document.getElementById('day-p').value||0;
+  const r=+document.getElementById('day-r').value/100||0;
+  const startStr=document.getElementById('day-start').value;
+  const n=+document.getElementById('day-freq').value;
+  const resultEl=document.getElementById('dailyResult');
+  const noDateEl=document.getElementById('dailyNoDate');
+  if(!startStr||!p){
+    if(resultEl) resultEl.style.display='none';
+    if(noDateEl) noDateEl.style.display='';
+    return;
+  }
+  const start=new Date(startStr+'T00:00:00');
+  const today=new Date();today.setHours(0,0,0,0);
+  if(start>today){
+    if(resultEl) resultEl.style.display='none';
+    if(noDateEl){noDateEl.style.display='';noDateEl.querySelector('div').textContent='📅 تاريخ البداية في المستقبل!';}
+    return;
+  }
+  const diffMs=today-start;
+  const diffDays=Math.floor(diffMs/(1000*60*60*24));
+  const diffYears=diffDays/365;
+  // A = P*(1 + r/n)^(n*t)
+  const balance=p*Math.pow(1+r/n, n*diffYears);
+  const earned=balance-p;
+  const roiNow=((earned/p)*100).toFixed(2);
+  // فائدة اليوم = قيمة اليوم - قيمة الأمس
+  const balYest=p*Math.pow(1+r/n, n*((diffDays-1)/365));
+  const todayInterest=diffDays>0?balance-balYest:0;
+  // مدة بالكلام
+  const yrs=Math.floor(diffDays/365), months=Math.floor((diffDays%365)/30), days=diffDays%30;
+  let durStr='';
+  if(yrs>0) durStr+=yrs+(yrs===1?' سنة':' سنوات')+' ';
+  if(months>0) durStr+=months+(months===1?' شهر':' شهور')+' ';
+  if(days>0||!durStr) durStr+=days+(days===1?' يوم':' يوم');
+  const g=id=>document.getElementById(id);
+  if(resultEl) resultEl.style.display='';
+  if(noDateEl) noDateEl.style.display='none';
+  if(g('day-result')) g('day-result').textContent=fmt(Math.round(balance));
+  if(g('day-earned')) g('day-earned').textContent=fmt(Math.round(earned));
+  if(g('day-days')) g('day-days').textContent=diffDays.toLocaleString('ar-EG');
+  if(g('day-duration')) g('day-duration').textContent=durStr.trim();
+  if(g('day-today-interest')) g('day-today-interest').textContent=fmt(+todayInterest.toFixed(2));
+  if(g('day-roi-now')) g('day-roi-now').textContent=roiNow+'%';
+}
+
+// Set default date for daily tab to today - 1 year
+(function(){
+  const d=new Date();d.setFullYear(d.getFullYear()-1);
+  const s=d.toISOString().split('T')[0];
+  const el=document.getElementById('day-start');
+  if(el) el.value=s;
+})();
 
 // ── TAB SWITCH ──
 
@@ -7239,7 +7726,7 @@ function refreshAll(){
   initMainChart();updateDashboard();populateMonthFilter();
   updateNetWorthUI();renderWeeklyBudgetUI();
   populateFilterCat();populateTxCatSelect();
-  updateTodayWidget();
+  updateTodayWidget();renderShoppingList();
   // تحديث التحليلات لو الصفحة مفتوحة
   if(document.getElementById('page-analytics')?.classList.contains('active')){
     renderAnalyticsKPIs();renderIncomeSources();renderBudgetEfficiency();renderCashflowChart();
@@ -7260,6 +7747,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   populateMonthFilter();renderRecentTx();renderExpenses();renderCatChart();
   renderBudget();renderDebts();renderGoals();
   initMainChart();initWeekChart();updateDashboard();updateClock();calcSim();renderSettings();
+  renderShoppingList();checkDueShoppingItems();
   populateTxCatSelect();populateFilterCat();updateNetWorthUI();renderWeeklyBudgetUI();
   updateTodayWidget(); // ويدجت اليوم
 
