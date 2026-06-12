@@ -4899,6 +4899,9 @@ function confirmShopBuy(){
   saveState();_syncAfterSave();closeModal('modalShopBuy');refreshAll();
   toast(`✅ تم شراء "${it.name}" وتسجيل المعاملة`);
 }
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
 function renderShoppingList(){
   const body=document.getElementById('shoppingListBody');
   if(!body)return;
@@ -4914,17 +4917,26 @@ function renderShoppingList(){
     return `
     <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">
       <div style="flex:1">
-        <div style="font-weight:700;font-size:13.5px;color:var(--text-1)">${it.name}</div>
+        <div style="font-weight:700;font-size:13.5px;color:var(--text-1)">${escapeHtml(it.name)}</div>
         <div style="font-size:11px;color:${isDue?'var(--red)':'var(--text-3)'}">
-          ${isDue?'⏰ ':'📅 '}${dateLabel}${it.price?` • ${fmt(it.price)} EGP تقريباً`:''}${it.note?` • ${it.note}`:''}
+          ${isDue?'⏰ ':'📅 '}${dateLabel}${it.price?` • ${fmt(it.price)} EGP تقريباً`:''}${it.note?` • ${escapeHtml(it.note)}`:''}
         </div>
       </div>
-      <button class="btn btn-sm" onclick="openEditShopItem(${it.id})" title="تعديل"><i class="ti ti-pencil"></i></button>
-      <button class="btn btn-sm" style="color:var(--red)" onclick="deleteShopItem(${it.id})" title="حذف"><i class="ti ti-trash"></i></button>
-      <button class="btn btn-sm btn-primary" onclick="openShopBuy(${it.id})">اشتريتها</button>
+      <button class="btn btn-sm" data-action="edit" data-id="${it.id}" title="تعديل"><i class="ti ti-pencil"></i></button>
+      <button class="btn btn-sm" style="color:var(--red)" data-action="delete" data-id="${it.id}" title="حذف"><i class="ti ti-trash"></i></button>
+      <button class="btn btn-sm btn-primary" data-action="buy" data-id="${it.id}">اشتريتها</button>
     </div>`;
   }).join('');
 }
+document.getElementById('shoppingListBody').addEventListener('click',function(e){
+  const btn=e.target.closest('button[data-action]');
+  if(!btn)return;
+  const id=+btn.dataset.id;
+  const action=btn.dataset.action;
+  if(action==='edit')openEditShopItem(id);
+  else if(action==='delete')deleteShopItem(id);
+  else if(action==='buy')openShopBuy(id);
+});
 function checkDueShoppingItems(){
   const today=todayEgypt();
   const due=state.shoppingList.filter(it=>it.date&&it.date<=today);
