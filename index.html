@@ -900,6 +900,74 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 /* ── DAILY RATE CHART in budget ── */
 .daily-rate-card{background:var(--bg-1);border:1px solid var(--border);border-radius:var(--r-xl);padding:20px 22px;margin-bottom:20px}
 
+/* ── FLOATING ACTION BUTTON ── */
+.fab{
+  position:fixed;
+  left:22px;bottom:22px;
+  width:58px;height:58px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#9333ea,#6366f1);
+  border:none;
+  color:#fff;
+  font-size:28px;
+  cursor:pointer;
+  box-shadow:0 6px 28px rgba(147,51,234,.55);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s cubic-bezier(.4,0,.2,1);
+  z-index:500;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.fab:hover{transform:scale(1.1) rotate(45deg);box-shadow:0 10px 36px rgba(147,51,234,.7)}
+.fab:active{transform:scale(.95) rotate(45deg)}
+@media(min-width:601px){.fab{display:none}}
+@media(max-width:600px){.fab{bottom:calc(68px + env(safe-area-inset-bottom,0px))}}
+
+/* ── SUPER QUICK ADD MODAL (ببالغ مبسّط) ── */
+.sqmodal-overlay{
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(4px);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .22s;
+}
+.sqmodal-overlay.show{opacity:1;pointer-events:auto}
+.sqmodal{
+  background:var(--bg-1);
+  border:1px solid var(--border-med);
+  border-radius:var(--r-2xl) var(--r-2xl) 0 0;
+  padding:20px 20px calc(env(safe-area-inset-bottom,0px) + 20px);
+  width:100%;max-width:480px;
+  transform:translateY(100%);
+  transition:transform .28s cubic-bezier(.4,0,.2,1);
+}
+.sqmodal-overlay.show .sqmodal{transform:translateY(0)}
+.sqmodal-handle{
+  width:38px;height:4px;border-radius:99px;
+  background:var(--border-med);margin:0 auto 18px;
+}
+
+/* ── DAY SUMMARY STRIP (فوق الداشبورد) ── */
+.day-strip{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-bottom:18px;
+}
+.day-pill{
+  background:var(--bg-1);border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:12px 14px;
+  text-align:center;transition:all var(--trans);cursor:default;
+  position:relative;overflow:hidden;
+}
+.day-pill::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0}
+.day-pill.dp-red::before{background:var(--red)}
+.day-pill.dp-green::before{background:var(--green)}
+.day-pill.dp-blue::before{background:var(--blue)}
+.day-pill:hover{border-color:var(--border-med)}
+.dp-label{font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.dp-val{font-size:18px;font-weight:800;font-family:'Space Grotesk',monospace;line-height:1}
+.dp-sub{font-size:10px;color:var(--text-3);margin-top:3px}
+
 /* ── MONTHLY SPEND RATE PILL ── */
 .spend-rate-pill{
   display:inline-flex;align-items:center;gap:6px;
@@ -1266,20 +1334,23 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
     <button class="btn btn-ghost btn-icon btn-sm" onclick="closeModal('modalQuickAdd')"><i class="ti ti-x"></i></button>
   </div>
   <input type="hidden" id="quickAddCatKey">
-  <div style="position:relative;margin-bottom:14px">
-    <input type="number" id="quickAddAmount" placeholder="0" min="0" step="0.5"
+  <div style="position:relative;margin-bottom:10px">
+    <input type="number" id="quickAddAmount" inputmode="decimal" placeholder="0" min="0" step="0.5"
       style="width:100%;padding:14px 16px;font-size:28px;font-weight:800;font-family:'Space Grotesk',monospace;
       background:var(--bg-2);border:2px solid var(--border-med);border-radius:var(--r-lg);
-      color:var(--text-1);outline:none;text-align:center;
+      color:var(--text-1);outline:none;text-align:center;direction:ltr;
       transition:border-color .2s"
       oninput="this.style.borderColor=this.value?'var(--blue)':'var(--border-med)'"
-      onkeydown="if(event.key==='Enter')saveQuickAdd()">
+      onkeydown="if(event.key==='Enter')document.getElementById('quickAddDesc').focus()">
     <div style="text-align:center;font-size:11px;color:var(--text-3);margin-top:5px">EGP</div>
   </div>
-  <div style="font-size:11px;color:var(--text-3);margin-bottom:8px">الوصف (اختياري)</div>
+  <div style="font-size:11px;color:var(--text-3);margin-bottom:6px">الوصف (اختياري)</div>
   <input type="text" id="quickAddDesc" placeholder="أي تفاصيل..."
-    style="width:100%;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:14px;font-size:13px"
+    style="width:100%;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:10px;font-size:13px;transition:border-color .2s"
+    onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border-med)'"
     onkeydown="if(event.key==='Enter')saveQuickAdd()">
+  <div style="font-size:11px;color:var(--text-3);margin-bottom:6px">المحفظة</div>
+  <select id="quickAddWalletSel" style="width:100%;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:14px;font-size:13px;font-family:'Tajawal',sans-serif"></select>
   <div style="display:flex;gap:8px">
     <button class="btn" style="flex:1" onclick="closeModal('modalQuickAdd')">إلغاء</button>
     <button class="btn btn-primary" style="flex:2;font-size:15px;padding:10px" onclick="saveQuickAdd()"><i class="ti ti-check"></i> حفظ</button>
@@ -1669,7 +1740,24 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div class="rate-item" style="margin-right:auto"><span class="lbl">تحديث</span><span class="val" id="lastUpdate">الآن</span></div>
         </div>
 
-        <!-- ══ TODAY WIDGET ══ -->
+        <!-- ══ DAY SUMMARY STRIP — أسرع نظرة على يومك ══ -->
+        <div class="day-strip" id="dayStrip">
+          <div class="day-pill dp-red">
+            <div class="dp-label">📤 صرفت اليوم</div>
+            <div class="dp-val" id="dsSpent" style="color:var(--red)">—</div>
+            <div class="dp-sub" id="dsTxCount">— معاملة</div>
+          </div>
+          <div class="day-pill dp-green">
+            <div class="dp-label">💰 رصيد المحافظ EGP</div>
+            <div class="dp-val" id="dsBalance" style="color:var(--green)">—</div>
+            <div class="dp-sub">المحافظ بالجنيه بس</div>
+          </div>
+          <div class="day-pill dp-blue">
+            <div class="dp-label">📅 باقي الأسبوع</div>
+            <div class="dp-val" id="dsWeekLeft" style="color:var(--blue)">—</div>
+            <div class="dp-sub" id="dsWeekSub">من الميزانية</div>
+          </div>
+        </div>
         <div class="today-card" id="todayCard">
           <div class="today-icon">📅</div>
           <div class="today-info">
@@ -6848,7 +6936,7 @@ function updateTodayWidget(){
 
   // progress bar — الأولوية: ميزانية الأسبوع ÷ 7، وإلا متوسط اليوم من الشهر اللي فات، وإلا مجموع الميزانيات الشهرية ÷ أيام الشهر
   const curWeek = getCurrentWeekBudget();
-  let dailyBudget = curWeek ? Math.round(curWeek.limit / 7) : 0;
+  let dailyBudget = curWeek ? Math.round(((curWeek.limit||0) + (curWeek.carryover||0)) / 7) : 0;
 
   // fallback 1: مجموع ميزانيات الشهر الحالي ÷ أيام الشهر
   if(!dailyBudget){
@@ -7694,11 +7782,16 @@ function openQuickAdd(catKey){
   const iconEl = document.getElementById('quickAddCatIcon');
   iconEl.innerHTML = `<i class="ti ${cat.icon || 'ti-circle'}" style="color:${cat.color};font-size:18px"></i>`;
   iconEl.style.background = cat.color + '22';
-  // اسم المحفظة الافتراضية
+  // تعبئة المحافظ
+  const walSel = document.getElementById('quickAddWalletSel');
+  if(walSel){
+    walSel.innerHTML = state.wallets.map(w=>`<option value="${w.key}">${w.icon||'🏦'} ${w.name} (${fmt(w.balance)})</option>`).join('');
+  }
   const defWallet = state.wallets[0];
   document.getElementById('quickAddWalletName').textContent = defWallet ? defWallet.name : 'المحفظة الافتراضية';
   document.getElementById('quickAddAmount').value = '';
   document.getElementById('quickAddDesc').value = '';
+  document.getElementById('quickAddAmount').style.borderColor = 'var(--border-med)';
   openModal('modalQuickAdd');
   setTimeout(() => document.getElementById('quickAddAmount').focus(), 150);
 }
@@ -7709,8 +7802,9 @@ function saveQuickAdd(){
   const catKey = document.getElementById('quickAddCatKey').value;
   const cat = state.categories.find(c => c.key === catKey);
   const desc = document.getElementById('quickAddDesc').value.trim() || (cat ? cat.name : 'مصروف');
-  const wallet = state.wallets[0];
-  if(!wallet){ toast('أضف محفظة أولاً', 'error'); return; }
+  // استخدم المحفظة المختارة أو الأولى افتراضياً
+  const walletKey = document.getElementById('quickAddWalletSel')?.value || state.wallets[0]?.key;
+  if(!walletKey){ toast('أضف محفظة أولاً', 'error'); return; }
   const tx = {
     id: Date.now(),
     desc,
@@ -7718,7 +7812,7 @@ function saveQuickAdd(){
     currency: 'EGP',
     type: 'expense',
     cat: catKey,
-    wallet: wallet.key,
+    wallet: walletKey,
     date: todayEgypt(),
     note: ''
   };
@@ -7729,7 +7823,6 @@ function saveQuickAdd(){
   _syncAfterSave();
   closeModal('modalQuickAdd');
   refreshAll();
-  const ci = getCatInfo(catKey);
   toast(`💸 ${desc} — ${fmt(amount)} EGP`);
 }
 
@@ -7739,10 +7832,136 @@ function refreshAll(){
   updateNetWorthUI();renderWeeklyBudgetUI();
   populateFilterCat();populateTxCatSelect();
   updateTodayWidget();renderShoppingList();
+  updateDayStrip();
   // تحديث التحليلات لو الصفحة مفتوحة
   if(document.getElementById('page-analytics')?.classList.contains('active')){
     renderAnalyticsKPIs();renderIncomeSources();renderBudgetEfficiency();renderCashflowChart();
   }
+}
+
+// ══════════════════════════════════════════════════════════
+// DAY STRIP — بانر إحصائيات اليوم السريع
+// ══════════════════════════════════════════════════════════
+function updateDayStrip(){
+  const today = todayEgypt();
+  const todayTxs = state.transactions.filter(t => t.date === today);
+  const todaySpent = todayTxs.filter(t=>t.type==='expense').reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+
+  // رصيد المحافظ المصرية بس (EGP فقط)
+  const egpBalance = state.wallets.filter(w=>w.currency==='EGP').reduce((s,w)=>s+w.balance,0);
+
+  // باقي الأسبوع
+  const ws = state.weeklyBudgets||[];
+  const curW = ws.find(w=>w.start<=today&&w.end>=today);
+  let weekLeftTxt = '—';
+  let weekSubTxt = 'ما فيش ميزانية أسبوع';
+  if(curW){
+    const spent = getSpentBetween?.(curW.start, curW.end) ?? 0;
+    const limit = (curW.limit||0) + (curW.carryover||0);
+    const left = limit - spent;
+    weekLeftTxt = fmt(Math.max(left,0));
+    weekSubTxt = left < 0 ? '⚠ تجاوزت الميزانية' : `من ${fmt(limit)} EGP`;
+  }
+
+  const dsSpent = document.getElementById('dsSpent');
+  const dsBalance = document.getElementById('dsBalance');
+  const dsWeekLeft = document.getElementById('dsWeekLeft');
+  const dsTxCount = document.getElementById('dsTxCount');
+  const dsWeekSub = document.getElementById('dsWeekSub');
+  if(dsSpent) dsSpent.textContent = fmt(todaySpent);
+  if(dsBalance) dsBalance.textContent = fmt(egpBalance);
+  if(dsWeekLeft){ dsWeekLeft.textContent = weekLeftTxt; dsWeekLeft.style.color = weekLeftTxt==='—'||parseFloat(weekLeftTxt.replace(/,/g,''))>0?'var(--blue)':'var(--red)'; }
+  if(dsTxCount) dsTxCount.textContent = `${todayTxs.length} معاملة اليوم`;
+  if(dsWeekSub) dsWeekSub.textContent = weekSubTxt;
+}
+
+// ══════════════════════════════════════════════════════════
+// SUPER QUICK ADD — Bottom Sheet FAB
+// ══════════════════════════════════════════════════════════
+function openSuperQuickAdd(){
+  // تعبئة المحافظ
+  const walSel = document.getElementById('sqWallet');
+  if(walSel){
+    walSel.innerHTML = state.wallets.map(w=>`<option value="${w.key}">${w.icon||'🏦'} ${w.name} (${fmt(w.balance)})</option>`).join('');
+  }
+  // تعبئة الفئات (أكثر 6 استخداماً)
+  const mk = getCurrentMonthKey();
+  const usageCount = {};
+  getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{ usageCount[t.cat]=(usageCount[t.cat]||0)+1; });
+  const sorted = [...state.categories].sort((a,b)=>(usageCount[b.key]||0)-(usageCount[a.key]||0));
+  const top = sorted.slice(0,6);
+  const grid = document.getElementById('sqCatGrid');
+  if(grid){
+    if(!top.length){
+      grid.innerHTML='<span style="font-size:12px;color:var(--text-3)">أضف فئات من الإعدادات أولاً</span>';
+    } else {
+      // اختر أول فئة تلقائياً
+      document.getElementById('sqCatKey').value = top[0].key;
+      const ci0 = getCatInfo(top[0].key);
+      document.getElementById('sqCatDisplay').textContent = top[0].name;
+      grid.innerHTML = top.map(cat=>`
+        <button onclick="sqSelectCat('${cat.key}')" id="sqcb_${cat.key}"
+          style="padding:6px 11px;border-radius:var(--r-md);font-size:12px;font-weight:600;cursor:pointer;
+          border:1.5px solid ${cat.color}40;background:${cat.color}15;color:${cat.color};
+          transition:all .15s;-webkit-tap-highlight-color:transparent;font-family:'Tajawal',sans-serif">
+          <i class="ti ${cat.icon||'ti-circle'}" style="font-size:12px"></i> ${cat.name}
+        </button>`).join('');
+      // هايلايت أول فئة
+      const firstBtn = document.getElementById('sqcb_'+top[0].key);
+      if(firstBtn){ firstBtn.style.borderColor=top[0].color; firstBtn.style.background=top[0].color+'30'; }
+    }
+  }
+  // reset
+  document.getElementById('sqAmount').value='';
+  document.getElementById('sqDesc').value='';
+  document.getElementById('sqAmount').style.borderColor='var(--border-med)';
+  // show
+  document.getElementById('sqOverlay').classList.add('show');
+  setTimeout(()=>document.getElementById('sqAmount').focus(),200);
+}
+
+function sqSelectCat(key){
+  document.getElementById('sqCatKey').value = key;
+  const cat = state.categories.find(c=>c.key===key);
+  document.getElementById('sqCatDisplay').textContent = cat ? cat.name : key;
+  // هايلايت الزر المختار
+  document.querySelectorAll('[id^="sqcb_"]').forEach(btn=>{
+    const btnKey = btn.id.replace('sqcb_','');
+    const bc = state.categories.find(c=>c.key===btnKey);
+    if(!bc) return;
+    if(btnKey===key){
+      btn.style.borderColor=bc.color; btn.style.background=bc.color+'30';
+    } else {
+      btn.style.borderColor=bc.color+'40'; btn.style.background=bc.color+'15';
+    }
+  });
+}
+
+function closeSuperQuickAdd(){
+  document.getElementById('sqOverlay').classList.remove('show');
+}
+
+function saveSuperQuickAdd(){
+  const amount = parseFloat(document.getElementById('sqAmount').value);
+  if(!amount||amount<=0){ toast('أدخل المبلغ أولاً','error'); document.getElementById('sqAmount').focus(); return; }
+  const catKey = document.getElementById('sqCatKey').value;
+  if(!catKey){ toast('اختر الفئة أولاً','info'); return; }
+  const cat = state.categories.find(c=>c.key===catKey);
+  const desc = document.getElementById('sqDesc').value.trim() || (cat?cat.name:'مصروف');
+  const walletKey = document.getElementById('sqWallet').value;
+  if(!walletKey){ toast('أضف محفظة أولاً','error'); return; }
+  const tx = {
+    id: Date.now(), desc, amount, currency:'EGP',
+    type:'expense', cat:catKey, wallet:walletKey,
+    date:todayEgypt(), note:''
+  };
+  const ok = applyTransaction(tx);
+  if(ok===false) return;
+  state.transactions.unshift(tx);
+  saveState(); _syncAfterSave();
+  closeSuperQuickAdd();
+  refreshAll();
+  toast(`💸 ${desc} — ${fmt(amount)} EGP`);
 }
 
 function populateMonthFilter(){
@@ -7762,6 +7981,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderShoppingList();checkDueShoppingItems();
   populateTxCatSelect();populateFilterCat();updateNetWorthUI();renderWeeklyBudgetUI();
   updateTodayWidget(); // ويدجت اليوم
+  updateDayStrip(); // بانر إحصائيات اليوم
 
   // Save chart ref for tab switching
   const mainChartInst=Chart.getChart('chartMonthly');if(mainChartInst)state.charts.main=mainChartInst;
@@ -7785,7 +8005,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   _checkAndApplyRecurring();
 
   // تحديث ويدجت اليوم كل دقيقة
-  setInterval(updateTodayWidget, 60000);
+  setInterval(()=>{ updateTodayWidget(); updateDayStrip(); }, 60000);
 });
 
 // ── كشف الجهاز الجديد ──
@@ -8057,6 +8277,58 @@ function renderWeeklyReport(){
 // ══════════════════════════════════════════════════════════
 
 </script>
+<!-- ═══ FAB — زر عائم لإضافة مصروف سريع ═══ -->
+<button class="fab" onclick="openSuperQuickAdd()" title="إضافة مصروف سريع" aria-label="إضافة مصروف سريع">
+  <i class="ti ti-plus" style="font-size:26px"></i>
+</button>
+
+<!-- ═══ SUPER QUICK ADD BOTTOM SHEET ═══ -->
+<div class="sqmodal-overlay" id="sqOverlay" onclick="if(event.target===this)closeSuperQuickAdd()">
+  <div class="sqmodal" id="sqModal">
+    <div class="sqmodal-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:16px;font-weight:800;color:var(--text-1)">💸 إضافة مصروف سريع</div>
+      <button class="btn btn-ghost btn-icon btn-sm" onclick="closeSuperQuickAdd()"><i class="ti ti-x"></i></button>
+    </div>
+    <!-- المبلغ -->
+    <input type="number" id="sqAmount" inputmode="decimal" placeholder="0"
+      style="width:100%;padding:16px;font-size:32px;font-weight:900;font-family:'Space Grotesk',monospace;
+      background:var(--bg-2);border:2px solid var(--border-med);border-radius:var(--r-lg);
+      color:var(--text-1);outline:none;text-align:center;margin-bottom:10px;direction:ltr"
+      oninput="this.style.borderColor=this.value?'var(--purple)':'var(--border-med)'"
+      onkeydown="if(event.key==='Enter')document.getElementById('sqDesc').focus()">
+    <!-- الوصف -->
+    <input type="text" id="sqDesc" placeholder="الوصف (مثال: فطار، أجرة...)"
+      style="width:100%;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border-med);
+      border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:12px;font-size:14px;transition:border-color .2s"
+      onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border-med)'"
+      onkeydown="if(event.key==='Enter')saveSuperQuickAdd()">
+    <!-- الفئات السريعة -->
+    <div id="sqCatGrid" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px"></div>
+    <!-- الفئة المختارة + المحفظة -->
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:8px 12px">
+        <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:3px">الفئة</div>
+        <div id="sqCatDisplay" style="font-size:13px;font-weight:700;color:var(--text-1)">— اختر من فوق —</div>
+      </div>
+      <div style="flex:1;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:8px 12px">
+        <div style="font-size:9.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:3px">المحفظة</div>
+        <select id="sqWallet" style="background:transparent;border:none;color:var(--text-1);font-size:13px;font-weight:700;outline:none;width:100%;font-family:'Tajawal',sans-serif"></select>
+      </div>
+    </div>
+    <input type="hidden" id="sqCatKey">
+    <!-- حفظ -->
+    <button onclick="saveSuperQuickAdd()"
+      style="width:100%;padding:14px;font-size:15px;font-weight:700;
+      background:linear-gradient(135deg,#9333ea,#6366f1);color:#fff;border:none;
+      border-radius:var(--r-lg);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+      box-shadow:0 4px 18px rgba(147,51,234,.4);transition:all .2s;font-family:'Tajawal',sans-serif;
+      -webkit-tap-highlight-color:transparent">
+      <i class="ti ti-check" style="font-size:18px"></i> حفظ المصروف
+    </button>
+  </div>
+</div>
+
 <!-- ═══ مودال إعدادات الوفر ═══ -->
 <div class="modal-overlay" id="modalCarryover">
   <div class="modal" style="width:460px">
