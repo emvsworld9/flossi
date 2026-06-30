@@ -945,7 +945,6 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   width:38px;height:4px;border-radius:99px;
   background:var(--border-med);margin:0 auto 18px;
 }
-#sqCatGrid{max-height:152px;overflow-y:auto;padding:2px 1px}
 
 /* ── DAY SUMMARY STRIP (فوق الداشبورد) ── */
 .day-strip{
@@ -1094,7 +1093,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <div class="form-grid">
     <div class="form-group">
       <label class="form-label">المبلغ</label>
-      <input type="number" id="txAmount" placeholder="0.00" min="0" step="0.01">
+      <input type="number" inputmode="decimal" id="txAmount" placeholder="0.00" min="0" step="0.01">
     </div>
     <div class="form-group">
       <label class="form-label">العملة</label>
@@ -1156,7 +1155,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <input type="hidden" id="debtEditIdx"><input type="hidden" id="debtEditDir">
   <div class="form-group"><label class="form-label">اسم الشخص</label><input type="text" id="debtName" placeholder="اسم الشخص"></div>
   <div class="form-grid">
-    <div class="form-group"><label class="form-label">المبلغ</label><input type="number" id="debtAmount" placeholder="0"></div>
+    <div class="form-group"><label class="form-label">المبلغ</label><input type="number" inputmode="decimal" id="debtAmount" placeholder="0"></div>
     <div class="form-group"><label class="form-label">العملة</label><select id="debtCurr"><option>EGP</option><option>USD</option></select></div>
   </div>
   <div class="form-grid">
@@ -1188,7 +1187,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   </div>
   <div class="form-group">
     <label class="form-label">المبلغ اللي اتسدد</label>
-    <input type="number" id="partialAmount" placeholder="0" oninput="updatePartialPreview()">
+    <input type="number" inputmode="decimal" id="partialAmount" placeholder="0" oninput="updatePartialPreview()">
   </div>
   <div id="partialPreview" style="display:none;background:var(--teal-dim);border:1px solid var(--teal);border-radius:var(--r-md);padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--teal)">
     <i class="ti ti-arrow-right"></i> المتبقي: <span id="partialRemaining" style="font-weight:800"></span>
@@ -1207,8 +1206,8 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <input type="hidden" id="goalEditIdx">
   <div class="form-group"><label class="form-label">اسم الهدف</label><input type="text" id="goalName" placeholder="مثال: سيارة، سفرية، شقة..."></div>
   <div class="form-grid">
-    <div class="form-group"><label class="form-label">المبلغ المطلوب</label><input type="number" id="goalTarget" placeholder="0"></div>
-    <div class="form-group"><label class="form-label">المدخر حالياً</label><input type="number" id="goalSaved" placeholder="0"></div>
+    <div class="form-group"><label class="form-label">المبلغ المطلوب</label><input type="number" inputmode="decimal" id="goalTarget" placeholder="0"></div>
+    <div class="form-group"><label class="form-label">المدخر حالياً</label><input type="number" inputmode="decimal" id="goalSaved" placeholder="0"></div>
   </div>
   <div class="form-grid">
     <div class="form-group"><label class="form-label">الأيقونة</label><select id="goalIcon"><option value="ti-car">🚗 سيارة</option><option value="ti-plane">✈️ سفر</option><option value="ti-home">🏠 شقة</option><option value="ti-device-laptop">💻 لاب توب</option><option value="ti-heart">❤️ زواج</option><option value="ti-shield">🛡️ طوارئ</option><option value="ti-trending-up">📈 استثمار</option><option value="ti-star">⭐ أخرى</option></select></div>
@@ -1248,7 +1247,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   </div>
   <div class="form-group">
     <label class="form-label">المبلغ المدخر</label>
-    <input type="number" id="addSavedAmount" placeholder="0" min="1" step="100" style="font-size:20px;font-weight:700">
+    <input type="number" inputmode="decimal" id="addSavedAmount" placeholder="0" min="1" step="100" style="font-size:20px;font-weight:700">
   </div>
   <div class="form-group">
     <label class="form-label">📌 علّقه من محفظة (اختياري)</label>
@@ -1279,7 +1278,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   </div>
   <div class="form-group">
     <label>السعر التقريبي (اختياري)</label>
-    <input type="number" id="shopPrice" class="form-control" placeholder="0">
+    <input type="number" inputmode="decimal" id="shopPrice" class="form-control" placeholder="0">
   </div>
   <div class="form-group">
     <label>ملاحظة (اختياري)</label>
@@ -1298,7 +1297,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <input type="hidden" id="shopBuyId">
   <div class="form-group">
     <label>السعر</label>
-    <input type="number" id="shopBuyAmount" class="form-control" placeholder="0">
+    <input type="number" inputmode="decimal" id="shopBuyAmount" class="form-control" placeholder="0">
   </div>
   <div class="form-group">
     <label>العملة</label>
@@ -1393,14 +1392,14 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
     <div style="font-size:12.5px;font-weight:700;color:var(--text-1);margin-bottom:12px">➕ إضافة مصروف متكرر</div>
     <div class="form-grid">
       <div class="form-group"><label class="form-label">الوصف</label><input type="text" id="recDesc" placeholder="مثال: إيجار، Netflix..."></div>
-      <div class="form-group"><label class="form-label">المبلغ (EGP)</label><input type="number" id="recAmount" placeholder="0" min="0"></div>
+      <div class="form-group"><label class="form-label">المبلغ (EGP)</label><input type="number" inputmode="decimal" id="recAmount" placeholder="0" min="0"></div>
     </div>
     <div class="form-grid">
       <div class="form-group"><label class="form-label">الفئة</label><select id="recCat"></select></div>
       <div class="form-group"><label class="form-label">المحفظة</label><select id="recWallet"></select></div>
     </div>
     <div class="form-group"><label class="form-label">يوم التكرار (من الشهر)</label>
-      <input type="number" id="recDay" placeholder="1" min="1" max="28" value="1">
+      <input type="number" inputmode="decimal" id="recDay" placeholder="1" min="1" max="28" value="1">
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button class="btn btn-primary btn-sm" onclick="saveRecurring()"><i class="ti ti-check"></i> إضافة</button>
@@ -1445,12 +1444,12 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <!-- وضع الأسهم -->
   <div id="invSharesMode">
     <div class="form-grid">
-      <div class="form-group"><label class="form-label">🔢 عدد الأسهم / الوحدات</label><input type="number" id="invShares" placeholder="0" min="0" step="any" oninput="invCalcFromShares()"></div>
-      <div class="form-group"><label class="form-label">💵 سعر الشراء للوحدة</label><input type="number" id="invPricePerShare" placeholder="0.00" min="0" step="any" oninput="invCalcFromShares()"></div>
+      <div class="form-group"><label class="form-label">🔢 عدد الأسهم / الوحدات</label><input type="number" inputmode="decimal" id="invShares" placeholder="0" min="0" step="any" oninput="invCalcFromShares()"></div>
+      <div class="form-group"><label class="form-label">💵 سعر الشراء للوحدة</label><input type="number" inputmode="decimal" id="invPricePerShare" placeholder="0.00" min="0" step="any" oninput="invCalcFromShares()"></div>
     </div>
     <div class="form-group">
       <label class="form-label">📈 السعر الحالي للوحدة</label>
-      <input type="number" id="invCurrentPrice" placeholder="0.00" min="0" step="any" oninput="invCalcFromShares()">
+      <input type="number" inputmode="decimal" id="invCurrentPrice" placeholder="0.00" min="0" step="any" oninput="invCalcFromShares()">
     </div>
     <div id="invSharesPreview" style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;font-size:12.5px;color:var(--text-2);margin-bottom:8px;display:none">
       <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>التكلفة الكلية</span><strong id="invSharesCost" style="color:var(--text-1);font-family:'Space Grotesk',monospace">—</strong></div>
@@ -1461,14 +1460,14 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <!-- وضع المبلغ الكلي -->
   <div id="invTotalMode" style="display:none">
     <div class="form-grid">
-      <div class="form-group"><label class="form-label">💸 سعر الشراء (تكلفتك)</label><input type="number" id="invCost" placeholder="0" min="0"></div>
-      <div class="form-group"><label class="form-label">📈 القيمة الحالية</label><input type="number" id="invValue" placeholder="0" oninput="invSyncFromValue()"></div>
+      <div class="form-group"><label class="form-label">💸 سعر الشراء (تكلفتك)</label><input type="number" inputmode="decimal" id="invCost" placeholder="0" min="0"></div>
+      <div class="form-group"><label class="form-label">📈 القيمة الحالية</label><input type="number" inputmode="decimal" id="invValue" placeholder="0" oninput="invSyncFromValue()"></div>
     </div>
     <!-- حقل نسبة التغيير — يظهر فقط في التعديل -->
     <div class="form-group" id="invPctGroup" style="display:none">
       <label class="form-label">🔄 تحديث بالنسبة <span style="color:var(--text-3);font-weight:400">(اختياري)</span></label>
       <div style="display:flex;gap:8px;align-items:center">
-        <input type="number" id="invChangePct" placeholder="مثال: +12 أو -5" step="0.1"
+        <input type="number" inputmode="decimal" id="invChangePct" placeholder="مثال: +12 أو -5" step="0.1"
           style="flex:1;padding:10px 13px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none"
           oninput="invSyncFromPct()">
         <span style="color:var(--text-3);font-size:13px;white-space:nowrap">%</span>
@@ -1504,7 +1503,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <div class="inv-bulk-wrap">
     <div class="inv-bulk-label">📊 تحديث كل المحفظة بنسبة واحدة</div>
     <div class="inv-bulk-pct-input">
-      <input type="number" id="bulkAllPct" placeholder="مثال: +12.5 أو -3.2" step="0.01" oninput="previewBulkAll()">
+      <input type="number" inputmode="decimal" id="bulkAllPct" placeholder="مثال: +12.5 أو -3.2" step="0.01" oninput="previewBulkAll()">
       <span style="color:var(--text-3);font-size:14px;white-space:nowrap">%</span>
     </div>
     <div class="inv-bulk-preview" id="bulkAllPreview"></div>
@@ -1530,7 +1529,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <input type="hidden" id="walletEditKey">
   <div class="form-group"><label class="form-label">اسم المحفظة</label><input type="text" id="walletName" placeholder="مثال: بنك مصر، InstaPay..."></div>
   <div class="form-grid">
-    <div class="form-group"><label class="form-label">الرصيد الحالي</label><input type="number" id="walletBalance" placeholder="0"></div>
+    <div class="form-group"><label class="form-label">الرصيد الحالي</label><input type="number" inputmode="decimal" id="walletBalance" placeholder="0"></div>
     <div class="form-group"><label class="form-label">العملة</label><select id="walletCurr"><option>EGP</option><option>USD</option></select></div>
   </div>
   <div class="form-grid">
@@ -1551,8 +1550,8 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
   <input type="hidden" id="budgetEditIdx">
   <div class="form-group"><label class="form-label">الفئة</label><select id="budgetCat" style="width:100%;padding:9px 12px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;font-size:14px"></select></div>
   <div class="form-grid">
-    <div class="form-group"><label class="form-label">الحد الشهري</label><input type="number" id="budgetLimit" placeholder="0"></div>
-    <div class="form-group"><label class="form-label">المُنفق حتى الآن</label><input type="number" id="budgetSpent" placeholder="0"></div>
+    <div class="form-group"><label class="form-label">الحد الشهري</label><input type="number" inputmode="decimal" id="budgetLimit" placeholder="0"></div>
+    <div class="form-group"><label class="form-label">المُنفق حتى الآن</label><input type="number" inputmode="decimal" id="budgetSpent" placeholder="0"></div>
   </div>
   <div class="form-grid" style="display:none">
     <div class="form-group"><label class="form-label">الأيقونة</label><select id="budgetIcon"><option value="ti-shopping-cart">🛒 تسوق</option><option value="ti-car">🚗 مواصلات</option><option value="ti-bolt">💡 فواتير</option><option value="ti-heart">❤️ صحة</option><option value="ti-device-tv">🎬 ترفيه</option><option value="ti-book">📚 تعليم</option><option value="ti-home">🏠 إيجار</option><option value="ti-plane">✈️ سفر</option><option value="ti-gift">🎁 هدايا</option><option value="ti-phone">📱 اتصالات</option><option value="ti-circle">⚪ عام</option></select></div>
@@ -1569,7 +1568,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 <div class="modal-overlay" id="modalRates">
 <div class="modal" style="width:360px">
   <div class="modal-title"><i class="ti ti-currency-dollar" style="color:var(--teal)"></i> تحديث أسعار الصرف</div>
-  <div class="form-group"><label class="form-label">USD / EGP</label><input type="number" id="rateUSDInput" placeholder="49.15" step="0.01"></div>
+  <div class="form-group"><label class="form-label">USD / EGP</label><input type="number" inputmode="decimal" id="rateUSDInput" placeholder="49.15" step="0.01"></div>
   <div class="modal-footer">
     <button class="btn" onclick="closeModal('modalRates')">إلغاء</button>
     <button class="btn btn-primary" onclick="saveRates()"><i class="ti ti-check"></i> تحديث</button>
@@ -1656,6 +1655,176 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 </div>
 </div>
 
+<!-- ══════════════ MONTHLY WRAPPED MODAL ══════════════ -->
+<div class="modal-overlay" id="modalWrapped" style="backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+<div class="modal" style="max-width:520px;width:100%;background:linear-gradient(160deg,#1a0a35 0%,#0f1a32 50%,#0a1f1a 100%);border-color:rgba(192,132,252,.35);padding:0;overflow:hidden;border-radius:24px">
+  <!-- animated bg -->
+  <div id="wrappedBg" style="position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+    <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(192,132,252,.25),transparent 70%);top:-80px;right:-80px;animation:wrappedFloat 6s ease-in-out infinite"></div>
+    <div style="position:absolute;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(0,245,196,.15),transparent 70%);bottom:-60px;left:-40px;animation:wrappedFloat 8s ease-in-out infinite reverse"></div>
+    <div style="position:absolute;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(255,114,200,.12),transparent 70%);top:40%;left:30%;animation:wrappedFloat 5s ease-in-out infinite 2s"></div>
+  </div>
+  <style>
+    @keyframes wrappedFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}}
+    @keyframes wrappedFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes wrappedPop{0%{transform:scale(0.5);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+    @keyframes wrappedSlide{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
+    .wrapped-step{position:relative;z-index:1;padding:32px 28px;display:none;flex-direction:column;align-items:center;text-align:center;min-height:380px;justify-content:center}
+    .wrapped-step.active{display:flex;animation:wrappedFadeIn .5s ease forwards}
+    .wrapped-emoji{font-size:64px;animation:wrappedPop .6s cubic-bezier(.34,1.56,.64,1) forwards;display:block;margin-bottom:16px}
+    .wrapped-title{font-size:28px;font-weight:900;color:#fff;line-height:1.2;margin-bottom:10px;letter-spacing:-.5px}
+    .wrapped-sub{font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;max-width:340px}
+    .wrapped-big-num{font-size:52px;font-weight:900;font-family:'Space Grotesk',monospace;background:linear-gradient(135deg,var(--purple),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin:12px 0}
+    .wrapped-cat-row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.07);border-radius:14px;padding:12px 16px;width:100%;margin:5px 0;animation:wrappedSlide .4s ease forwards;opacity:0}
+    .wrapped-progress-bar{height:6px;border-radius:99px;background:rgba(255,255,255,.15);margin-top:6px;overflow:hidden;flex:1}
+    .wrapped-progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--purple),var(--teal))}
+    .wrapped-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px 20px;position:relative;z-index:1;border-top:1px solid rgba(255,255,255,.08)}
+    .wrapped-dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .3s;cursor:pointer}
+    .wrapped-dot.active{background:var(--purple);width:20px;border-radius:99px}
+    .wrapped-share-btn{position:absolute;top:16px;left:16px;z-index:10;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:7px 12px;color:rgba(255,255,255,.7);font-size:12px;cursor:pointer;font-family:'Tajawal',sans-serif;transition:all .2s}
+    .wrapped-share-btn:hover{background:rgba(255,255,255,.15);color:#fff}
+    .wrapped-close-btn{position:absolute;top:16px;right:16px;z-index:10;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;transition:all .2s}
+    .wrapped-close-btn:hover{background:rgba(255,255,255,.2);color:#fff}
+    .wrapped-month-tag{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.12em;margin-bottom:20px}
+  </style>
+  <!-- close + share -->
+  <div onclick="closeModal('modalWrapped')" class="wrapped-close-btn"><i class="ti ti-x" style="font-size:16px"></i></div>
+  <!-- steps -->
+  <div id="wrappedSteps"></div>
+  <!-- nav -->
+  <div class="wrapped-nav">
+    <button class="btn btn-sm" id="wrappedPrev" onclick="wrappedNav(-1)" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.7)"><i class="ti ti-arrow-right"></i></button>
+    <div id="wrappedDots" style="display:flex;gap:6px"></div>
+    <button class="btn btn-sm" id="wrappedNext" onclick="wrappedNav(1)" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.7)"><i class="ti ti-arrow-left"></i></button>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ GLOBAL SUMMARY MODAL ══════════════ -->
+<div class="modal-overlay" id="modalGlobalSummary">
+<div class="modal" style="width:560px;max-width:100%;padding:0;overflow:hidden;border:1px solid rgba(192,132,252,.3)">
+
+  <!-- هيدر المودال المحسّن -->
+  <div style="background:linear-gradient(135deg,#1a0f35 0%,#0f1a2e 100%);padding:18px 22px 16px;position:relative;overflow:hidden;border-bottom:1px solid rgba(192,132,252,.2)">
+    <div style="position:absolute;top:-30px;right:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(192,132,252,.15),transparent 70%);pointer-events:none"></div>
+    <div style="position:absolute;bottom:-20px;left:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(0,245,196,.1),transparent 70%);pointer-events:none"></div>
+
+    <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:44px;height:44px;border-radius:var(--r-lg);background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(192,132,252,.4);flex-shrink:0">
+          <i class="ti ti-report-analytics" style="font-size:22px;color:#fff"></i>
+        </div>
+        <div>
+          <div style="font-size:17px;font-weight:800;color:var(--text-1)">الملخص العام</div>
+          <div id="gsSyncTime" style="font-size:11px;color:var(--text-3);margin-top:1px"></div>
+        </div>
+      </div>
+      <button onclick="closeModal('modalGlobalSummary')" style="width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all .2s" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- المحتوى القابل للتمرير -->
+  <div style="padding:18px 22px 20px;overflow-y:auto;max-height:calc(88vh - 130px)">
+
+    <!-- صافي الثروة الحقيقي -->
+    <div id="gsNetWorthBar" style="background:linear-gradient(135deg,rgba(0,245,196,.1),rgba(192,132,252,.08));border:1px solid rgba(0,245,196,.3);border-radius:var(--r-xl);padding:16px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px">
+      <div>
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;display:flex;align-items:center;gap:5px">
+          <i class="ti ti-diamond" style="font-size:12px;color:var(--teal)"></i> صافي الثروة الحقيقي
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px">
+          <div id="gsNetWorth" style="font-size:32px;font-weight:900;font-family:'Space Grotesk',monospace;color:var(--teal);line-height:1">—</div>
+          <div style="font-size:13px;color:var(--text-3)">EGP</div>
+        </div>
+        <div id="gsNetWorthNote" style="font-size:11px;color:var(--text-3);margin-top:4px">أصول − ديون</div>
+      </div>
+      <div style="width:56px;height:56px;border-radius:50%;background:rgba(0,245,196,.12);border:2px solid rgba(0,245,196,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i class="ti ti-currency-pound" style="font-size:26px;color:var(--teal)"></i>
+      </div>
+    </div>
+
+    <!-- شبكة الأرقام الرئيسية -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px">
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-top:3px solid var(--blue);border-radius:var(--r-lg);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:4px"><i class="ti ti-building-bank" style="font-size:11px"></i> الأصول</div>
+        <div id="gsTotalAssets" style="font-size:19px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--blue);line-height:1">—</div>
+        <div style="font-size:10px;color:var(--text-3);margin-top:3px">EGP</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-top:3px solid var(--red);border-radius:var(--r-lg);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:4px"><i class="ti ti-trending-down" style="font-size:11px"></i> مصاريف الشهر</div>
+        <div id="gsMonthExp" style="font-size:19px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--red);line-height:1">—</div>
+        <div style="font-size:10px;color:var(--text-3);margin-top:3px">EGP</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-top:3px solid var(--green);border-radius:var(--r-lg);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:4px"><i class="ti ti-trending-up" style="font-size:11px"></i> دخل الشهر</div>
+        <div id="gsMonthInc" style="font-size:19px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--green);line-height:1">—</div>
+        <div style="font-size:10px;color:var(--text-3);margin-top:3px">EGP</div>
+      </div>
+    </div>
+
+    <!-- ميزانية الأسبوع -->
+    <div id="gsWeekBudget" style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 16px;margin-bottom:14px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:11px;font-weight:700;color:var(--text-2);display:flex;align-items:center;gap:6px"><i class="ti ti-calendar-week" style="font-size:14px;color:var(--teal)"></i> ميزانية الأسبوع الحالي</div>
+        <div id="gsWeekPct" style="font-size:12px;font-weight:800;color:var(--teal)">—</div>
+      </div>
+      <div class="progress-track" style="height:8px;border-radius:99px">
+        <div class="progress-fill" id="gsWeekBar" style="width:0%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:99px"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-3);margin-top:7px">
+        <span>صرفت: <strong id="gsWeekSpent" style="color:var(--red)">—</strong></span>
+        <span>متبقي: <strong id="gsWeekLeft" style="color:var(--green)">—</strong></span>
+      </div>
+    </div>
+
+    <!-- صحة مالية + تنبيهات الديون -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:4px"><i class="ti ti-piggy-bank" style="font-size:12px;color:var(--purple)"></i> نسبة الادخار</div>
+        <div id="gsSavingRate" style="font-size:22px;font-weight:800;font-family:'Space Grotesk',monospace;color:var(--purple);line-height:1">—<span style="font-size:14px;color:var(--text-3)">%</span></div>
+        <div id="gsSavingNote" style="font-size:10px;color:var(--text-3);margin-top:5px">من الدخل</div>
+      </div>
+      <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px">
+        <div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;display:flex;align-items:center;gap:4px"><i class="ti ti-alert-circle" style="font-size:12px;color:var(--amber)"></i> تنبيهات الديون</div>
+        <div id="gsDebtAlerts" style="font-size:13px;font-weight:600;color:var(--text-1)">جاري التحميل...</div>
+      </div>
+    </div>
+
+    <!-- أعلى فئات الشهر -->
+    <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 16px;margin-bottom:14px">
+      <div style="font-size:10.5px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:6px">
+        <span style="display:flex;align-items:center;gap:6px"><i class="ti ti-trophy" style="font-size:14px;color:var(--gold)"></i> مصاريف الفئات</span>
+        <button id="gsTopCatsToggle" onclick="gsToggleAllCats()" style="font-size:10px;font-weight:700;font-family:Tajawal,sans-serif;background:var(--bg-3);border:1px solid var(--border-med);border-radius:var(--r-sm);color:var(--text-2);cursor:pointer;padding:3px 9px;transition:all .2s">كل الفئات</button>
+      </div>
+      <div id="gsTopCats"></div>
+    </div>
+
+    <!-- تنبيهات وملاحظات ذكية -->
+    <div id="gsSmartAlerts"></div>
+
+    <!-- ملخص مخصص داخل المودال -->
+    <div id="gsCustomSummaryArea"></div>
+
+  </div>
+
+  <!-- فوتر الأكشن -->
+  <div style="padding:12px 22px 16px;border-top:1px solid var(--border);background:var(--bg-1);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <button class="btn btn-sm" style="background:var(--purple-dim);border-color:rgba(192,132,252,.4);color:var(--purple);flex:1;min-width:120px;justify-content:center" onclick="openInlineCustomSummary()">
+      <i class="ti ti-calendar-stats" style="font-size:14px"></i> ملخص مخصص
+    </button>
+    <button class="btn btn-sm btn-teal" style="flex:1;min-width:100px;justify-content:center" onclick="closeModal('modalGlobalSummary');openHowMuch()">
+      <i class="ti ti-wallet" style="font-size:14px"></i> كم معايا؟
+    </button>
+    <button class="btn btn-sm" style="background:var(--amber-dim);border-color:var(--amber);color:var(--amber);flex:1;min-width:80px;justify-content:center" onclick="closeModal('modalGlobalSummary');showPage('debts',document.querySelectorAll('.nav-item')[4])">
+      <i class="ti ti-users" style="font-size:14px"></i> الديون
+    </button>
+  </div>
+
+</div>
+</div>
+
 <!-- ══════════════ APP ══════════════ -->
 <div class="app">
   <!-- SIDEBAR -->
@@ -1707,8 +1876,8 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
         <button class="btn btn-ghost" style="position:relative" title="تحديث الأسعار" onclick="openModal('modalRates')">
           <i class="ti ti-currency-dollar" style="font-size:18px"></i>
         </button>
-        <button class="btn btn-ghost" style="position:relative" title="الإشعارات" onclick="showPage('debts',document.querySelectorAll('.nav-item')[4])">
-          <i class="ti ti-bell" style="font-size:18px"></i>
+        <button class="btn btn-ghost" id="summaryBtn" style="position:relative;background:rgba(192,132,252,.08);border-color:rgba(192,132,252,.3)" title="الملخص العام" onclick="openGlobalSummary()">
+          <i class="ti ti-report-analytics" style="font-size:18px;color:var(--purple)"></i>
           <span class="notif-dot" id="notifDot" style="display:none"></span>
         </button>
         <div id="lastSyncWrap" style="display:none;flex-direction:column;align-items:flex-end;line-height:1.3">
@@ -1777,7 +1946,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             <div class="today-progress-track">
               <div class="today-progress-fill" id="todayBar" style="width:0%;background:linear-gradient(90deg,var(--blue),var(--teal))"></div>
             </div>
-            <div style="font-size:10px;color:var(--text-3);margin-top:4px" id="todayBudgetHint">الميزانية اليومية = ميزانية الأسبوع ÷ 7</div>
+            <div style="font-size:10px;color:var(--text-3);margin-top:4px" id="todayBudgetHint">الميزانية اليومية = ميزانية الأسبوع ÷ عدد أيام الأسبوع</div>
           </div>
           <button class="btn btn-sm btn-primary" onclick="openAddTx()" style="flex-shrink:0">
             <i class="ti ti-plus"></i>
@@ -1805,6 +1974,10 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             </button>
             <button class="btn btn-sm btn-teal" onclick="openHowMuch()" title="كم معايا؟" style="white-space:nowrap">
               <i class="ti ti-wallet" style="font-size:13px"></i> <span>كم معايا؟</span>
+            </button>
+            <button class="btn btn-sm" onclick="openWrapped()" title="Wrapped الشهري 🎵" id="wrappedBtn" style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(255,114,200,.15));border-color:rgba(192,132,252,.5);color:var(--purple);white-space:nowrap;position:relative">
+              <i class="ti ti-sparkles" style="font-size:13px"></i> <span>Wrapped</span>
+              <span id="wrappedNewDot" style="display:none;position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 6px var(--pink)"></span>
             </button>
           </div>
         </div>
@@ -1967,7 +2140,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
               <option value="amount_desc">⬇ أكبر مبلغ</option>
               <option value="amount_asc">⬆ أصغر مبلغ</option>
             </select>
-            <input type="number" id="filterAmount" placeholder="بحث بالمبلغ..." class="btn btn-sm"
+            <input type="number" inputmode="decimal" id="filterAmount" placeholder="بحث بالمبلغ..." class="btn btn-sm"
               style="width:110px;text-align:center;cursor:text"
               oninput="renderExpenses()" min="0">
           </div>
@@ -2067,7 +2240,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
         </div>
         <div class="form-group">
           <label class="form-label">الميزانية (EGP)</label>
-          <input type="number" id="singleWeekLimit" placeholder="0" min="0" step="50" style="font-size:20px;font-weight:700">
+          <input type="number" inputmode="decimal" id="singleWeekLimit" placeholder="0" min="0" step="50" style="font-size:20px;font-weight:700">
         </div>
         <div id="singleWeekSpentInfo" style="display:none;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:10px 14px;margin-bottom:4px;font-size:12.5px;color:var(--text-2)"></div>
         <div class="modal-footer">
@@ -2211,19 +2384,19 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">المبلغ الأولي (EGP)</label>
-                <input type="number" id="adv-p" value="10000" min="0" step="100" oninput="calcAdvanced()" placeholder="10000">
+                <input type="number" inputmode="decimal" id="adv-p" value="10000" min="0" step="100" oninput="calcAdvanced()" placeholder="10000">
               </div>
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">نسبة الفائدة السنوية %</label>
-                <input type="number" id="adv-r" value="20" min="0" step="0.1" oninput="calcAdvanced()" placeholder="20">
+                <input type="number" inputmode="decimal" id="adv-r" value="20" min="0" step="0.1" oninput="calcAdvanced()" placeholder="20">
               </div>
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">المدة (سنوات)</label>
-                <input type="number" id="adv-y" value="3" min="1" max="50" step="1" oninput="calcAdvanced()" placeholder="3">
+                <input type="number" inputmode="decimal" id="adv-y" value="3" min="1" max="50" step="1" oninput="calcAdvanced()" placeholder="3">
               </div>
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">إضافة شهرية (EGP)</label>
-                <input type="number" id="adv-monthly" value="0" min="0" step="100" oninput="calcAdvanced()" placeholder="صفر لو مفيش">
+                <input type="number" inputmode="decimal" id="adv-monthly" value="0" min="0" step="100" oninput="calcAdvanced()" placeholder="صفر لو مفيش">
               </div>
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">تكرار الفائدة الثانوية</label>
@@ -2287,11 +2460,11 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">المبلغ الأصلي (EGP)</label>
-                <input type="number" id="day-p" value="50000" min="0" step="100" oninput="calcDaily()" placeholder="50000">
+                <input type="number" inputmode="decimal" id="day-p" value="50000" min="0" step="100" oninput="calcDaily()" placeholder="50000">
               </div>
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">نسبة الفائدة السنوية %</label>
-                <input type="number" id="day-r" value="23.5" min="0" step="0.1" oninput="calcDaily()" placeholder="23.5">
+                <input type="number" inputmode="decimal" id="day-r" value="23.5" min="0" step="0.1" oninput="calcDaily()" placeholder="23.5">
               </div>
               <div class="form-group" style="margin-bottom:0">
                 <label class="form-label">تاريخ البداية</label>
@@ -2604,19 +2777,27 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
           <div id="anomalyList" style="display:flex;flex-direction:column;gap:8px;min-height:40px"></div>
         </div>
 
-        <!-- ═══ WALLET HISTORY ═══ -->
-        <div class="card mb20">
+        <!-- ═══ AI SPENDING FORECAST ═══ -->
+        <div class="card mb20" id="forecastCard">
           <div class="card-header">
             <div>
-              <div class="card-title">🏦 تطور رصيد المحافظ</div>
-              <div class="card-subtitle">الرصيد بعد كل معاملة — مع الوقت</div>
+              <div class="card-title">🔮 توقع مصاريف — بالذكاء الاصطناعي</div>
+              <div class="card-subtitle">بناءً على آخر 3 شهور من عاداتك</div>
             </div>
-            <select class="btn btn-sm" id="walletHistorySelect" onchange="renderWalletHistory()">
-              <option value="all">كل المحافظ</option>
-            </select>
+            <div style="display:flex;align-items:center;gap:8px">
+              <select id="forecastMonthSelect" style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);color:var(--text-1);font-size:12px;padding:5px 8px;cursor:pointer;direction:rtl"></select>
+              <button class="btn btn-sm" id="forecastRefreshBtn" onclick="generateForecast()" style="background:linear-gradient(135deg,rgba(192,132,252,.2),rgba(106,180,255,.15));border-color:rgba(192,132,252,.4);color:var(--purple)">
+                <i class="ti ti-sparkles" style="font-size:13px"></i> تحليل
+              </button>
+            </div>
           </div>
-          <div class="chart-wrap" style="height:240px"><canvas id="walletHistoryChart"></canvas></div>
-          <div id="walletHistoryLegend" style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px"></div>
+          <div id="forecastBody">
+            <div style="text-align:center;padding:30px 20px;color:var(--text-3)">
+              <div style="font-size:36px;margin-bottom:10px">🔮</div>
+              <div style="font-size:13px;color:var(--text-2);margin-bottom:14px">اختر الشهر واضغط "تحليل" وسيقوم الذكاء الاصطناعي بتحليل عاداتك وتوقع مصاريفك</div>
+              <button class="btn btn-primary" onclick="generateForecast()"><i class="ti ti-sparkles"></i> ابدأ التحليل</button>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -2626,6 +2807,17 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 
       <!-- ═══ SETTINGS ═══ -->
       <div class="page" id="page-settings">
+        <div class="settings-section">
+          <div class="settings-title"><i class="ti ti-sparkles"></i> الذكاء الاصطناعي — Claude API</div>
+          <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:10px">
+            <div><div class="settings-row-info">مفتاح API</div><div class="settings-row-hint">اللي هيشغّل توقع المصاريف بالذكاء الاصطناعي — من <a href="https://console.anthropic.com" target="_blank" style="color:var(--blue)">console.anthropic.com</a></div></div>
+            <div style="display:flex;gap:8px;width:100%">
+              <input type="password" id="claudeApiKeyInput" placeholder="sk-ant-..." style="flex:1;padding:9px 13px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);outline:none;font-size:13px;direction:ltr" onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border-med)'">
+              <button class="btn btn-sm btn-primary" onclick="saveClaudeApiKey()"><i class="ti ti-check"></i> حفظ</button>
+            </div>
+            <div id="claudeApiKeyStatus" style="font-size:11.5px;color:var(--text-3)"></div>
+          </div>
+        </div>
         <div class="settings-section">
           <div class="settings-title"><i class="ti ti-user-circle"></i> الحساب الشخصي</div>
           <div class="profile-grid">
@@ -2709,6 +2901,26 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
 </div><!-- /app -->
 
 <script>
+// ══════════════════════════════════════════════════════════
+//  ICON → EMOJI MAP (fallback لو CDN الأيقونات مش شغال)
+// ══════════════════════════════════════════════════════════
+const ICON_EMOJI = {
+  'ti-shopping-cart':'🛒','ti-car':'🚗','ti-bolt':'⚡','ti-heart':'❤️',
+  'ti-device-tv':'📺','ti-book':'📚','ti-briefcase':'💼','ti-trending-up':'📈',
+  'ti-home':'🏠','ti-plane':'✈️','ti-shirt':'👕','ti-coffee':'☕',
+  'ti-tool':'🔧','ti-gift':'🎁','ti-phone':'📱','ti-circle':'⚪',
+  'ti-coin':'🪙','ti-piggy-bank':'🐷','ti-wallet':'👛','ti-receipt':'🧾',
+  'ti-box':'📦','ti-package':'📦','ti-chart-line':'📊','ti-currency-bitcoin':'₿',
+  'ti-building-bank':'🏦','ti-scale':'⚖️','ti-target':'🎯','ti-star':'⭐',
+  'ti-flag':'🚩','ti-currency-dollar':'💵','ti-coins':'🪙','ti-calendar-week':'📅',
+  'ti-arrow-up-right':'↗️','ti-arrow-down-left':'↙️','ti-sparkles':'✨',
+  'ti-arrows-exchange':'↔️','ti-refresh':'🔄','ti-check':'✅',
+  'ti-device-laptop':'💻','ti-shield':'🛡️','ti-moon':'🌙',
+  'ti-lock':'🔒','ti-user':'👤','ti-users':'👥','ti-settings':'⚙️',
+  'ti-alert-triangle':'⚠️','ti-info-circle':'ℹ️','ti-bell':'🔔',
+};
+function getIconEmoji(iconClass){ return ICON_EMOJI[iconClass] || '💸'; }
+
 // ══════════════════════════════════════════════════════════
 //  STATE
 // ══════════════════════════════════════════════════════════
@@ -3413,9 +3625,35 @@ function showPage(id,el){
 }
 
 // ── MODALS ──
-function openModal(id){document.getElementById(id).classList.add('show')}
+function openModal(id){
+  const m=document.getElementById(id);
+  m.classList.add('show');
+  // ✅ تحسين: فوكس أوتوماتيك على أول حقل قابل للكتابة في المودال (أسهل وأسرع في الاستخدام)
+  setTimeout(()=>{
+    const firstField=m.querySelector('input:not([type=hidden]):not([disabled]), select:not([disabled]), textarea:not([disabled])');
+    if(firstField) firstField.focus({preventScroll:true});
+  },80);
+}
 function closeModal(id){document.getElementById(id).classList.remove('show')}
 document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('show')});});
+
+// ✅ تحسين شامل: Esc يقفل أي مودال مفتوح، Enter يضغط على زرار الحفظ/التأكيد
+document.addEventListener('keydown', function(e){
+  const openModals=[...document.querySelectorAll('.modal-overlay.show')];
+  if(!openModals.length) return;
+  const top=openModals[openModals.length-1];
+  if(e.key==='Escape'){
+    e.preventDefault();
+    top.classList.remove('show');
+    if(top.id==='modalConfirm') confirmCb=null;
+  } else if(e.key==='Enter'){
+    const tag=(e.target.tagName||'').toLowerCase();
+    if(tag==='textarea') return; // سيب الـ Enter يعمل سطر جديد في الملاحظات
+    if(tag==='select' && e.target.size>1) return;
+    const primaryBtn=top.querySelector('.modal-footer .btn:last-child');
+    if(primaryBtn){ e.preventDefault(); primaryBtn.click(); }
+  }
+});
 
 function toast(msg,type='success'){
   const el=document.createElement('div');
@@ -4065,7 +4303,7 @@ function openBulkUpdate(){
       <div style="flex:1;font-size:13px;font-weight:700;color:var(--text-1)">${inv.name}</div>
       <div style="font-size:11px;color:var(--text-3)">${fmt(inv.value,2)} ${inv.currency}</div>
       <div style="display:flex;align-items:center;gap:4px">
-        <input type="number" id="bulkPct_${i}" placeholder="${curPct}%" step="0.01" value=""
+        <input type="number" inputmode="decimal" id="bulkPct_${i}" placeholder="${curPct}%" step="0.01" value=""
           style="width:90px;padding:7px 10px;background:var(--bg-1);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:'Space Grotesk',monospace;font-size:13px;outline:none">
         <span style="color:var(--text-3);font-size:12px">%</span>
       </div>
@@ -4305,8 +4543,9 @@ function renderRecentTx(){
     const meta=tx.type==='transfer'&&tx.toWallet
       ?`تحويل: ${getWalletName(tx.wallet)} ← ${getWalletName(tx.toWallet)} • ${fmtDate(tx.date)}`
       :`${ci.label} • ${fmtDate(tx.date)}`;
+    const txEmoji = tx.type==='transfer' ? '↔️' : tx.type==='income' ? '💰' : getIconEmoji(ci.icon);
     return`<div class="tx-row">
-      <div class="tx-icon" style="background:${ci.color}18"><i class="ti ${tx.type==='transfer'?'ti-arrows-exchange':ci.icon}" style="color:${col}"></i></div>
+      <div class="tx-icon" style="background:${ci.color}18;font-size:18px;display:flex;align-items:center;justify-content:center">${txEmoji}</div>
       <div class="tx-info"><div class="tx-name">${tx.desc}</div><div class="tx-meta">${meta}</div></div>
       <div class="tx-amount" style="color:${col}">${sign}${fmt(tx.amount)} <span style="font-size:10px;opacity:.7">${tx.currency}</span></div>
       <div class="tx-actions">
@@ -4354,8 +4593,9 @@ function renderExpenses(){
     const walletMeta=tx.type==='transfer'&&tx.toWallet
       ?`${getWalletName(tx.wallet)} ← ${getWalletName(tx.toWallet)}`
       :getWalletName(tx.wallet);
+    const txEmoji2 = tx.type==='transfer' ? '↔️' : tx.type==='income' ? '💰' : getIconEmoji(ci.icon);
     return`<div class="tx-row">
-      <div class="tx-icon" style="background:${ci.color}18"><i class="ti ${tx.type==='transfer'?'ti-arrows-exchange':ci.icon}" style="color:${col}"></i></div>
+      <div class="tx-icon" style="background:${ci.color}18;font-size:18px;display:flex;align-items:center;justify-content:center">${txEmoji2}</div>
       <div class="tx-info"><div class="tx-name">${tx.desc}</div><div class="tx-meta">${fmtDate(tx.date)} • ${walletMeta}${tx.note?' • '+tx.note:''}</div></div>
       <span class="badge ${bdg}" style="flex-shrink:0">${tx.type==='transfer'?'تحويل':ci.label}</span>
       <div class="tx-amount" style="color:${col};margin-right:10px">${sign}${fmt(tx.amount)} <span style="font-size:10px;opacity:.7">${tx.currency}</span></div>
@@ -4473,7 +4713,7 @@ function renderBudget(){
   if(todayFromWeekEl){
     if(curWeekForBudget && curWeekForBudget.limit>0){
       todayFromWeekEl.style.display='block';
-      const dailyLim = Math.round(curWeekForBudget.limit/7);
+      const dailyLim = Math.round(curWeekForBudget.limit/weekDayCount(curWeekForBudget));
       const todayPct = Math.min(Math.round(todaySpentAmt/dailyLim*100), 150);
       const btaEl = document.getElementById('budgetTodayAmt');
       const bdlEl = document.getElementById('budgetDailyLimit');
@@ -5098,7 +5338,7 @@ function generateWeekSlots(){
           </div>
           <div style="flex:1">
             <div style="font-size:10px;color:var(--text-3);margin-bottom:3px">الميزانية (EGP)</div>
-            <input type="number" class="wb-limit" value="${limit||''}" placeholder="0" min="0" step="50" style="width:100%;padding:7px 9px;background:var(--bg-3);border:1px solid var(--border-med);border-radius:var(--r-sm);color:var(--text-1);outline:none;font-size:12px">
+            <input type="number" inputmode="decimal" class="wb-limit" value="${limit||''}" placeholder="0" min="0" step="50" style="width:100%;padding:7px 9px;background:var(--bg-3);border:1px solid var(--border-med);border-radius:var(--r-sm);color:var(--text-1);outline:none;font-size:12px">
           </div>
         </div>
       </div>
@@ -5246,6 +5486,15 @@ function getCurrentWeekBudget(){
   // find the custom week slot that contains today
   const today=isoDate(new Date());
   return (state.weeklyBudgets||[]).find(w=>today>=w.start&&today<=w.end)||null;
+}
+
+function weekDayCount(w){
+  // عدد أيام الأسبوع الفعلي (مهم لأسابيع آخر الشهر اللي ممكن تكون 2 أو 3 أيام بس)
+  if(!w||!w.start||!w.end) return 7;
+  const d1=new Date(w.start+'T00:00:00');
+  const d2=new Date(w.end+'T00:00:00');
+  const diff=Math.round((d2-d1)/86400000)+1;
+  return diff>0?diff:7;
 }
 
 function renderWeeklyBudgetUI(){
@@ -5608,6 +5857,330 @@ function updateNotif(){
   const dot=document.getElementById('notifDot');const badge=document.getElementById('expBadge');
   dot.style.display=lateDebts>0?'block':'none';
   badge.textContent=state.transactions.filter(t=>t.date&&t.date.startsWith(getCurrentMonthKey())).length;
+}
+
+// ══════════════════════════════════════════════════════════
+// GLOBAL SUMMARY MODAL — ملخص عام شامل (زرار الجرس)
+// ══════════════════════════════════════════════════════════
+function openGlobalSummary(){
+  const mk = getCurrentMonthKey();
+  const today = todayEgypt();
+  const cairoNow = getCairoNow();
+
+  // ── أرقام أساسية ──
+  const totalAssets = getTotalAssets();
+  const monthExp    = calcMonthExpenses(mk);
+  const monthInc    = state.transactions
+    .filter(t=>t.type==='income'&&t.date&&t.date.startsWith(mk))
+    .reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+  const oweEGP = state.debts.owe.reduce((s,d)=>s+toEGP(d.amount,d.currency),0);
+  const netWorth = totalAssets - oweEGP;
+  const savingRate = monthInc>0 ? Math.round((monthInc-monthExp)/monthInc*100) : null;
+
+  // ── ميزانية الأسبوع ──
+  const curWeek = getCurrentWeekBudget();
+  const weekLimit = curWeek ? (curWeek.limit||0)+(curWeek.carryover||0) : 0;
+  const weekSpent = curWeek ? getSpentBetween(curWeek.start,curWeek.end) : 0;
+  const weekLeft  = weekLimit - weekSpent;
+  const weekPct   = weekLimit>0 ? Math.min(Math.round(weekSpent/weekLimit*100),100) : 0;
+
+  // ── فئات الشهر (كل الفئات محفوظة) ──
+  const catMap={};
+  state.transactions.filter(t=>t.type==='expense'&&t.date&&t.date.startsWith(mk))
+    .forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
+  const allCatsSorted = Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+  window._gsCatsAll = allCatsSorted;
+  window._gsCatsMonthExp = monthExp;
+  window._gsShowAll = false;
+  const topCats = allCatsSorted.slice(0,4);
+
+  // ── ديون التنبيه ──
+  const lateDebts  = state.debts.owe.filter(d=>d.status==='late');
+  const soonDebts  = state.debts.owe.filter(d=>d.status==='soon');
+
+  // ── تعبئة الـ UI ──
+  const _id = id => document.getElementById(id);
+
+  // وقت التحديث
+  const timeStr = cairoNow.toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+  const dateStr = cairoNow.toLocaleDateString('ar-EG',{weekday:'short',day:'numeric',month:'short'});
+  if(_id('gsSyncTime')) _id('gsSyncTime').textContent = dateStr+' • '+timeStr;
+
+  // صافي الثروة
+  if(_id('gsNetWorth')){
+    _id('gsNetWorth').textContent = fmt(netWorth);
+    _id('gsNetWorth').style.color = netWorth>=0?'var(--teal)':'var(--red)';
+  }
+  if(_id('gsNetWorthNote')) _id('gsNetWorthNote').textContent = fmt(totalAssets)+' أصول − '+fmt(oweEGP)+' ديون';
+
+  // أرقام الشهر
+  if(_id('gsTotalAssets')) _id('gsTotalAssets').textContent = fmt(totalAssets);
+  if(_id('gsMonthExp'))    _id('gsMonthExp').textContent    = fmt(monthExp);
+  if(_id('gsMonthInc'))    _id('gsMonthInc').textContent    = fmt(monthInc);
+
+  // نسبة الادخار
+  if(_id('gsSavingRate')){
+    if(savingRate!==null){
+      _id('gsSavingRate').innerHTML = '<span style="font-size:22px;font-weight:800;font-family:\'Space Grotesk\',monospace;line-height:1">'+Math.max(savingRate,0)+'</span><span style="font-size:14px;color:var(--text-3)">%</span>';
+      _id('gsSavingRate').style.color = savingRate>=20?'var(--green)':savingRate>=10?'var(--amber)':'var(--red)';
+    } else {
+      _id('gsSavingRate').innerHTML = '<span style="font-size:15px;color:var(--text-3)">لا يوجد دخل</span>';
+    }
+  }
+  if(_id('gsSavingNote')) _id('gsSavingNote').textContent = monthInc>0?'من '+fmt(monthInc)+' EGP دخل':'لم يُسجّل دخل هذا الشهر';
+
+  // ميزانية الأسبوع
+  if(weekLimit>0){
+    const barColor = weekPct>=100?'linear-gradient(90deg,var(--red),var(--pink))':weekPct>=80?'linear-gradient(90deg,var(--amber),var(--gold))':'linear-gradient(90deg,var(--teal),var(--green))';
+    if(_id('gsWeekBar'))   { _id('gsWeekBar').style.width=weekPct+'%'; _id('gsWeekBar').style.background=barColor; }
+    if(_id('gsWeekPct'))   _id('gsWeekPct').textContent = weekPct+'%';
+    if(_id('gsWeekSpent')) _id('gsWeekSpent').textContent = fmt(weekSpent)+' EGP';
+    if(_id('gsWeekLeft'))  {
+      _id('gsWeekLeft').textContent = fmt(Math.max(weekLeft,0))+' EGP';
+      _id('gsWeekLeft').style.color = weekLeft<0?'var(--red)':weekLeft<weekLimit*0.2?'var(--amber)':'var(--green)';
+    }
+  } else {
+    if(_id('gsWeekBudget')) _id('gsWeekBudget').innerHTML = '<div style="text-align:center;font-size:12px;color:var(--text-3);padding:4px 0">لم تُحدد ميزانية أسبوعية — <span style="color:var(--blue);cursor:pointer" onclick="closeModal(\'modalGlobalSummary\');showPage(\'budget\',document.querySelectorAll(\'.nav-item\')[3])">إعداد الميزانية</span></div>';
+  }
+
+  // تنبيهات الديون
+  if(_id('gsDebtAlerts')){
+    if(!lateDebts.length && !soonDebts.length && oweEGP===0){
+      _id('gsDebtAlerts').innerHTML = '<span style="color:var(--green);font-size:13px">✅ ما عندكش ديون متأخرة</span>';
+    } else {
+      let alertHtml = '';
+      if(lateDebts.length) alertHtml += '<div style="color:var(--red);font-size:12px;font-weight:700;margin-bottom:3px"><i class="ti ti-alert-triangle" style="font-size:13px"></i> '+lateDebts.length+' دين متأخر</div>';
+      if(soonDebts.length) alertHtml += '<div style="color:var(--amber);font-size:12px;font-weight:700;margin-bottom:3px"><i class="ti ti-clock" style="font-size:13px"></i> '+soonDebts.length+' دين قريب</div>';
+      if(oweEGP>0) alertHtml += '<div style="color:var(--text-2);font-size:11px">إجمالي: '+fmt(oweEGP)+' EGP</div>';
+      _id('gsDebtAlerts').innerHTML = alertHtml;
+    }
+  }
+
+  // أعلى فئات الشهر
+  const _renderGsTopCats = (showAll) => {
+    const cats = showAll ? allCatsSorted : allCatsSorted.slice(0,4);
+    const btn = _id('gsTopCatsToggle');
+    if(btn){
+      btn.textContent = showAll ? 'أعلى فقط' : 'كل الفئات';
+      btn.style.color = showAll ? 'var(--gold)' : 'var(--text-2)';
+      btn.style.borderColor = showAll ? 'var(--gold)' : 'var(--border-med)';
+    }
+    if(_id('gsTopCats')){
+      if(!cats.length){
+        _id('gsTopCats').innerHTML = '<div style="font-size:12px;color:var(--text-3)">لا توجد مصاريف هذا الشهر</div>';
+      } else {
+        _id('gsTopCats').innerHTML = cats.map(([k,v],idx)=>{
+          const c = getCatInfo(k);
+          const pct = monthExp>0?Math.round(v/monthExp*100):0;
+          const borderBottom = idx<cats.length-1 ? 'border-bottom:1px solid var(--border);' : '';
+          return '<div style="display:flex;align-items:center;gap:9px;padding:5px 0;'+borderBottom+'">'+
+            '<span style="width:26px;height:26px;border-radius:7px;background:'+c.color+'22;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+
+              '<i class="ti '+c.icon+'" style="color:'+c.color+';font-size:12px"></i></span>'+
+            '<span style="flex:1;font-size:12.5px;font-weight:600;color:var(--text-1)">'+c.label+'</span>'+
+            '<div style="width:50px;height:4px;background:var(--bg-3);border-radius:99px;overflow:hidden">'+
+              '<div style="width:'+Math.max(pct,2)+'%;height:100%;background:'+c.color+';border-radius:99px"></div></div>'+
+            '<span style="font-size:10.5px;color:var(--text-3);min-width:26px;text-align:left">'+pct+'%</span>'+
+            '<strong style="font-size:12px;color:var(--text-1);font-family:monospace;min-width:54px;text-align:left">'+fmt(v)+'</strong>'+
+          '</div>';
+        }).join('');
+      }
+    }
+  };
+  window._renderGsTopCats = _renderGsTopCats;
+  _renderGsTopCats(false);
+
+  // تنبيهات ذكية
+  const alerts = [];
+  if(savingRate!==null && savingRate<0)
+    alerts.push({color:'var(--red)',icon:'ti-trending-down',text:'صرفت أكتر من دخلك هذا الشهر بـ '+fmt(Math.abs(monthInc-monthExp))+' EGP!'});
+  if(savingRate!==null && savingRate>=30)
+    alerts.push({color:'var(--green)',icon:'ti-star',text:'ممتاز! بتوفر '+savingRate+'% من دخلك هذا الشهر 🎉'});
+  if(weekLimit>0 && weekPct>=90 && weekLeft>0)
+    alerts.push({color:'var(--amber)',icon:'ti-alert-triangle',text:'اقتربت من حد ميزانية الأسبوع — متبقي '+fmt(weekLeft)+' EGP بس'});
+  if(weekLimit>0 && weekSpent>weekLimit)
+    alerts.push({color:'var(--red)',icon:'ti-circle-x',text:'تجاوزت ميزانية الأسبوع بـ '+fmt(weekSpent-weekLimit)+' EGP'});
+  // شراء سلة
+  const dueShop = state.shoppingList.filter(it=>it.date&&it.date<=today);
+  if(dueShop.length)
+    alerts.push({color:'var(--amber)',icon:'ti-shopping-cart',text:dueShop.length+' حاجة في السلة موعدها اليوم أو فات'});
+
+  if(_id('gsSmartAlerts') && alerts.length){
+    _id('gsSmartAlerts').innerHTML = alerts.map(a=>
+      '<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:'+a.color+'10;border:1px solid '+a.color+'35;border-radius:var(--r-md);margin-bottom:7px;font-size:12px;font-weight:600;color:'+a.color+'">'+
+        '<i class="ti '+a.icon+'" style="font-size:15px;flex-shrink:0"></i>'+a.text+'</div>'
+    ).join('');
+  } else if(_id('gsSmartAlerts')){
+    _id('gsSmartAlerts').innerHTML='';
+  }
+
+  openModal('modalGlobalSummary');
+}
+
+// ── تبديل عرض كل الفئات / أعلى فقط ──
+function gsToggleAllCats(){
+  window._gsShowAll = !window._gsShowAll;
+  if(window._renderGsTopCats) window._renderGsTopCats(window._gsShowAll);
+}
+
+// ── ملخص مخصص داخل المودال ──
+function openInlineCustomSummary(){
+  const area = document.getElementById('gsCustomSummaryArea');
+  if(!area) return;
+
+  // لو الفورم موجود خليه يختفي toggle
+  if(area.querySelector('#gsCustomForm')){
+    area.innerHTML='';
+    return;
+  }
+
+  const today = todayEgypt();
+  const inp = (id,lbl,val)=>
+    '<div style="flex:1;min-width:120px">'+
+      '<div style="font-size:10px;color:var(--text-3);font-weight:700;margin-bottom:5px">'+lbl+'</div>'+
+      '<input type="date" id="'+id+'" value="'+val+'" style="width:100%;padding:8px 10px;background:var(--bg-2);border:1px solid var(--border-med);border-radius:var(--r-md);color:var(--text-1);font-family:Tajawal,sans-serif;font-size:13px;outline:none">'+
+    '</div>';
+
+  area.innerHTML =
+    '<div id="gsCustomForm" style="background:var(--bg-2);border:1px solid rgba(192,132,252,.3);border-radius:var(--r-xl);padding:16px 18px;margin-top:4px;margin-bottom:4px;animation:fadeIn .25s ease">'+
+      '<div style="font-size:12px;font-weight:800;color:var(--purple);margin-bottom:12px;display:flex;align-items:center;gap:6px">'+
+        '<i class="ti ti-calendar-stats" style="font-size:14px"></i> ملخص مخصص — اختار الفترة'+
+      '</div>'+
+      '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">'+
+        inp('gsCustomFrom','من',today)+
+        inp('gsCustomTo','إلى',today)+
+      '</div>'+
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">'+
+        '<button onclick="gsSetCustomPreset(\'day\')" style="'+_gsPresetStyle('var(--purple)')+'">اليوم</button>'+
+        '<button onclick="gsSetCustomPreset(\'yesterday\')" style="'+_gsPresetStyle('var(--blue)')+'">أمس</button>'+
+        '<button onclick="gsSetCustomPreset(\'week\')" style="'+_gsPresetStyle('var(--teal)')+'">هذا الأسبوع</button>'+
+        '<button onclick="gsSetCustomPreset(\'month\')" style="'+_gsPresetStyle('var(--green)')+'">هذا الشهر</button>'+
+      '</div>'+
+      '<button onclick="gsApplyCustomSummary()" style="width:100%;padding:10px;background:linear-gradient(135deg,var(--purple),var(--teal));border:none;border-radius:var(--r-md);color:#fff;font-family:Tajawal,sans-serif;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">'+
+        '<i class="ti ti-chart-bar" style="font-size:14px"></i> عرض الملخص'+
+      '</button>'+
+      '<div id="gsCustomResult" style="margin-top:12px"></div>'+
+    '</div>';
+
+  // scroll للفورم
+  setTimeout(()=>{ area.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 80);
+}
+
+function _gsPresetStyle(color){
+  return 'background:'+color+'15;border:1px solid '+color+'55;border-radius:var(--r-sm);color:'+color+';cursor:pointer;padding:4px 11px;font-size:11.5px;font-weight:700;font-family:Tajawal,sans-serif;';
+}
+
+function gsSetCustomPreset(preset){
+  const today = todayEgypt();
+  const cairoNow = getCairoNow();
+  let from=today, to=today;
+  if(preset==='yesterday'){
+    const y=new Date(cairoNow); y.setDate(y.getDate()-1);
+    const ys=y.toISOString().slice(0,10); from=ys; to=ys;
+  } else if(preset==='week'){
+    const cur = getCurrentWeekBudget();
+    if(cur){ from=cur.start; to=cur.end; }
+    else {
+      const d=new Date(cairoNow);
+      const day=d.getDay();
+      const diff=d.getDate()-day+(day===0?-6:1);
+      const mon=new Date(d.setDate(diff));
+      from=mon.toISOString().slice(0,10);
+      const sun=new Date(mon); sun.setDate(sun.getDate()+6);
+      to=sun.toISOString().slice(0,10);
+    }
+  } else if(preset==='month'){
+    const mk=getCurrentMonthKey();
+    from=mk+'-01';
+    const lastDay=new Date(parseInt(mk.slice(0,4)),parseInt(mk.slice(5,7)),0).getDate();
+    to=mk+'-'+String(lastDay).padStart(2,'0');
+  }
+  const fromInp=document.getElementById('gsCustomFrom');
+  const toInp=document.getElementById('gsCustomTo');
+  if(fromInp) fromInp.value=from;
+  if(toInp) toInp.value=to;
+}
+
+function gsApplyCustomSummary(){
+  const fromInp=document.getElementById('gsCustomFrom');
+  const toInp=document.getElementById('gsCustomTo');
+  if(!fromInp||!fromInp.value||!toInp||!toInp.value){ toast('اختار الفترة الأول','error'); return; }
+  const fromStr=fromInp.value, toStr=toInp.value;
+  if(fromStr>toStr){ toast('تاريخ البداية قبل النهاية','error'); return; }
+
+  const txs    = state.transactions.filter(t=>t.type==='expense' && t.date && t.date>=fromStr && t.date<=toStr);
+  const incTxs = state.transactions.filter(t=>t.type==='income'  && t.date && t.date>=fromStr && t.date<=toStr);
+  const spent  = txs.reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+  const inc    = incTxs.reduce((s,t)=>s+toEGP(t.amount,t.currency),0);
+  const net    = inc - spent;
+
+  const fmtDate = str=>new Date(str+'T12:00:00').toLocaleDateString('ar-EG',{day:'numeric',month:'long',year:'numeric'});
+  const labelStr = fromStr===toStr ? fmtDate(fromStr) : fmtDate(fromStr)+' — '+fmtDate(toStr);
+
+  // كل الفئات مرتبة
+  const catMap={};
+  txs.forEach(t=>{ catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency); });
+  const sortedCats=Object.entries(catMap).sort((a,b)=>b[1]-a[1]);
+
+  let catsHtml='';
+  if(sortedCats.length){
+    catsHtml=
+      '<div style="font-size:10px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between">'+
+        '<span>توزيع الفئات ('+sortedCats.length+')</span>'+
+      '</div>'+
+      sortedCats.map(([k,v],idx)=>{
+        const c=getCatInfo(k);
+        const pct=spent>0?Math.round(v/spent*100):0;
+        const border=idx<sortedCats.length-1?'border-bottom:1px solid var(--border);':'';
+        return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;'+border+'">'+
+          '<span style="width:24px;height:24px;border-radius:6px;background:'+c.color+'22;display:flex;align-items:center;justify-content:center;flex-shrink:0">'+
+            '<i class="ti '+c.icon+'" style="color:'+c.color+';font-size:12px"></i></span>'+
+          '<span style="flex:1;font-size:12px;color:var(--text-1);font-weight:600">'+c.label+'</span>'+
+          '<div style="width:50px;height:4px;background:var(--bg-3);border-radius:99px;overflow:hidden">'+
+            '<div style="width:'+Math.max(pct,2)+'%;height:100%;background:'+c.color+';border-radius:99px"></div></div>'+
+          '<span style="font-size:10.5px;color:var(--text-3);min-width:26px;text-align:left">'+pct+'%</span>'+
+          '<strong style="font-size:12px;color:var(--text-1);font-family:monospace;min-width:50px;text-align:left">'+fmt(v)+'</strong>'+
+        '</div>';
+      }).join('');
+  } else {
+    catsHtml='<div style="font-size:12px;color:var(--text-3);padding:6px 0">لا توجد مصاريف في هذه الفترة</div>';
+  }
+
+  const netColor=net>=0?'var(--green)':'var(--red)';
+
+  const result=document.getElementById('gsCustomResult');
+  if(!result) return;
+  result.innerHTML=
+    '<div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">'+
+      '<div style="font-size:12px;font-weight:700;color:var(--text-1);margin-bottom:10px">📊 '+labelStr+'</div>'+
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px">'+
+        '<div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--r-md);padding:9px 10px;text-align:center">'+
+          '<div style="font-size:9.5px;color:var(--text-3);font-weight:700;margin-bottom:3px">💸 مصاريف</div>'+
+          '<div style="font-size:16px;font-weight:800;color:var(--red);font-family:monospace;line-height:1">'+fmt(spent)+'</div>'+
+          '<div style="font-size:9px;color:var(--text-3);margin-top:2px">'+txs.length+' معاملة</div>'+
+        '</div>'+
+        (inc>0?
+          '<div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--r-md);padding:9px 10px;text-align:center">'+
+            '<div style="font-size:9.5px;color:var(--text-3);font-weight:700;margin-bottom:3px">💰 دخل</div>'+
+            '<div style="font-size:16px;font-weight:800;color:var(--green);font-family:monospace;line-height:1">'+fmt(inc)+'</div>'+
+            '<div style="font-size:9px;color:var(--text-3);margin-top:2px">'+incTxs.length+' معاملة</div>'+
+          '</div>'
+        :
+          '<div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--r-md);padding:9px 10px;text-align:center">'+
+            '<div style="font-size:9.5px;color:var(--text-3);font-weight:700;margin-bottom:3px">📊 عدد المعاملات</div>'+
+            '<div style="font-size:16px;font-weight:800;color:var(--blue);font-family:monospace;line-height:1">'+txs.length+'</div>'+
+            '<div style="font-size:9px;color:var(--text-3);margin-top:2px">مصروف</div>'+
+          '</div>'
+        )+
+        '<div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--r-md);padding:9px 10px;text-align:center">'+
+          '<div style="font-size:9.5px;color:var(--text-3);font-weight:700;margin-bottom:3px">💡 صافي</div>'+
+          '<div style="font-size:16px;font-weight:800;color:'+netColor+';font-family:monospace;line-height:1">'+(net>=0?'+':'')+fmt(net)+'</div>'+
+          '<div style="font-size:9px;color:var(--text-3);margin-top:2px">EGP</div>'+
+        '</div>'+
+      '</div>'+
+      catsHtml+
+    '</div>';
+
+  setTimeout(()=>{ result.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 80);
 }
 
 // ── CHARTS ──
@@ -6214,9 +6787,9 @@ function renderAnalyticsKPIs(){
   const spendDays = Object.values(dayMap);
   const totalDaysWithData = spendDays.length;
 
-  // اعتبر الحد اليومي = ميزانية أسبوع ÷ 7، أو متوسط الشهر اللي فات
+  // اعتبر الحد اليومي = ميزانية أسبوع ÷ عدد أيام الأسبوع الفعلي، أو متوسط الشهر اللي فات
   const curWeek = getCurrentWeekBudget();
-  let dailyLimit = curWeek ? Math.round(curWeek.limit / 7) : 0;
+  let dailyLimit = curWeek ? Math.round(curWeek.limit / weekDayCount(curWeek)) : 0;
   if(!dailyLimit && dailyAvg > 0){
     // استخدم متوسط الشهر اللي فات كمرجع
     const pmk = getPrevMonthKey();
@@ -6663,8 +7236,6 @@ function renderAnalytics(){
   renderCashflowChart();
   // كشف الشذوذ
   renderAnomalyDetection();
-  // تطور رصيد المحافظ
-  renderWalletHistory();
 }
 
 // ── SIMULATOR ──
@@ -6814,13 +7385,37 @@ function calcDaily(){
 
 
 // ── SEARCH ──
+let _globalSearchTimer=null;
 function globalSearchFn(){
-  const q=document.getElementById('globalSearch').value.trim().toLowerCase();if(!q)return;
-  showPage('expenses',document.querySelectorAll('.nav-item')[2]);
-  setTimeout(()=>{
-    const rows=[...document.querySelectorAll('#expenseList .tx-row')];
-    rows.forEach(r=>{const text=r.textContent.toLowerCase();r.style.display=text.includes(q)?'':'none';});
-  },100);
+  clearTimeout(_globalSearchTimer);
+  _globalSearchTimer=setTimeout(()=>{
+    const q=document.getElementById('globalSearch').value.trim().toLowerCase();
+    const expensesPage=document.getElementById('page-expenses');
+    const alreadyOnExpenses=expensesPage.classList.contains('active');
+    if(q && !alreadyOnExpenses){
+      showPage('expenses',document.querySelectorAll('.nav-item')[2]);
+    }
+    setTimeout(()=>{
+      const list=document.getElementById('expenseList');
+      const rows=[...document.querySelectorAll('#expenseList .tx-row')];
+      let matches=0;
+      rows.forEach(r=>{
+        const isMatch=!q||r.textContent.toLowerCase().includes(q);
+        r.style.display=isMatch?'':'none';
+        if(isMatch)matches++;
+      });
+      let noRes=document.getElementById('searchNoResults');
+      if(q && matches===0 && rows.length>0){
+        if(!noRes && list){
+          noRes=document.createElement('div');
+          noRes.id='searchNoResults';
+          noRes.style.cssText='text-align:center;padding:24px 10px;color:var(--text-3);font-size:13px';
+          noRes.innerHTML=`<i class="ti ti-search-off" style="font-size:26px;display:block;margin-bottom:8px;opacity:.6"></i>مفيش نتائج لـ "${q}"`;
+          list.appendChild(noRes);
+        }
+      } else if(noRes){ noRes.remove(); }
+    }, q && !alreadyOnExpenses ? 100 : 0);
+  }, 220);
 }
 
 // ── CAIRO TIME HELPERS ──
@@ -6935,9 +7530,9 @@ function updateTodayWidget(){
     }
   }
 
-  // progress bar — الأولوية: ميزانية الأسبوع ÷ 7، وإلا متوسط اليوم من الشهر اللي فات، وإلا مجموع الميزانيات الشهرية ÷ أيام الشهر
+  // progress bar — الأولوية: ميزانية الأسبوع ÷ عدد أيام الأسبوع الفعلي، وإلا متوسط اليوم من الشهر اللي فات، وإلا مجموع الميزانيات الشهرية ÷ أيام الشهر
   const curWeek = getCurrentWeekBudget();
-  let dailyBudget = curWeek ? Math.round(((curWeek.limit||0) + (curWeek.carryover||0)) / 7) : 0;
+  let dailyBudget = curWeek ? Math.round(((curWeek.limit||0) + (curWeek.carryover||0)) / weekDayCount(curWeek)) : 0;
 
   // fallback 1: مجموع ميزانيات الشهر الحالي ÷ أيام الشهر
   if(!dailyBudget){
@@ -7880,58 +8475,48 @@ function updateDayStrip(){
 // SUPER QUICK ADD — Bottom Sheet FAB
 // ══════════════════════════════════════════════════════════
 function openSuperQuickAdd(){
-  // تعبئة المحافظ (آخر محفظة مستخدمة تتحدد تلقائي)
+  // تعبئة المحافظ
   const walSel = document.getElementById('sqWallet');
-  const lastWallet = localStorage.getItem('sq_last_wallet');
   if(walSel){
     walSel.innerHTML = state.wallets.map(w=>`<option value="${w.key}">${w.icon||'🏦'} ${w.name} (${fmt(w.balance)})</option>`).join('');
-    if(lastWallet && state.wallets.some(w=>w.key===lastWallet)) walSel.value = lastWallet;
   }
-  // تعبئة كل الفئات (مرتبة بالأكثر استخداماً، مفيش تقييد بـ 6)
+  // تعبئة الفئات (أكثر 6 استخداماً)
   const mk = getCurrentMonthKey();
   const usageCount = {};
   getMonthTxs(mk).filter(t=>t.type==='expense').forEach(t=>{ usageCount[t.cat]=(usageCount[t.cat]||0)+1; });
   const sorted = [...state.categories].sort((a,b)=>(usageCount[b.key]||0)-(usageCount[a.key]||0));
+  const top = sorted.slice(0,6);
   const grid = document.getElementById('sqCatGrid');
-  const lastCat = localStorage.getItem('sq_last_cat');
-  const defaultCat = sorted.find(c=>c.key===lastCat) || sorted[0];
   if(grid){
-    if(!sorted.length){
+    if(!top.length){
       grid.innerHTML='<span style="font-size:12px;color:var(--text-3)">أضف فئات من الإعدادات أولاً</span>';
     } else {
-      grid.innerHTML = sorted.map(cat=>`
-        <button onclick="sqSelectCat('${cat.key}')" id="sqcb_${cat.key}" data-name="${cat.name}"
+      // اختر أول فئة تلقائياً
+      document.getElementById('sqCatKey').value = top[0].key;
+      const ci0 = getCatInfo(top[0].key);
+      document.getElementById('sqCatDisplay').textContent = top[0].name;
+      grid.innerHTML = top.map(cat=>`
+        <button onclick="sqSelectCat('${cat.key}')" id="sqcb_${cat.key}"
           style="padding:6px 11px;border-radius:var(--r-md);font-size:12px;font-weight:600;cursor:pointer;
           border:1.5px solid ${cat.color}40;background:${cat.color}15;color:${cat.color};
           transition:all .15s;-webkit-tap-highlight-color:transparent;font-family:'Tajawal',sans-serif">
           <i class="ti ${cat.icon||'ti-circle'}" style="font-size:12px"></i> ${cat.name}
         </button>`).join('');
-      sqSelectCat(defaultCat.key, true);
+      // هايلايت أول فئة
+      const firstBtn = document.getElementById('sqcb_'+top[0].key);
+      if(firstBtn){ firstBtn.style.borderColor=top[0].color; firstBtn.style.background=top[0].color+'30'; }
     }
   }
   // reset
   document.getElementById('sqAmount').value='';
   document.getElementById('sqDesc').value='';
   document.getElementById('sqAmount').style.borderColor='var(--border-med)';
-  const searchInput = document.getElementById('sqCatSearch');
-  if(searchInput) searchInput.value='';
-  filterSqCats('');
-  updateSqBudgetHint();
   // show
   document.getElementById('sqOverlay').classList.add('show');
   setTimeout(()=>document.getElementById('sqAmount').focus(),200);
 }
 
-// بحث سريع داخل شبكة الفئات (مفيد دلوقتي إن كل الفئات ظاهرة)
-function filterSqCats(query){
-  const q=(query||'').trim().toLowerCase();
-  document.querySelectorAll('[id^="sqcb_"]').forEach(btn=>{
-    const name=(btn.dataset.name||'').toLowerCase();
-    btn.style.display = (!q || name.includes(q)) ? '' : 'none';
-  });
-}
-
-function sqSelectCat(key, skipSave){
+function sqSelectCat(key){
   document.getElementById('sqCatKey').value = key;
   const cat = state.categories.find(c=>c.key===key);
   document.getElementById('sqCatDisplay').textContent = cat ? cat.name : key;
@@ -7946,30 +8531,6 @@ function sqSelectCat(key, skipSave){
       btn.style.borderColor=bc.color+'40'; btn.style.background=bc.color+'15';
     }
   });
-  if(!skipSave) localStorage.setItem('sq_last_cat', key);
-  updateSqBudgetHint();
-}
-
-// تلميح حي بالباقي من ميزانية الفئة المختارة هذا الشهر
-function updateSqBudgetHint(){
-  const hint = document.getElementById('sqBudgetHint');
-  if(!hint) return;
-  const catKey = document.getElementById('sqCatKey').value;
-  const b = catKey ? (state.budget||[]).find(x=>(x.catKey||x.cat)===catKey) : null;
-  const limit = b ? (b.total||b.limit||0) : 0;
-  if(!catKey || !limit){ hint.style.display='none'; hint.textContent=''; return; }
-  const mk = getCurrentMonthKey();
-  const spent = getMonthTxs(mk).filter(t=>t.type==='expense'&&t.cat===catKey).reduce((s,t)=>s+t.amount,0);
-  const amountNow = parseFloat(document.getElementById('sqAmount').value)||0;
-  const left = limit - spent - amountNow;
-  hint.style.display='block';
-  if(left<0){
-    hint.style.color='var(--red)';
-    hint.textContent = `⚠ هتجاوز ميزانية الفئة بـ ${fmt(Math.abs(left))} EGP`;
-  } else {
-    hint.style.color='var(--text-2)';
-    hint.textContent = `متبقي ${fmt(left)} EGP من ميزانية الفئة هذا الشهر`;
-  }
 }
 
 function closeSuperQuickAdd(){
@@ -7994,9 +8555,6 @@ function saveSuperQuickAdd(){
   if(ok===false) return;
   state.transactions.unshift(tx);
   saveState(); _syncAfterSave();
-  // فاكر آخر اختيار للفئة والمحفظة عشان المرة الجاية تتحدد تلقائي
-  localStorage.setItem('sq_last_cat', catKey);
-  localStorage.setItem('sq_last_wallet', walletKey);
   closeSuperQuickAdd();
   refreshAll();
   toast(`💸 ${desc} — ${fmt(amount)} EGP`);
@@ -8044,6 +8602,9 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   // تحديث ويدجت اليوم كل دقيقة
   setInterval(()=>{ updateTodayWidget(); updateDayStrip(); }, 60000);
+
+  // فحص الشهر الملفوف
+  _checkWrappedNewMonth();
 });
 
 // ── كشف الجهاز الجديد ──
@@ -8332,24 +8893,16 @@ function renderWeeklyReport(){
     <input type="number" id="sqAmount" inputmode="decimal" placeholder="0"
       style="width:100%;padding:16px;font-size:32px;font-weight:900;font-family:'Space Grotesk',monospace;
       background:var(--bg-2);border:2px solid var(--border-med);border-radius:var(--r-lg);
-      color:var(--text-1);outline:none;text-align:center;margin-bottom:6px;direction:ltr"
-      oninput="this.style.borderColor=this.value?'var(--purple)':'var(--border-med)';updateSqBudgetHint()"
+      color:var(--text-1);outline:none;text-align:center;margin-bottom:10px;direction:ltr"
+      oninput="this.style.borderColor=this.value?'var(--purple)':'var(--border-med)'"
       onkeydown="if(event.key==='Enter')document.getElementById('sqDesc').focus()">
-    <!-- تلميح الميزانية الحي -->
-    <div id="sqBudgetHint" style="display:none;font-size:11.5px;text-align:center;margin-bottom:10px;font-weight:600"></div>
     <!-- الوصف -->
     <input type="text" id="sqDesc" placeholder="الوصف (مثال: فطار، أجرة...)"
       style="width:100%;padding:10px 14px;background:var(--bg-2);border:1px solid var(--border-med);
-      border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:10px;font-size:14px;transition:border-color .2s"
+      border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:12px;font-size:14px;transition:border-color .2s"
       onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border-med)'"
       onkeydown="if(event.key==='Enter')saveSuperQuickAdd()">
-    <!-- بحث في الفئات -->
-    <input type="text" id="sqCatSearch" placeholder="🔍 دور على فئة..."
-      style="width:100%;padding:8px 12px;background:var(--bg-2);border:1px solid var(--border-med);
-      border-radius:var(--r-md);color:var(--text-1);outline:none;margin-bottom:8px;font-size:12.5px;transition:border-color .2s"
-      onfocus="this.style.borderColor='var(--blue)'" onblur="this.style.borderColor='var(--border-med)'"
-      oninput="filterSqCats(this.value)">
-    <!-- كل الفئات -->
+    <!-- الفئات السريعة -->
     <div id="sqCatGrid" style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px"></div>
     <!-- الفئة المختارة + المحفظة -->
     <div style="display:flex;gap:8px;margin-bottom:16px">
@@ -8417,13 +8970,13 @@ function renderWeeklyReport(){
     <!-- الوفر المتوقع -->
     <div class="form-group">
       <label class="form-label">الوفر المتوقع (EGP) <span style="color:var(--text-3);font-weight:400">— لو الوفر الفعلي عداه يظهر تحذير</span></label>
-      <input type="number" id="coMaxLimit" placeholder="مثال: 300 — كم تتوقع توفّر من هذا الأسبوع؟" min="0" step="50">
+      <input type="number" inputmode="decimal" id="coMaxLimit" placeholder="مثال: 300 — كم تتوقع توفّر من هذا الأسبوع؟" min="0" step="50">
     </div>
 
     <!-- تعديل يدوي -->
     <div class="form-group">
       <label class="form-label">تعديل يدوي للوفر (موجب = إضافة، سالب = خصم)</label>
-      <input type="number" id="coAdjust" placeholder="مثال: -500 لتقليل الوفر بـ 500 EGP" step="50">
+      <input type="number" inputmode="decimal" id="coAdjust" placeholder="مثال: -500 لتقليل الوفر بـ 500 EGP" step="50">
     </div>
 
     <div style="font-size:11.5px;color:var(--text-3);background:var(--bg-2);border-radius:var(--r-md);padding:10px 13px;margin-bottom:4px;line-height:1.7">
@@ -8453,5 +9006,538 @@ function renderWeeklyReport(){
   </div>
 </div>
 
+<script>
+// ══════════════════════════════════════════════════════════
+
+let _wrappedStep = 0;
+let _wrappedStepsData = [];
+
+function _getWrappedMonthKey(offset = 1) {
+  const now = getCairoNow ? getCairoNow() : new Date();
+  const d = new Date(now.getFullYear(), now.getMonth() - offset, 1);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+
+function _getWrappedMonthLabel(mk) {
+  const d = new Date(mk + '-15');
+  return d.toLocaleDateString('ar-EG', {year:'numeric', month:'long'});
+}
+
+function _buildWrappedData(mk) {
+  const txs = (state.transactions || []).filter(t => t.date && t.date.startsWith(mk));
+  const expTxs = txs.filter(t => t.type === 'expense');
+  const incTxs = txs.filter(t => t.type === 'income');
+
+  const totalExp = expTxs.reduce((s,t) => s + toEGP(t.amount, t.currency), 0);
+  const totalInc = incTxs.reduce((s,t) => s + toEGP(t.amount, t.currency), 0);
+  const saved = totalInc - totalExp;
+  const savingRate = totalInc > 0 ? Math.round(saved / totalInc * 100) : 0;
+
+  // cats
+  const catMap = {};
+  expTxs.forEach(t => {
+    catMap[t.cat] = (catMap[t.cat] || 0) + toEGP(t.amount, t.currency);
+  });
+  const catsSorted = Object.entries(catMap).sort((a,b) => b[1]-a[1]);
+  const topCat = catsSorted[0];
+  const topCatInfo = topCat ? (catInfo[topCat[0]] || {label: topCat[0], icon: '💸', color: 'var(--purple)'}) : null;
+
+  // worst day
+  const dayMap = {};
+  expTxs.forEach(t => { dayMap[t.date] = (dayMap[t.date]||0) + toEGP(t.amount,t.currency); });
+  const daysSorted = Object.entries(dayMap).sort((a,b) => b[1]-a[1]);
+  const worstDay = daysSorted[0];
+
+  // best day (least spending but had transactions)
+  const bestDay = daysSorted.length > 1 ? daysSorted[daysSorted.length - 1] : null;
+
+  // daily avg
+  const daysInMonth = new Date(mk.split('-')[0], mk.split('-')[1], 0).getDate();
+  const dailyAvg = totalExp / daysInMonth;
+
+  // biggest single expense
+  const biggestTx = expTxs.sort((a,b) => toEGP(b.amount,b.currency) - toEGP(a.amount,a.currency))[0];
+
+  return { mk, totalExp, totalInc, saved, savingRate, catsSorted, topCat, topCatInfo, worstDay, bestDay, dailyAvg, biggestTx, txCount: expTxs.length, daysInMonth };
+}
+
+function _buildWrappedSteps(d) {
+  const label = _getWrappedMonthLabel(d.mk);
+  const steps = [];
+
+  // Step 1 — Intro
+  steps.push(`
+    <div class="wrapped-step active" id="wstep-0">
+      <div class="wrapped-month-tag">تقرير شهر ${label}</div>
+      <span class="wrapped-emoji">🎵</span>
+      <div class="wrapped-title">Wrapped الشهري</div>
+      <div class="wrapped-sub">ملخصك المالي الأسطوري لشهر ${label}<br>اتفرج على أبرز لحظاتك المالية 🚀</div>
+      <div style="margin-top:24px;background:rgba(255,255,255,.06);border-radius:16px;padding:16px 24px;display:flex;gap:24px;justify-content:center">
+        <div style="text-align:center"><div style="font-size:11px;color:rgba(255,255,255,.45);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">معاملات</div><div style="font-size:24px;font-weight:900;color:#fff;font-family:'Space Grotesk',monospace">${d.txCount}</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+        <div style="text-align:center"><div style="font-size:11px;color:rgba(255,255,255,.45);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">صرفت</div><div style="font-size:24px;font-weight:900;color:var(--red);font-family:'Space Grotesk',monospace">${fmt(d.totalExp)}</div></div>
+        <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+        <div style="text-align:center"><div style="font-size:11px;color:rgba(255,255,255,.45);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">وفرت</div><div style="font-size:24px;font-weight:900;color:var(--teal);font-family:'Space Grotesk',monospace">${fmt(Math.max(d.saved,0))}</div></div>
+      </div>
+    </div>
+  `);
+
+  // Step 2 — Total spending
+  const spendMsg = d.totalExp < 1000 ? 'شهر خفيف وهادي 😌' : d.totalExp < 5000 ? 'معقول — إنت ضابط نفسك 👍' : d.totalExp < 15000 ? 'مصاريف كتير شوية 🤔' : 'أيوه حاجة كتير أوي 😅';
+  steps.push(`
+    <div class="wrapped-step" id="wstep-1">
+      <div class="wrapped-month-tag">الإنفاق الكلي</div>
+      <span class="wrapped-emoji">💸</span>
+      <div class="wrapped-title">صرفت الشهر ده</div>
+      <div class="wrapped-big-num">${fmt(d.totalExp)}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:8px">EGP</div>
+      <div class="wrapped-sub">${spendMsg}<br>بمتوسط <strong style="color:rgba(255,255,255,.8)">${fmt(d.dailyAvg)}</strong> EGP يومياً</div>
+    </div>
+  `);
+
+  // Step 3 — Top category
+  if (d.topCat && d.topCatInfo) {
+    const topPct = d.totalExp > 0 ? Math.round(d.topCat[1]/d.totalExp*100) : 0;
+    const catRows = d.catsSorted.slice(0,4).map((c,i)=>{
+      const ci = catInfo[c[0]] || {label:c[0], color:'var(--purple)'};
+      const pct = d.totalExp > 0 ? Math.round(c[1]/d.totalExp*100) : 0;
+      return `<div class="wrapped-cat-row" style="animation-delay:${i*0.1}s">
+        <span style="font-size:20px">${ci.icon||'💸'}</span>
+        <div style="flex:1;text-align:right">
+          <div style="font-size:13px;font-weight:700;color:#fff">${ci.label}</div>
+          <div class="wrapped-progress-bar"><div class="wrapped-progress-fill" style="width:${pct}%;background:${ci.color||'var(--purple)'}"></div></div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.7);font-family:'Space Grotesk',monospace;min-width:42px;text-align:left">${pct}%</div>
+      </div>`;
+    }).join('');
+    steps.push(`
+      <div class="wrapped-step" id="wstep-2">
+        <div class="wrapped-month-tag">أكتر فئة</div>
+        <span class="wrapped-emoji">${d.topCatInfo.icon||'🏆'}</span>
+        <div class="wrapped-title">${d.topCatInfo.label}</div>
+        <div class="wrapped-sub">صرفت <strong style="color:rgba(255,255,255,.9)">${fmt(d.topCat[1])} EGP</strong> على ${d.topCatInfo.label}<br>وده <strong style="color:var(--pink)">${topPct}%</strong> من مصاريفك كلها</div>
+        <div style="width:100%;margin-top:20px">${catRows}</div>
+      </div>
+    `);
+  }
+
+  // Step 4 — Worst day
+  if (d.worstDay) {
+    const dayD = new Date(d.worstDay[0]+'T12:00:00');
+    const dayLabel = dayD.toLocaleDateString('ar-EG', {weekday:'long', day:'numeric', month:'long'});
+    steps.push(`
+      <div class="wrapped-step" id="wstep-3">
+        <div class="wrapped-month-tag">أسخن يوم</div>
+        <span class="wrapped-emoji">🔥</span>
+        <div class="wrapped-title">أكتر يوم صرفت فيه</div>
+        <div class="wrapped-big-num">${fmt(d.worstDay[1])}</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:8px">EGP</div>
+        <div class="wrapped-sub">يوم <strong style="color:rgba(255,255,255,.85)">${dayLabel}</strong><br>كان يوم ساخن فعلاً 🔥</div>
+      </div>
+    `);
+  }
+
+  // Step 5 — Saving rate
+  const savEmoji = d.savingRate >= 30 ? '🏆' : d.savingRate >= 20 ? '😊' : d.savingRate >= 10 ? '😐' : d.savingRate >= 0 ? '😬' : '😱';
+  const savMsg = d.savingRate >= 30 ? 'بطل مالي حقيقي!' : d.savingRate >= 20 ? 'كويس، بس ممكن أحسن' : d.savingRate >= 10 ? 'محتاج تدخر أكتر' : d.savingRate >= 0 ? 'الوضع صعب شوية' : 'مصاريفك أكتر من دخلك!';
+  steps.push(`
+    <div class="wrapped-step" id="wstep-4">
+      <div class="wrapped-month-tag">معدل الادخار</div>
+      <span class="wrapped-emoji">${savEmoji}</span>
+      <div class="wrapped-title">${savMsg}</div>
+      <div class="wrapped-big-num">${d.savingRate}%</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:8px">من دخلك وفّرته</div>
+      <div style="width:100%;background:rgba(255,255,255,.1);border-radius:99px;height:10px;overflow:hidden;margin:10px 0">
+        <div style="height:100%;width:${Math.max(0,Math.min(d.savingRate,100))}%;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:99px;transition:width 1s ease"></div>
+      </div>
+      <div class="wrapped-sub">وفّرت <strong style="color:var(--teal)">${fmt(Math.max(d.saved,0))} EGP</strong> هذا الشهر${d.saved < 0 ? '<br><span style="color:var(--red)">⚠️ الشهر الجاي حاول تقلل المصاريف</span>' : ''}</div>
+    </div>
+  `);
+
+  // Step 6 — Biggest expense
+  if (d.biggestTx) {
+    const bigCat = catInfo[d.biggestTx.cat] || {label: d.biggestTx.cat, icon:'💸'};
+    steps.push(`
+      <div class="wrapped-step" id="wstep-5">
+        <div class="wrapped-month-tag">أكبر مصروف</div>
+        <span class="wrapped-emoji">💣</span>
+        <div class="wrapped-title">${d.biggestTx.desc}</div>
+        <div class="wrapped-big-num">${fmt(toEGP(d.biggestTx.amount, d.biggestTx.currency))}</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.5);margin-bottom:8px">EGP — في فئة ${bigCat.label}</div>
+        <div class="wrapped-sub">ده كان أكبر مصروف واحد في شهر ${_getWrappedMonthLabel(d.mk)}</div>
+      </div>
+    `);
+  }
+
+  // Step 7 — Final outro
+  const grade = d.savingRate >= 30 ? 'A+' : d.savingRate >= 20 ? 'A' : d.savingRate >= 10 ? 'B' : 'C';
+  const gradeColor = d.savingRate >= 30 ? 'var(--green)' : d.savingRate >= 20 ? 'var(--teal)' : d.savingRate >= 10 ? 'var(--amber)' : 'var(--red)';
+  steps.push(`
+    <div class="wrapped-step" id="wstep-6">
+      <div class="wrapped-month-tag">تقييمك الشهري</div>
+      <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--teal));display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;color:#fff;margin-bottom:16px;box-shadow:0 0 40px rgba(192,132,252,.4);font-family:'Space Grotesk',monospace;animation:wrappedPop .6s cubic-bezier(.34,1.56,.64,1) forwards">${grade}</div>
+      <div class="wrapped-title">شهر ${_getWrappedMonthLabel(d.mk)}</div>
+      <div class="wrapped-sub">ملخصك المالي:<br>
+        📤 صرفت: <strong style="color:var(--red)">${fmt(d.totalExp)} EGP</strong><br>
+        💰 دخلك: <strong style="color:var(--green)">${fmt(d.totalInc)} EGP</strong><br>
+        🐷 وفّرت: <strong style="color:var(--teal)">${fmt(Math.max(d.saved,0))} EGP</strong><br>
+        <span style="margin-top:8px;display:block;color:var(--purple)">الشهر الجاي هتبقى أحسن 💪</span>
+      </div>
+    </div>
+  `);
+
+  return steps;
+}
+
+function openWrapped(monthOffset = 1) {
+  const mk = _getWrappedMonthKey(monthOffset);
+  const txs = (state.transactions || []).filter(t => t.date && t.date.startsWith(mk));
+
+  if (!txs.length) {
+    toast('مفيش بيانات للشهر اللي فات عشان نعمل Wrapped 😅', 'info');
+    return;
+  }
+
+  const d = _buildWrappedData(mk);
+  const steps = _buildWrappedSteps(d);
+  _wrappedStepsData = steps;
+  _wrappedStep = 0;
+
+  // inject steps
+  const stepsEl = document.getElementById('wrappedSteps');
+  stepsEl.innerHTML = steps.join('');
+
+  // nav dots
+  const dotsEl = document.getElementById('wrappedDots');
+  dotsEl.innerHTML = steps.map((_,i) => `<div class="wrapped-dot ${i===0?'active':''}" onclick="wrappedGoTo(${i})"></div>`).join('');
+
+  // trigger cat row animations
+  setTimeout(() => {
+    document.querySelectorAll('.wrapped-cat-row').forEach((el,i) => {
+      el.style.animationDelay = i*0.1+'s';
+      el.style.opacity = '1';
+    });
+  }, 100);
+
+  // hide prev on first step
+  _updateWrappedNav();
+
+  // mark as seen
+  document.getElementById('wrappedNewDot').style.display = 'none';
+  localStorage.setItem('floosi_wrapped_seen', mk);
+
+  openModal('modalWrapped');
+}
+
+function wrappedNav(dir) {
+  const total = _wrappedStepsData.length;
+  const newStep = _wrappedStep + dir;
+  if (newStep < 0 || newStep >= total) return;
+  wrappedGoTo(newStep);
+}
+
+function wrappedGoTo(idx) {
+  const total = _wrappedStepsData.length;
+  // hide current
+  const cur = document.getElementById('wstep-' + _wrappedStep);
+  if (cur) { cur.classList.remove('active'); }
+  _wrappedStep = idx;
+  // show new
+  const next = document.getElementById('wstep-' + _wrappedStep);
+  if (next) {
+    next.classList.add('active');
+    next.style.animation = 'none';
+    requestAnimationFrame(() => { next.style.animation = ''; });
+  }
+  // dots
+  document.querySelectorAll('.wrapped-dot').forEach((d,i) => {
+    d.classList.toggle('active', i === _wrappedStep);
+  });
+  _updateWrappedNav();
+}
+
+function _updateWrappedNav() {
+  const total = _wrappedStepsData.length;
+  const prevBtn = document.getElementById('wrappedPrev');
+  const nextBtn = document.getElementById('wrappedNext');
+  if (prevBtn) prevBtn.style.opacity = _wrappedStep === 0 ? '.3' : '1';
+  if (nextBtn) {
+    if (_wrappedStep === total - 1) {
+      nextBtn.innerHTML = '<i class="ti ti-x"></i>';
+      nextBtn.onclick = () => closeModal('modalWrapped');
+    } else {
+      nextBtn.innerHTML = '<i class="ti ti-arrow-left"></i>';
+      nextBtn.onclick = () => wrappedNav(1);
+    }
+  }
+}
+
+// ── فحص إذا في Wrapped جديد في أول الشهر ──
+function _checkWrappedNewMonth() {
+  const now = getCairoNow ? getCairoNow() : new Date();
+  const dayOfMonth = now.getDate();
+  if (dayOfMonth > 7) return; // بس في أول 7 أيام من الشهر
+
+  const lastMonthKey = _getWrappedMonthKey(1);
+  const seen = localStorage.getItem('floosi_wrapped_seen');
+
+  if (seen !== lastMonthKey) {
+    // في wrapped جديد لم يُشاهد
+    const txs = (state.transactions || []).filter(t => t.date && t.date.startsWith(lastMonthKey));
+    if (txs.length > 0) {
+      const dot = document.getElementById('wrappedNewDot');
+      if (dot) dot.style.display = 'block';
+    }
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// 🔮 AI SPENDING FORECAST
+// ══════════════════════════════════════════════════════════
+
+async function generateForecast() {
+  const btn = document.getElementById('forecastRefreshBtn');
+  const body = document.getElementById('forecastBody');
+  if (!body) return;
+
+  // بناء الـ dropdown لو أول مرة
+  const sel = document.getElementById('forecastMonthSelect');
+  if (sel && sel.options.length === 0) {
+    const now2 = getCairoNow ? getCairoNow() : new Date();
+    const opts = [
+      { label: now2.toLocaleDateString('ar-EG', {month:'long', year:'numeric'}), offset: 0 },
+      { label: new Date(now2.getFullYear(), now2.getMonth()+1, 1).toLocaleDateString('ar-EG', {month:'long', year:'numeric'}), offset: 1 },
+    ];
+    opts.forEach((o, i) => {
+      const opt = document.createElement('option');
+      opt.value = o.offset;
+      opt.textContent = (i === 0 ? '📅 ' : '📆 ') + o.label;
+      sel.appendChild(opt);
+    });
+    sel.value = '1'; // default: الشهر الجاي
+  }
+
+  // جمع داتا آخر 3 شهور
+  const now = getCairoNow ? getCairoNow() : new Date();
+  const targetOffset = sel ? parseInt(sel.value) : 1;
+  const months = [];
+  for (let i = 1; i <= 3; i++) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i + (targetOffset === 0 ? 1 : 0), 1);
+    const mk = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+    const txs = (state.transactions || []).filter(t => t.date && t.date.startsWith(mk) && t.type === 'expense');
+    const catMap = {};
+    txs.forEach(t => { catMap[t.cat] = (catMap[t.cat]||0) + toEGP(t.amount, t.currency); });
+    months.push({ mk, total: txs.reduce((s,t) => s + toEGP(t.amount,t.currency), 0), cats: catMap });
+  }
+
+  if (months.every(m => m.total === 0)) {
+    body.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-3)"><i class="ti ti-database-off" style="font-size:32px;display:block;margin-bottom:8px"></i><div>مفيش بيانات كافية للتوقع — سجّل مصاريفك لمدة شهر على الأقل</div></div>`;
+    return;
+  }
+
+  // loading state
+  if (btn) { btn.disabled = true; btn.innerHTML = '<i class="ti ti-loader" style="animation:spin 1s linear infinite"></i> جاري التحليل...'; }
+  body.innerHTML = `
+    <div style="text-align:center;padding:40px 20px">
+      <div style="width:50px;height:50px;border:3px solid var(--purple-dim);border-top-color:var(--purple);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px"></div>
+      <div style="font-size:13px;color:var(--text-2)">الذكاء الاصطناعي بيحلل عاداتك المالية...</div>
+    </div>`;
+
+  // جهّز الداتا للـ AI
+  const allCats = [...new Set(months.flatMap(m => Object.keys(m.cats)))];
+  const catRows = allCats.map(k => {
+    const ci = catInfo[k] || {label: k};
+    const vals = months.map(m => m.cats[k] || 0);
+    const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+    return `- ${ci.label}: ${vals.map(v=>Math.round(v)).join(', ')} EGP (متوسط ${Math.round(avg)} EGP)`;
+  }).join('\n');
+
+  const nextMonthD = new Date(now.getFullYear(), now.getMonth() + targetOffset, 1);
+  const nextMonthLabel = nextMonthD.toLocaleDateString('ar-EG', {month:'long', year:'numeric'});
+
+  const prompt = `أنت مستشار مالي ذكي متخصص في تحليل المصاريف الشخصية في مصر.
+
+البيانات التالية هي مصاريف المستخدم خلال آخر 3 شهور (مرتبة من الأقدم للأحدث) لكل فئة:
+
+${catRows}
+
+المطلوب منك:
+1. توقّع مصاريف الشهر الجاي (${nextMonthLabel}) لكل فئة بناءً على الترند
+2. اذكر الفئات التي ستزداد أو تقل وسبب ذلك
+3. أعطِ نصيحة مالية واحدة محددة وعملية
+
+الرد يجب أن يكون JSON فقط بهذا الشكل (بدون أي نص خارج الـ JSON):
+{
+  "total_prediction": 12000,
+  "confidence": "high",
+  "categories": [
+    {"key": "food", "name": "أكل", "predicted": 3000, "trend": "up", "note": "ارتفع بسبب..."},
+    ...
+  ],
+  "main_insight": "نصيحة مالية مختصرة ومفيدة",
+  "warning": "تحذير اختياري أو null"
+}
+فقط استخدم فئات موجودة في البيانات. لا تضف فئات جديدة.`;
+
+  try {
+    const apiKey = getClaudeApiKey();
+    if (!apiKey) {
+      body.innerHTML = `<div style="text-align:center;padding:24px;color:var(--amber)">
+        <div style="font-size:32px;margin-bottom:10px">🔑</div>
+        <div style="font-size:13px;margin-bottom:14px">محتاج مفتاح Claude API — روح الإعدادات وحطه هناك</div>
+        <button class="btn btn-sm btn-primary" onclick="switchPage('settings')"><i class="ti ti-settings"></i> الإعدادات</button>
+      </div>`;
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-sparkles" style="font-size:13px"></i> تحليل'; }
+      return;
+    }
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-calls': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+    const data = await res.json();
+    const text = (data.content || []).map(c => c.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    _renderForecast(parsed, months, nextMonthLabel);
+  } catch(e) {
+    // fallback: حساب بسيط بدون AI
+    _renderForecastFallback(months, nextMonthLabel);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<i class="ti ti-refresh" style="font-size:13px"></i> تحديث'; }
+  }
+}
+
+function _renderForecast(parsed, months, nextMonthLabel) {
+  const body = document.getElementById('forecastBody');
+  if (!body) return;
+
+  const confColor = parsed.confidence === 'high' ? 'var(--green)' : parsed.confidence === 'medium' ? 'var(--amber)' : 'var(--red)';
+  const confLabel = parsed.confidence === 'high' ? 'ثقة عالية' : parsed.confidence === 'medium' ? 'ثقة متوسطة' : 'ثقة منخفضة';
+
+  const catRows = (parsed.categories || []).map(c => {
+    const ci = catInfo[c.key] || {label: c.name || c.key, icon:'ti-circle', color:'var(--purple)'};
+    const iconDisplay = getIconEmoji(ci.icon) || ci.icon || '💸';
+    const trendColor = c.trend === 'up' ? 'var(--red)' : c.trend === 'down' ? 'var(--green)' : 'var(--text-2)';
+    const trendIcon = c.trend === 'up' ? 'ti-trending-up' : c.trend === 'down' ? 'ti-trending-down' : 'ti-minus';
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)">
+        <div style="width:36px;height:36px;border-radius:var(--r-md);background:${ci.color||'var(--purple)'}18;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${iconDisplay}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:var(--text-1)">${ci.label}</div>
+          ${c.note ? `<div style="font-size:11px;color:var(--text-3);margin-top:2px">${c.note}</div>` : ''}
+        </div>
+        <div style="text-align:left">
+          <div style="font-size:14px;font-weight:800;color:var(--text-1);font-family:'Space Grotesk',monospace">${fmt(c.predicted)} <span style="font-size:10px;color:var(--text-3)">EGP</span></div>
+          <div style="font-size:11px;color:${trendColor};display:flex;align-items:center;gap:3px;justify-content:flex-end"><i class="ti ${trendIcon}" style="font-size:11px"></i> ${c.trend === 'up' ? 'ستزيد' : c.trend === 'down' ? 'ستنقص' : 'ثابتة'}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  body.innerHTML = `
+    <div style="background:linear-gradient(135deg,rgba(192,132,252,.08),rgba(0,245,196,.05));border:1px solid rgba(192,132,252,.2);border-radius:var(--r-lg);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:28px">🔮</span>
+      <div style="flex:1">
+        <div style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:3px">إجمالي المتوقع — ${nextMonthLabel}</div>
+        <div style="font-size:26px;font-weight:900;color:var(--text-1);font-family:'Space Grotesk',monospace">${fmt(parsed.total_prediction)} <span style="font-size:13px;color:var(--text-3)">EGP</span></div>
+      </div>
+      <div style="background:${confColor}18;border:1px solid ${confColor}40;border-radius:var(--r-md);padding:5px 10px;font-size:11px;font-weight:700;color:${confColor}">${confLabel}</div>
+    </div>
+
+    ${parsed.main_insight ? `
+    <div style="background:var(--teal-dim);border:1px solid rgba(0,245,196,.25);border-radius:var(--r-md);padding:11px 14px;margin-bottom:16px;font-size:13px;color:var(--teal);line-height:1.6">
+      💡 <strong>نصيحة AI:</strong> ${parsed.main_insight}
+    </div>` : ''}
+
+    ${parsed.warning ? `
+    <div style="background:var(--amber-dim);border:1px solid rgba(255,179,64,.3);border-radius:var(--r-md);padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--amber)">
+      ⚠️ ${parsed.warning}
+    </div>` : ''}
+
+    <div style="font-size:11.5px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">التوقع بالفئة</div>
+    <div>${catRows}</div>
+
+    <div style="margin-top:14px;font-size:11px;color:var(--text-3);text-align:center;line-height:1.6">
+      <i class="ti ti-info-circle" style="font-size:13px"></i> التوقع بناءً على آخر 3 شهور — قد تختلف النتائج الفعلية
+    </div>
+  `;
+}
+
+function _renderForecastFallback(months, nextMonthLabel) {
+  // حساب بسيط بدون AI: متوسط آخر 3 شهور + ترند
+  const allCats = [...new Set(months.flatMap(m => Object.keys(m.cats)))];
+  const totalAvg = months.reduce((s,m)=>s+m.total,0) / months.length;
+
+  const catRows = allCats.map(k => {
+    const ci = catInfo[k] || {label: k, icon:'ti-circle', color:'var(--purple)'};
+    const iconDisplay = getIconEmoji(ci.icon) || ci.icon || '💸';
+    const vals = months.map(m => m.cats[k] || 0);
+    const avg = vals.reduce((a,b)=>a+b,0) / vals.filter(v=>v>0).length || 0;
+    const trend = vals[0] > 0 && vals[vals.length-1] > vals[0] * 1.1 ? 'up' : vals[0] > 0 && vals[vals.length-1] < vals[0] * 0.9 ? 'down' : 'stable';
+    const trendColor = trend === 'up' ? 'var(--red)' : trend === 'down' ? 'var(--green)' : 'var(--text-2)';
+    const trendIcon = trend === 'up' ? 'ti-trending-up' : trend === 'down' ? 'ti-trending-down' : 'ti-minus';
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)">
+        <div style="width:36px;height:36px;border-radius:var(--r-md);background:${ci.color||'var(--purple)'}18;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0">${iconDisplay}</div>
+        <div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text-1)">${ci.label}</div></div>
+        <div style="text-align:left">
+          <div style="font-size:14px;font-weight:800;color:var(--text-1);font-family:'Space Grotesk',monospace">${fmt(Math.round(avg))} <span style="font-size:10px;color:var(--text-3)">EGP</span></div>
+          <div style="font-size:11px;color:${trendColor};display:flex;align-items:center;gap:3px;justify-content:flex-end"><i class="ti ${trendIcon}" style="font-size:11px"></i></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const body = document.getElementById('forecastBody');
+  if (!body) return;
+  body.innerHTML = `
+    <div style="background:var(--amber-dim);border:1px solid rgba(255,179,64,.3);border-radius:var(--r-md);padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--amber)">
+      ⚠️ تم الحساب بدون AI — بناءً على متوسط آخر 3 شهور فقط
+    </div>
+    <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-lg);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:28px">📊</span>
+      <div>
+        <div style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:3px">إجمالي المتوقع — ${nextMonthLabel}</div>
+        <div style="font-size:26px;font-weight:900;color:var(--text-1);font-family:'Space Grotesk',monospace">${fmt(Math.round(totalAvg))} <span style="font-size:13px;color:var(--text-3)">EGP</span></div>
+      </div>
+    </div>
+    <div>${catRows}</div>`;
+}
+
+function saveClaudeApiKey() {
+  const key = document.getElementById('claudeApiKeyInput')?.value?.trim();
+  if (!key || !key.startsWith('sk-ant-')) {
+    showToast('المفتاح لازم يبدأ بـ sk-ant-', 'error');
+    return;
+  }
+  localStorage.setItem('floosi_claude_api_key', key);
+  document.getElementById('claudeApiKeyStatus').innerHTML = '✅ تم حفظ المفتاح';
+  showToast('✅ تم حفظ مفتاح API', 'success');
+}
+
+function getClaudeApiKey() {
+  return localStorage.getItem('floosi_claude_api_key') || '';
+}
+
+// ── load API key on init ──
+(function _loadApiKeyDisplay() {
+  document.addEventListener('DOMContentLoaded', () => {
+    const k = getClaudeApiKey();
+    const inp = document.getElementById('claudeApiKeyInput');
+    const status = document.getElementById('claudeApiKeyStatus');
+    if (k && inp) { inp.value = k; if (status) status.innerHTML = '✅ المفتاح محفوظ'; }
+  });
+})();
+
+
+</script>
 </body>
 </html>
