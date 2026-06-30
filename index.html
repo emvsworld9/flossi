@@ -1435,6 +1435,7 @@ input,select,textarea,button{font-family:'Tajawal',sans-serif;font-size:16px} /*
     <div id="wcWeekChips" style="display:flex;flex-wrap:wrap;gap:8px"></div>
   </div>
   <div id="weekCompareContent" style="display:flex;flex-direction:column;gap:12px"></div>
+  <div id="wcAiSection" style="margin-top:6px"></div>
 </div>
 </div>
 
@@ -8229,6 +8230,68 @@ function wcRender(){
   </div>`:'';
 
   content.innerHTML = cardsHtml + diffHtml + topCatsHtml;
+
+  // قسم التقرير
+  const aiSection = document.getElementById('wcAiSection');
+  if(aiSection){
+    if(_wcWeeks.length < 1){
+      aiSection.innerHTML = '';
+    } else {
+      aiSection.innerHTML = `
+        <button class="btn btn-sm" id="wcAiBtn" onclick="wcRunReport()" style="width:100%;background:linear-gradient(135deg,#9333ea,#6366f1);border:none;color:#fff;justify-content:center">
+          <i class="ti ti-file-text" style="font-size:13px"></i> عرض تقرير
+        </button>
+        <div id="wcAiReportBody" style="margin-top:12px"></div>`;
+    }
+  }
+}
+
+function wcRunReport(){
+  const out = document.getElementById('wcAiReportBody');
+  if(!_wcWeeks.length || !out) return;
+
+  // بيانات كل أسبوع
+  const weeksData = _wcWeeks.map(w=>{
+    const spent = getSpentBetween(w.start, w.end);
+    const catMap = {};
+    state.transactions.filter(t=>t.type==='expense'&&t.date>=w.start&&t.date<=w.end)
+      .forEach(t=>{catMap[t.cat]=(catMap[t.cat]||0)+toEGP(t.amount,t.currency);});
+    const topCat = Object.entries(catMap).sort((a,b)=>b[1]-a[1])[0];
+    return {...w, spent, topCat};
+  });
+
+  const avg = weeksData.reduce((s,d)=>s+d.spent,0) / weeksData.length;
+  const maxWeek = weeksData.reduce((a,b)=>b.spent>a.spent?b:a, weeksData[0]);
+  const minWeek = weeksData.reduce((a,b)=>b.spent<a.spent?b:a, weeksData[0]);
+
+  let trendLine = '';
+  if(weeksData.length >= 2){
+    const last = weeksData[weeksData.length-1], prev = weeksData[weeksData.length-2];
+    const diff = last.spent - prev.spent;
+    const diffPct = prev.spent>0 ? Math.round(Math.abs(diff)/prev.spent*100) : 0;
+    trendLine = diff>0
+      ? `آخر أسبوع زاد ${fmt(Math.abs(diff))} EGP (${diffPct}%) عن اللي قبله.`
+      : diff<0
+        ? `آخر أسبوع قل ${fmt(Math.abs(diff))} EGP (${diffPct}%) عن اللي قبله.`
+        : `آخر أسبوع نفس اللي قبله تقريباً.`;
+  }
+
+  const topCatLine = maxWeek.topCat
+    ? `أكتر فئة إنفاق في أعلى أسبوع (${maxWeek.start} ← ${maxWeek.end}) كانت "${getCatInfo(maxWeek.topCat[0]).label}" بـ ${fmt(maxWeek.topCat[1])} EGP.`
+    : '';
+
+  out.innerHTML = `
+    <div style="background:linear-gradient(135deg,rgba(192,132,252,.08),rgba(0,245,196,.05));border:1px solid rgba(192,132,252,.2);border-radius:var(--r-lg);padding:14px;margin-bottom:10px">
+      <div style="font-size:11px;color:var(--text-3);font-weight:700;text-transform:uppercase;margin-bottom:6px">📊 ملخص</div>
+      <div style="font-size:13px;color:var(--text-1);line-height:1.8">
+        متوسط الإنفاق الأسبوعي: <strong>${fmt(Math.round(avg))} EGP</strong><br>
+        أعلى أسبوع إنفاق: ${maxWeek.start} ← ${maxWeek.end} (${fmt(maxWeek.spent)} EGP)<br>
+        أقل أسبوع إنفاق: ${minWeek.start} ← ${minWeek.end} (${fmt(minWeek.spent)} EGP)
+        ${trendLine?`<br>${trendLine}`:''}
+      </div>
+    </div>
+    ${topCatLine?`<div style="background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);padding:12px;font-size:12.5px;color:var(--text-2);line-height:1.7">🔍 ${topCatLine}</div>`:''}
+  `;
 }
 
 // ══════════════════════════════════════════════════════════
@@ -9373,7 +9436,7 @@ async function generateForecast() {
   const now = getCairoNow ? getCairoNow() : new Date();
   const targetOffset = sel ? parseInt(sel.value) : 1;
   const months = [];
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 3; i >= 1; i--) {
     const d = new Date(now.getFullYear(), now.getMonth() - i + (targetOffset === 0 ? 1 : 0), 1);
     const mk = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
     const txs = (state.transactions || []).filter(t => t.date && t.date.startsWith(mk) && t.type === 'expense');
@@ -9381,6 +9444,7 @@ async function generateForecast() {
     txs.forEach(t => { catMap[t.cat] = (catMap[t.cat]||0) + toEGP(t.amount, t.currency); });
     months.push({ mk, total: txs.reduce((s,t) => s + toEGP(t.amount,t.currency), 0), cats: catMap });
   }
+  // months الآن مرتبة من الأقدم للأحدث (يطابق وصفها في البرومبت تحت)
 
   if (months.every(m => m.total === 0)) {
     body.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-3)"><i class="ti ti-database-off" style="font-size:32px;display:block;margin-bottom:8px"></i><div>مفيش بيانات كافية للتوقع — سجّل مصاريفك لمدة شهر على الأقل</div></div>`;
@@ -9533,8 +9597,9 @@ function _renderForecastFallback(months, nextMonthLabel) {
     const ci = catInfo[k] || {label: k, icon:'ti-circle', color:'var(--purple)'};
     const iconDisplay = getIconEmoji(ci.icon) || ci.icon || '💸';
     const vals = months.map(m => m.cats[k] || 0);
-    const avg = vals.reduce((a,b)=>a+b,0) / vals.filter(v=>v>0).length || 0;
-    const trend = vals[0] > 0 && vals[vals.length-1] > vals[0] * 1.1 ? 'up' : vals[0] > 0 && vals[vals.length-1] < vals[0] * 0.9 ? 'down' : 'stable';
+    const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+    // vals[0] = أقدم شهر, vals[vals.length-1] = أحدث شهر (بعد التصحيح)
+    const trend = vals[vals.length-1] > 0 && vals[vals.length-1] > vals[0] * 1.1 ? 'up' : vals[0] > 0 && vals[vals.length-1] < vals[0] * 0.9 ? 'down' : 'stable';
     const trendColor = trend === 'up' ? 'var(--red)' : trend === 'down' ? 'var(--green)' : 'var(--text-2)';
     const trendIcon = trend === 'up' ? 'ti-trending-up' : trend === 'down' ? 'ti-trending-down' : 'ti-minus';
     return `
